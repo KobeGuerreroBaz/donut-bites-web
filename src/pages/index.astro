@@ -1,0 +1,780 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const whatsappNumber = "528110000000"; // Reemplazar con el número real
+const whatsappMessage = encodeURIComponent("¡Hola! Vi su página y me gustaría hacer un pedido de donas 🍩");
+const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
+const flavors = [
+  { emoji: "🍓", name: "Fresa con Crema", desc: "Glaseado rosa con fresas frescas y crema batida" },
+  { emoji: "🍫", name: "Chocolate Obsesión", desc: "Baño de chocolate oscuro con chispas y ganache" },
+  { emoji: "🍋", name: "Limón Merengue", desc: "Glaseado amarillo con toque cítrico y merengue" },
+  { emoji: "🌸", name: "Vainilla Floral", desc: "Clásica con decoración floral artesanal" },
+  { emoji: "🎉", name: "Temporada Especial", desc: "Diseños exclusivos que cambian según la ocasión" },
+  { emoji: "✨", name: "Personalizada", desc: "Cuéntanos tu idea y la hacemos realidad" },
+];
+
+const occasions = [
+  { icon: "🎂", label: "Cumpleaños" },
+  { icon: "💍", label: "Boda" },
+  { icon: "🎄", label: "Navidad" },
+  { icon: "💝", label: "San Valentín" },
+  { icon: "🐣", label: "Pascua" },
+  { icon: "🎓", label: "Graduación" },
+  { icon: "👶", label: "Baby Shower" },
+  { icon: "🎃", label: "Halloween" },
+];
+---
+
+<Layout>
+  <div class="site-wrapper">
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+      <nav class="nav">
+        <div class="logo">
+          <span class="logo-icon">🍩</span>
+          <span class="logo-text">Donut<strong>Bites</strong><span class="logo-co">.co</span></span>
+        </div>
+        <div class="nav-links">
+          <a href="#sabores">Sabores</a>
+          <a href="#ocasiones">Ocasiones</a>
+          <a href="#nosotros">Nosotros</a>
+          <a href={whatsappURL} class="btn-nav-wapp" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Pedir ahora
+          </a>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Menú">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="#sabores">Sabores</a>
+        <a href="#ocasiones">Ocasiones</a>
+        <a href="#nosotros">Nosotros</a>
+        <a href={whatsappURL} target="_blank" rel="noopener">💬 Hacer pedido</a>
+      </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="inicio">
+      <div class="hero-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="sprinkle-field" aria-hidden="true">
+          <span class="s">🍩</span><span class="s">✨</span><span class="s">🌸</span>
+          <span class="s">⭐</span><span class="s">🍩</span><span class="s">💫</span>
+          <span class="s">🌟</span><span class="s">🍩</span>
+        </div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-badge">📍 Monterrey &amp; Área Metropolitana</div>
+        <h1 class="hero-title">
+          Donas decoradas<br />
+          <em>hechas con amor</em>
+        </h1>
+        <p class="hero-subtitle">
+          Diseños únicos y artesanales que cambian con cada temporada.
+          Perfectas para cualquier ocasión especial. Solo por encargo.
+        </p>
+        <div class="hero-ctas">
+          <a href={whatsappURL} class="btn-primary" target="_blank" rel="noopener">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Hacer mi pedido
+          </a>
+          <a href="#sabores" class="btn-secondary">Ver sabores ↓</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><strong>100%</strong><span>Artesanal</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat"><strong>MTY</strong><span>y Área Metro</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat"><strong>🍩</strong><span>Por encargo</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="donut-showcase">
+          <div class="donut-ring donut-ring-outer"></div>
+          <div class="donut-ring donut-ring-mid"></div>
+          <div class="donut-emoji-main">🍩</div>
+          <div class="floating-tag tag-1">¡Personalizadas!</div>
+          <div class="floating-tag tag-2">Entrega en MTY 🛵</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SABORES ===== -->
+    <section class="section-flavors" id="sabores">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Nuestros Sabores</span>
+          <h2>Cada dona, una obra de arte</h2>
+          <p>Ingredientes de calidad, decoración artesanal y mucho cariño en cada pieza.</p>
+        </div>
+        <div class="flavors-grid">
+          {flavors.map((f) => (
+            <div class="flavor-card">
+              <div class="flavor-emoji">{f.emoji}</div>
+              <h3>{f.name}</h3>
+              <p>{f.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div class="flavors-cta">
+          <p>¿Tienes un sabor o diseño en mente?</p>
+          <a href={whatsappURL} class="btn-primary" target="_blank" rel="noopener">Cuéntanos por WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== OCASIONES ===== -->
+    <section class="section-occasions" id="ocasiones">
+      <div class="container">
+        <div class="section-header light">
+          <span class="section-eyebrow">Para cada momento</span>
+          <h2>La dona perfecta para cada ocasión</h2>
+          <p>Nuestros diseños de temporada se adaptan a lo que necesitas celebrar.</p>
+        </div>
+        <div class="occasions-grid">
+          {occasions.map((o) => (
+            <div class="occasion-chip">
+              <span class="occ-icon">{o.icon}</span>
+              <span>{o.label}</span>
+            </div>
+          ))}
+        </div>
+        <div class="occasions-note">
+          <div class="note-card">
+            <p>🌟 <strong>Diseños de temporada</strong> — Nuestro catálogo se renueva con cada fecha especial del año. Síguenos en redes para ver los diseños más recientes.</p>
+            <div class="social-links">
+              <a href="https://www.instagram.com/donutbitesco" target="_blank" rel="noopener" class="social-btn instagram">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                Instagram
+              </a>
+              <a href="https://www.tiktok.com/@donutbitesco" target="_blank" rel="noopener" class="social-btn tiktok">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.05a8.26 8.26 0 004.84 1.55V7.15a4.85 4.85 0 01-1.07-.46z"/></svg>
+                TikTok
+              </a>
+              <a href="https://www.facebook.com/donutbitesco" target="_blank" rel="noopener" class="social-btn facebook">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                Facebook
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROCESO ===== -->
+    <section class="section-process">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">¿Cómo pedir?</span>
+          <h2>Tu pedido en 3 pasos</h2>
+        </div>
+        <div class="process-steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-icon">💬</div>
+            <h3>Escríbenos</h3>
+            <p>Contáctanos por WhatsApp con tu idea, cantidad y fecha de entrega.</p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-icon">🎨</div>
+            <h3>Diseñamos</h3>
+            <p>Creamos el diseño perfecto para tu ocasión. ¡Tú decides los detalles!</p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-icon">🍩</div>
+            <h3>¡Disfruta!</h3>
+            <p>Recibe tus donas frescas y listas para sorprender a todos.</p>
+          </div>
+        </div>
+        <div class="process-cta">
+          <a href={whatsappURL} class="btn-primary large" target="_blank" rel="noopener">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Iniciar mi pedido ahora
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== NOSOTROS ===== -->
+    <section class="section-about" id="nosotros">
+      <div class="container about-grid">
+        <div class="about-visual">
+          <div class="about-donut-wrap">
+            <div class="about-emoji">🍩</div>
+            <div class="about-bubble b1">Hecho con amor ❤️</div>
+            <div class="about-bubble b2">100% artesanal ✨</div>
+          </div>
+        </div>
+        <div class="about-text">
+          <span class="section-eyebrow">Nuestra historia</span>
+          <h2>Donas que cuentan una historia</h2>
+          <p>Somos un emprendimiento familiar en Monterrey. Cada dona es elaborada a mano con ingredientes cuidadosamente seleccionados y decorada con la atención al detalle que solo el amor puede dar.</p>
+          <p>Nuestros diseños cambian con las temporadas, porque creemos que cada celebración merece algo especial y único. Desde cumpleaños hasta navidad, tenemos la dona perfecta para ti.</p>
+          <div class="about-badges">
+            <div class="badge">🏠 Negocio familiar</div>
+            <div class="badge">🎨 Diseño artesanal</div>
+            <div class="badge">📍 Monterrey y AMM</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STICKY WHATSAPP ===== -->
+    <a href={whatsappURL} class="wapp-sticky" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span>Pedir ahora</span>
+    </a>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div class="footer-logo">
+          <span>🍩</span>
+          <span>Donut<strong>Bites</strong>.co</span>
+        </div>
+        <p class="footer-tagline">Donas decoradas artesanales · Monterrey y Área Metropolitana</p>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/donutbitesco" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@donutbitesco" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.05a8.26 8.26 0 004.84 1.55V7.15a4.85 4.85 0 01-1.07-.46z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/donutbitesco" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+        </div>
+        <p class="footer-copy">© 2025 Donut Bites.co · Hecho con 🍩 en Monterrey, NL</p>
+      </div>
+    </footer>
+  </div>
+</Layout>
+
+<style is:global>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink:      #E8496A;
+    --pink-lt:   #F9B8C7;
+    --pink-pale: #FFF0F3;
+    --choco:     #3D1A0E;
+    --choco-mid: #7B3F00;
+    --cream:     #FFF8F0;
+    --gold:      #F4A629;
+    --gold-lt:   #FFE4B0;
+    --white:     #FFFFFF;
+    --gray:      #6B6B6B;
+    --gray-lt:   #F5F5F5;
+
+    --ff-display: 'Fraunces', Georgia, serif;
+    --ff-body:    'Nunito', system-ui, sans-serif;
+
+    --r-sm:  8px;
+    --r-md:  16px;
+    --r-lg:  24px;
+    --r-xl:  48px;
+    --r-full: 999px;
+
+    --shadow-sm: 0 2px 8px rgba(61,26,14,.08);
+    --shadow-md: 0 8px 32px rgba(61,26,14,.12);
+    --shadow-lg: 0 20px 60px rgba(61,26,14,.18);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--ff-body);
+    background: var(--cream);
+    color: var(--choco);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .site-wrapper { position: relative; }
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- HEADER ---- */
+  .header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,248,240,.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--pink-lt);
+  }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1120px; margin: 0 auto; padding: 16px 24px;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+  .logo-icon { font-size: 2rem; line-height: 1; }
+  .logo-text { font-family: var(--ff-display); font-size: 1.4rem; font-weight: 400; color: var(--choco); }
+  .logo-text strong { color: var(--pink); }
+  .logo-co { color: var(--gold); }
+
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-links a { text-decoration: none; color: var(--choco); font-weight: 600; font-size: .95rem; transition: color .2s; }
+  .nav-links a:hover { color: var(--pink); }
+
+  .btn-nav-wapp {
+    display: flex; align-items: center; gap: 7px;
+    background: #25D366; color: var(--white) !important;
+    padding: 10px 18px; border-radius: var(--r-full);
+    font-weight: 700; font-size: .9rem;
+    box-shadow: 0 4px 14px rgba(37,211,102,.35);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-nav-wapp:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,211,102,.45); }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    background: none; border: none; cursor: pointer; padding: 4px;
+  }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--choco); border-radius: 2px; transition: .3s; }
+
+  .mobile-menu {
+    display: none; flex-direction: column;
+    padding: 16px 24px 20px;
+    border-top: 1px solid var(--pink-lt);
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    padding: 12px 0; text-decoration: none; color: var(--choco);
+    font-weight: 700; font-size: 1.05rem; border-bottom: 1px solid var(--pink-pale);
+  }
+  .mobile-menu a:last-child { border-bottom: none; color: #25D366; }
+
+  /* ---- HERO ---- */
+  .hero {
+    position: relative; overflow: hidden;
+    min-height: 90vh;
+    display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+    gap: 40px; padding: 80px 60px 80px 80px;
+    background: linear-gradient(135deg, #FFF0F3 0%, #FFF8F0 50%, #FFF3E8 100%);
+  }
+
+  .hero-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+  .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: .35;
+    animation: blobFloat 8s ease-in-out infinite;
+  }
+  .blob-1 { width: 500px; height: 500px; background: var(--pink-lt); top: -200px; right: -100px; animation-delay: 0s; }
+  .blob-2 { width: 350px; height: 350px; background: var(--gold-lt); bottom: -100px; left: 100px; animation-delay: 3s; }
+  .blob-3 { width: 250px; height: 250px; background: #FFD6E7; top: 50%; right: 300px; animation-delay: 5s; }
+
+  @keyframes blobFloat {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(20px, -30px) scale(1.05); }
+  }
+
+  .sprinkle-field {
+    position: absolute; inset: 0;
+    display: flex; flex-wrap: wrap;
+    align-items: center; justify-content: space-around;
+    opacity: .08; font-size: 3rem;
+  }
+  .s { animation: spinFloat 12s ease-in-out infinite; }
+  .s:nth-child(2) { animation-delay: 1.5s; }
+  .s:nth-child(3) { animation-delay: 3s; }
+  .s:nth-child(4) { animation-delay: 4.5s; }
+  .s:nth-child(5) { animation-delay: 6s; }
+  .s:nth-child(6) { animation-delay: 7.5s; }
+  .s:nth-child(7) { animation-delay: 9s; }
+  .s:nth-child(8) { animation-delay: 10.5s; }
+
+  @keyframes spinFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+  }
+
+  .hero-content { position: relative; z-index: 1; animation: fadeUp .8s ease both; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--white); border: 1.5px solid var(--pink-lt);
+    color: var(--pink); font-weight: 700; font-size: .85rem;
+    padding: 8px 16px; border-radius: var(--r-full);
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .hero-title {
+    font-family: var(--ff-display);
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    font-weight: 900; line-height: 1.1;
+    color: var(--choco); margin-bottom: 20px;
+  }
+  .hero-title em {
+    font-style: italic; color: var(--pink);
+    background: linear-gradient(135deg, var(--pink), #F4736A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem; color: var(--gray);
+    max-width: 480px; margin-bottom: 36px; line-height: 1.7;
+  }
+
+  .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 48px; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, #25D366, #1DA851);
+    color: var(--white); font-weight: 800; font-size: 1rem;
+    padding: 16px 28px; border-radius: var(--r-full);
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(37,211,102,.4);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(37,211,102,.5); }
+  .btn-primary.large { font-size: 1.1rem; padding: 18px 36px; }
+
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 2px solid var(--pink); color: var(--pink);
+    font-weight: 700; font-size: 1rem;
+    padding: 14px 24px; border-radius: var(--r-full);
+    text-decoration: none;
+    transition: background .2s, color .2s;
+  }
+  .btn-secondary:hover { background: var(--pink); color: var(--white); }
+
+  .hero-stats {
+    display: flex; align-items: center; gap: 24px;
+    padding: 20px 28px; background: var(--white);
+    border-radius: var(--r-lg); box-shadow: var(--shadow-md);
+    width: fit-content;
+  }
+  .stat { text-align: center; }
+  .stat strong { display: block; font-family: var(--ff-display); font-size: 1.4rem; font-weight: 900; color: var(--pink); }
+  .stat span { font-size: .8rem; color: var(--gray); font-weight: 600; }
+  .stat-divider { width: 1px; height: 40px; background: var(--pink-lt); }
+
+  /* HERO VISUAL */
+  .hero-visual {
+    position: relative; z-index: 1;
+    display: flex; justify-content: center; align-items: center;
+    animation: fadeUp .8s .3s ease both;
+  }
+
+  .donut-showcase { position: relative; width: 360px; height: 360px; }
+
+  .donut-ring {
+    position: absolute; border-radius: 50%;
+    animation: spin 20s linear infinite;
+  }
+  .donut-ring-outer {
+    inset: 0; border: 3px dashed var(--pink-lt);
+  }
+  .donut-ring-mid {
+    inset: 40px; border: 2px dashed var(--gold-lt);
+    animation-direction: reverse; animation-duration: 15s;
+  }
+  @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+  .donut-emoji-main {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 9rem; line-height: 1;
+    animation: bounce 3s ease-in-out infinite;
+    filter: drop-shadow(0 20px 30px rgba(232,73,106,.3));
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translate(-50%,-50%) rotate(-5deg) scale(1); }
+    50% { transform: translate(-50%,-56%) rotate(5deg) scale(1.05); }
+  }
+
+  .floating-tag {
+    position: absolute;
+    background: var(--white); border-radius: var(--r-full);
+    padding: 10px 18px; font-weight: 800; font-size: .85rem;
+    box-shadow: var(--shadow-md); color: var(--choco);
+    animation: floatTag 4s ease-in-out infinite;
+  }
+  .tag-1 { top: 30px; right: -20px; animation-delay: 0s; }
+  .tag-2 { bottom: 60px; left: -30px; animation-delay: 2s; }
+  @keyframes floatTag {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* ---- SECTIONS COMMON ---- */
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-eyebrow {
+    display: inline-block;
+    background: var(--pink-pale); color: var(--pink);
+    font-weight: 800; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+    padding: 6px 16px; border-radius: var(--r-full); margin-bottom: 16px;
+  }
+  .section-header h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900; color: var(--choco);
+    margin-bottom: 16px; line-height: 1.2;
+  }
+  .section-header p { font-size: 1.1rem; color: var(--gray); max-width: 560px; margin: 0 auto; }
+  .section-header.light h2 { color: var(--white); }
+  .section-header.light p { color: rgba(255,255,255,.8); }
+  .section-header.light .section-eyebrow { background: rgba(255,255,255,.2); color: var(--white); }
+
+  /* ---- FLAVORS ---- */
+  .section-flavors { padding: 100px 0; background: var(--cream); }
+
+  .flavors-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    margin-bottom: 56px;
+  }
+
+  .flavor-card {
+    background: var(--white); border-radius: var(--r-lg);
+    padding: 36px 28px; text-align: center;
+    border: 1.5px solid transparent;
+    box-shadow: var(--shadow-sm);
+    transition: transform .3s, box-shadow .3s, border-color .3s;
+    cursor: default;
+  }
+  .flavor-card:hover {
+    transform: translateY(-8px); box-shadow: var(--shadow-lg);
+    border-color: var(--pink-lt);
+  }
+  .flavor-emoji { font-size: 3.5rem; margin-bottom: 16px; display: block; }
+  .flavor-card h3 {
+    font-family: var(--ff-display); font-size: 1.2rem; font-weight: 700;
+    color: var(--choco); margin-bottom: 10px;
+  }
+  .flavor-card p { font-size: .95rem; color: var(--gray); line-height: 1.5; }
+
+  .flavors-cta { text-align: center; }
+  .flavors-cta p { font-size: 1.1rem; color: var(--gray); margin-bottom: 20px; }
+
+  /* ---- OCCASIONS ---- */
+  .section-occasions {
+    padding: 100px 0;
+    background: linear-gradient(135deg, var(--choco) 0%, #5C2A10 100%);
+    position: relative; overflow: hidden;
+  }
+  .section-occasions::before {
+    content: '🍩';
+    position: absolute; font-size: 20rem; opacity: .04;
+    right: -4rem; top: 50%; transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .occasions-grid {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
+    margin-bottom: 48px;
+  }
+  .occasion-chip {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.2);
+    color: var(--white); font-weight: 700; font-size: .95rem;
+    padding: 12px 22px; border-radius: var(--r-full);
+    backdrop-filter: blur(8px);
+    transition: background .2s, transform .2s;
+  }
+  .occasion-chip:hover { background: rgba(255,255,255,.2); transform: scale(1.05); }
+  .occ-icon { font-size: 1.4rem; }
+
+  .occasions-note { display: flex; justify-content: center; }
+  .note-card {
+    background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.2);
+    border-radius: var(--r-lg); padding: 28px 36px;
+    backdrop-filter: blur(12px); max-width: 600px; text-align: center;
+    color: var(--white);
+  }
+  .note-card p { font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
+
+  .social-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .social-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: var(--r-full);
+    font-weight: 700; font-size: .9rem; text-decoration: none;
+    transition: transform .2s, opacity .2s;
+  }
+  .social-btn:hover { transform: translateY(-2px); opacity: .9; }
+  .social-btn.instagram { background: linear-gradient(135deg, #E1306C, #833AB4); color: var(--white); }
+  .social-btn.tiktok    { background: var(--choco); color: var(--white); }
+  .social-btn.facebook  { background: #1877F2; color: var(--white); }
+
+  /* ---- PROCESS ---- */
+  .section-process {
+    padding: 100px 0;
+    background: var(--pink-pale);
+  }
+  .process-steps {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 56px;
+  }
+  .step {
+    background: var(--white); border-radius: var(--r-lg);
+    padding: 40px 32px; text-align: center;
+    flex: 1; min-width: 220px; max-width: 280px;
+    box-shadow: var(--shadow-md);
+    position: relative; overflow: hidden;
+  }
+  .step::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--pink), var(--gold));
+  }
+  .step-num {
+    position: absolute; top: 16px; right: 20px;
+    font-family: var(--ff-display); font-size: 3rem; font-weight: 900;
+    color: var(--pink-pale); line-height: 1;
+  }
+  .step-icon { font-size: 3rem; margin-bottom: 16px; display: block; }
+  .step h3 { font-family: var(--ff-display); font-size: 1.2rem; font-weight: 700; color: var(--choco); margin-bottom: 10px; }
+  .step p { font-size: .95rem; color: var(--gray); }
+
+  .step-arrow { font-size: 1.8rem; color: var(--pink-lt); flex-shrink: 0; }
+  .process-cta { text-align: center; }
+
+  /* ---- ABOUT ---- */
+  .section-about { padding: 100px 0; background: var(--cream); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .about-visual { display: flex; justify-content: center; }
+  .about-donut-wrap { position: relative; width: 300px; height: 300px; }
+  .about-emoji {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8rem;
+    animation: bounce 4s ease-in-out infinite;
+    filter: drop-shadow(0 20px 30px rgba(232,73,106,.25));
+  }
+  .about-bubble {
+    position: absolute; background: var(--white);
+    border-radius: var(--r-full); padding: 10px 18px;
+    font-weight: 700; font-size: .85rem; color: var(--choco);
+    box-shadow: var(--shadow-md);
+    animation: floatTag 4s ease-in-out infinite;
+  }
+  .b1 { top: 10px; right: -40px; animation-delay: 0s; }
+  .b2 { bottom: 30px; left: -30px; animation-delay: 2s; }
+
+  .about-text .section-eyebrow { display: inline-block; margin-bottom: 16px; }
+  .about-text h2 {
+    font-family: var(--ff-display); font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 900; color: var(--choco); margin-bottom: 20px; line-height: 1.2;
+  }
+  .about-text p { font-size: 1rem; color: var(--gray); margin-bottom: 16px; line-height: 1.7; }
+
+  .about-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .badge {
+    background: var(--pink-pale); color: var(--pink);
+    border: 1.5px solid var(--pink-lt);
+    border-radius: var(--r-full); padding: 8px 18px;
+    font-weight: 700; font-size: .9rem;
+  }
+
+  /* ---- STICKY WHATSAPP ---- */
+  .wapp-sticky {
+    position: fixed; bottom: 28px; right: 28px; z-index: 200;
+    display: flex; align-items: center; gap: 10px;
+    background: #25D366; color: var(--white);
+    padding: 14px 22px; border-radius: var(--r-full);
+    font-weight: 800; font-size: .95rem; text-decoration: none;
+    box-shadow: 0 8px 32px rgba(37,211,102,.5);
+    animation: pulse 2.5s ease-in-out infinite;
+    transition: transform .2s;
+  }
+  .wapp-sticky:hover { transform: scale(1.05); animation: none; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 8px 32px rgba(37,211,102,.5); }
+    50% { box-shadow: 0 8px 48px rgba(37,211,102,.75), 0 0 0 8px rgba(37,211,102,.15); }
+  }
+
+  /* ---- FOOTER ---- */
+  .footer {
+    background: var(--choco); color: rgba(255,255,255,.7);
+    padding: 48px 0;
+  }
+  .footer-inner { text-align: center; }
+  .footer-logo {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--ff-display); font-size: 1.4rem;
+    color: var(--white); margin-bottom: 12px;
+  }
+  .footer-logo strong { color: var(--pink); }
+  .footer-tagline { font-size: .9rem; margin-bottom: 24px; }
+
+  .footer-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 24px; }
+  .footer-socials a {
+    color: rgba(255,255,255,.6); transition: color .2s, transform .2s;
+    display: flex;
+  }
+  .footer-socials a:hover { color: var(--white); transform: translateY(-2px); }
+  .footer-copy { font-size: .8rem; color: rgba(255,255,255,.4); }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr; text-align: center;
+      padding: 60px 32px;
+    }
+    .hero-subtitle { margin-left: auto; margin-right: auto; }
+    .hero-ctas { justify-content: center; }
+    .hero-stats { margin: 0 auto; }
+    .hero-visual { display: none; }
+    .flavors-grid { grid-template-columns: repeat(2, 1fr); }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-visual { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .flavors-grid { grid-template-columns: 1fr; }
+    .process-steps { flex-direction: column; }
+    .step-arrow { transform: rotate(90deg); }
+    .step { max-width: 100%; }
+    .wapp-sticky span { display: none; }
+    .wapp-sticky { padding: 16px; border-radius: 50%; }
+  }
+</style>
+
+<script>
+  // Mobile menu
+  const ham = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  ham?.addEventListener('click', () => menu?.classList.toggle('open'));
+
+  // Close menu on link click
+  menu?.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => menu.classList.remove('open'));
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.flavor-card, .step, .occasion-chip').forEach(el => {
+    (el as HTMLElement).style.opacity = '0';
+    (el as HTMLElement).style.transform = 'translateY(30px)';
+    (el as HTMLElement).style.transition = 'opacity .6s ease, transform .6s ease';
+    observer.observe(el);
+  });
+</script>
