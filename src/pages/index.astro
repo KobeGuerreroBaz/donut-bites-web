@@ -56,6 +56,48 @@ const occasions = [
         <a href={whatsappURL} target="_blank" rel="noopener">💬 Hacer pedido</a>
       </div>
     </header>
+<!-- ===== BANNER DÍA DE LAS MADRES ===== -->
+<section class="banner-madres">
+  <div class="petal">🌸</div>
+  <div class="petal">🌹</div>
+  <div class="petal">🌷</div>
+  <div class="petal">💐</div>
+  <div class="petal">🌺</div>
+  <div class="petal">🌸</div>
+
+  <div class="banner-madres-tag">💐 Edición especial · 10 de mayo</div>
+  <h2 class="banner-madres-title">Para la mamá más <em>dulce</em></h2>
+  <p class="banner-madres-sub">Donas decoradas artesanalmente para celebrar su día como se merece</p>
+
+  <div class="banner-madres-gallery">
+    <div class="madres-thumb" id="thumb-0">
+      <img src="/images/donas-decoradas-monterrey/donas-decoradas-dia-de-las-madres.jpg" alt="Dona decorada Día de las Madres Monterrey" />
+      <div class="madres-overlay"><span>Ver foto</span></div>
+    </div>
+    <div class="madres-thumb" id="thumb-1">
+      <img src="/images/donas-decoradas-monterrey/donas-decoradas-10-de-mayo.jpg" alt="Dona especial para mamá Monterrey" />
+      <div class="madres-overlay"><span>Ver foto</span></div>
+    </div>
+  </div>
+
+  <a href={whatsappURL} class="banner-madres-cta" target="_blank" rel="noopener">
+    💬 Hacer pedido por WhatsApp
+  </a>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lb-overlay" id="lb-overlay" onclick="handleOverlay(event)">
+  <div class="lb-inner">
+    <button class="lb-close" id="lb-close">✕</button>
+<button class="lb-prev" id="lb-prev">‹</button>
+<button class="lb-next" id="lb-next">›</button>
+    <img id="lb-img" src="" alt="" class="lb-img" />
+    <div class="lb-dots">
+      <button class="lb-dot active" id="lb-dot-0"></button>
+<button class="lb-dot" id="lb-dot-1"></button>
+    </div>
+  </div>
+</div>
 
     <!-- ===== HERO ===== -->
     <section class="hero" id="inicio">
@@ -723,6 +765,196 @@ const occasions = [
   }
   .footer-socials a:hover { color: var(--white); transform: translateY(-2px); }
   .footer-copy { font-size: .8rem; color: rgba(255,255,255,.4); }
+/* ---- BANNER DÍA DE LAS MADRES ---- */
+.banner-madres {
+  background: linear-gradient(135deg, #FAE8EE 0%, #FFF0F5 50%, #FAE8EE 100%);
+  border-bottom: 1.5px solid #F2C4D0;
+  padding: 48px 32px 52px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.petal {
+  position: absolute;
+  font-size: 28px;
+  opacity: .18;
+  animation: petalFloat 6s ease-in-out infinite;
+  pointer-events: none;
+}
+.petal:nth-child(1) { top: 10%; left: 5%;   animation-delay: 0s;   font-size: 22px; }
+.petal:nth-child(2) { top: 20%; left: 88%;  animation-delay: 1s;   font-size: 32px; }
+.petal:nth-child(3) { top: 65%; left: 3%;   animation-delay: 2s;   font-size: 18px; }
+.petal:nth-child(4) { top: 70%; left: 92%;  animation-delay: .5s;  font-size: 26px; }
+.petal:nth-child(5) { top: 40%; left: 95%;  animation-delay: 3s;   font-size: 16px; }
+.petal:nth-child(6) { top: 5%;  left: 50%;  animation-delay: 1.5s; font-size: 20px; }
+@keyframes petalFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-12px) rotate(8deg); }
+}
+.banner-madres-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #C8446A;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+.banner-madres-title {
+  font-family: var(--ff-display);
+  font-size: clamp(28px, 5vw, 48px);
+  color: var(--choco);
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+.banner-madres-title em { color: #C8446A; font-style: italic; }
+.banner-madres-sub {
+  font-size: 15px;
+  color: var(--gray);
+  margin-bottom: 28px;
+}
+.banner-madres-gallery {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.madres-thumb {
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(200,68,106,.18);
+  border: 3px solid #fff;
+  transition: transform .25s, box-shadow .25s;
+}
+.madres-thumb:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 16px 48px rgba(200,68,106,.28);
+}
+.madres-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s;
+}
+.madres-thumb:hover img { transform: scale(1.06); }
+.madres-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(200,68,106,.5) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity .25s;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 14px;
+}
+.madres-thumb:hover .madres-overlay { opacity: 1; }
+.madres-overlay span { color: #fff; font-size: 12px; font-weight: 700; }
+.banner-madres-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #C8446A;
+  color: #fff;
+  padding: 13px 28px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(200,68,106,.35);
+  transition: all .2s;
+}
+.banner-madres-cta:hover { background: #a8345a; transform: translateY(-2px); }
+
+/* ---- LIGHTBOX ---- */
+.lb-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,5,10,.92);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  padding: 20px;
+}
+.lb-overlay.open { display: flex; animation: fadeIn .3s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.lb-img {
+  animation: fadeIn .3s ease;
+}
+
+.lb-inner {
+  position: relative;
+  max-width: 520px;
+  width: 100%;
+}
+.lb-img {
+  width: 100%;
+  border-radius: 24px;
+  display: block;
+  box-shadow: 0 24px 80px rgba(0,0,0,.5);
+  max-height: 80vh;
+  object-fit: contain;
+}
+.lb-close {
+  position: absolute;
+  top: -16px; right: -16px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: #C8446A;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(200,68,106,.4);
+  transition: all .2s;
+  z-index: 10;
+}
+.lb-close:hover { background: #a8345a; transform: scale(1.1); }
+.lb-prev, .lb-next {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  border: 1.5px solid rgba(255,255,255,.25);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.lb-prev { left: -56px; }
+.lb-next { right: -56px; }
+.lb-prev:hover, .lb-next:hover { background: rgba(255,255,255,.3); }
+.lb-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+}
+.lb-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.3);
+  cursor: pointer;
+  border: none;
+  transition: all .2s;
+}
+.lb-dot.active { background: #F2C4D0; transform: scale(1.3); }
 
   /* ---- RESPONSIVE ---- */
   @media (max-width: 900px) {
@@ -778,4 +1010,57 @@ const occasions = [
     (el as HTMLElement).style.transition = 'opacity .6s ease, transform .6s ease';
     observer.observe(el);
   });
+  // Lightbox Día de las Madres
+    document.getElementById('thumb-0')?.addEventListener('click', () => openLightbox(0));
+  document.getElementById('thumb-1')?.addEventListener('click', () => openLightbox(1));
+  document.getElementById('lb-close')?.addEventListener('click', () => closeLightbox());
+  document.getElementById('lb-prev')?.addEventListener('click', () => navigate(-1));
+  document.getElementById('lb-next')?.addEventListener('click', () => navigate(1));
+  document.getElementById('lb-dot-0')?.addEventListener('click', () => goTo(0));
+  document.getElementById('lb-dot-1')?.addEventListener('click', () => goTo(1));
+
+  const photos = [
+    "/images/donas-decoradas-monterrey/donas-decoradas-dia-de-las-madres.jpg",
+    "/images/donas-decoradas-monterrey/donas-decoradas-10-de-mayo.jpg",
+  ];
+  let current = 0;
+
+  function openLightbox(index) {
+
+    current = index;
+    renderLb();
+    document.getElementById('lb-overlay')!.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lb-overlay')!.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleOverlay(e) {
+
+    if (e.target === document.getElementById('lb-overlay')) closeLightbox();
+  }
+  function navigate(dir) {
+    current = (current + dir + photos.length) % photos.length;
+    renderLb();
+  }
+  function goTo(index) {
+    current = index;
+    renderLb();
+  }
+  function renderLb() {
+    (document.getElementById('lb-img') as HTMLImageElement).src = photos[current];
+    document.querySelectorAll('.lb-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('lb-overlay')!.classList.contains('open')) return;
+    if (e.key === 'ArrowRight') navigate(1);
+    if (e.key === 'ArrowLeft')  navigate(-1);
+    if (e.key === 'Escape')     closeLightbox();
+  });
+
+
 </script>
+  
