@@ -1,9 +1,12 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://www.donutbites.co',
+  site: 'https://donutbitesco.com',
+  integrations: [sitemap()],
   compressHTML: true,
   build: {
     assets: '_assets',
   },
 });
+
