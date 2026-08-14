@@ -7,6 +7,9 @@ pages_build_output_dir = "./dist"
 binding = "SITE_CONTENT"
 id = "07088921913d4375a97ae22ac225ff6f"
 
-[[r2_buckets]]
-binding = "SITE_IMAGES"
-bucket_name = "donut-bites-images"
+# El binding de R2 (SITE_IMAGES -> donut-bites-images) se configura desde el
+# dashboard de Cloudflare (Settings > Bindings), no aqui. Declararlo tambien
+# en wrangler.toml hace que el despliegue falle: la funcion de bindings de R2
+# via wrangler.toml para Pages esta marcada "(BETA)" por Cloudflare y en la
+# practica no resuelve el bucket ("R2 bucket 'donut-bites-images' not found"),
+# aunque el mismo bucket si funciona bien configurado desde el dashboard.

@@ -33,7 +33,7 @@ donut-bites/
 │       └── images/uploads/[...path].ts  ← Sirve las fotos subidas desde R2
 ├── public/images/library/<temporada>/   ← Banco inicial de 42 fotos (nombres SEO)
 ├── astro.config.mjs                ← Adaptador Cloudflare (output: server)
-├── wrangler.toml                   ← Declara los bindings de KV y R2
+├── wrangler.toml                   ← Declara el binding de KV (el de R2 se configura solo desde el dashboard de Cloudflare, ver nota abajo)
 └── package.json
 ```
 
