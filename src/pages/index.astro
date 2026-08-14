@@ -1,32 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getContent, defaultContent } from '../lib/content';
 
-const whatsappNumber = "528146812034"; // Reemplazar con el número real
+const env = Astro.locals.runtime?.env;
+const content = env ? await getContent(env) : defaultContent;
+
 const whatsappMessage = encodeURIComponent("¡Hola! Vi su página y me gustaría hacer un pedido de donas 🍩");
-const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+const whatsappURL = `https://wa.me/${content.whatsappNumber}?text=${whatsappMessage}`;
 
-const flavors = [
-  { img: "/images/donas-decoradas-monterrey/caja-de-donas-decoradas.jpeg", name: "Caja de Donas", desc: "Selección de donas decoradas artesanales" },
-  { img: "/images/donas-decoradas-monterrey/donas-decoradas-halloween.jpeg", name: "Donas Halloween", desc: "Diseños exclusivos de temporada para Halloween" },
-  { emoji: "🍋", name: "Limón Merengue", desc: "Glaseado amarillo con toque cítrico y merengue" },
-  { emoji: "🌸", name: "Vainilla Floral", desc: "Clásica con decoración floral artesanal" },
-  { emoji: "🎉", name: "Temporada Especial", desc: "Diseños exclusivos que cambian según la ocasión" },
-  { emoji: "✨", name: "Personalizada", desc: "Cuéntanos tu idea y la hacemos realidad" },
-];
+const activeSeason = content.activeSeason !== 'ninguna' ? content.seasons[content.activeSeason] : null;
+const ogImage = activeSeason?.images[0]?.src ?? content.heroImage.src;
 
 const occasions = [
   { icon: "🎂", label: "Cumpleaños" },
   { icon: "💍", label: "Boda" },
   { icon: "🎄", label: "Navidad" },
   { icon: "💝", label: "San Valentín" },
-  { icon: "🐣", label: "Pascua" },
+  { icon: "🦃", label: "Acción de Gracias" },
   { icon: "🎓", label: "Graduación" },
   { icon: "👶", label: "Baby Shower" },
   { icon: "🎃", label: "Halloween" },
 ];
 ---
 
-<Layout>
+<Layout image={ogImage} phone={content.whatsappNumber}>
   <div class="site-wrapper">
 
     <!-- ===== HEADER ===== -->
@@ -56,48 +53,48 @@ const occasions = [
         <a href={whatsappURL} target="_blank" rel="noopener">💬 Hacer pedido</a>
       </div>
     </header>
-<!-- ===== BANNER DÍA DE LAS MADRES ===== -->
-<section class="banner-madres">
-  <div class="petal">🌸</div>
-  <div class="petal">🌹</div>
-  <div class="petal">🌷</div>
-  <div class="petal">💐</div>
-  <div class="petal">🌺</div>
-  <div class="petal">🌸</div>
 
-  <div class="banner-madres-tag">💐 Edición especial · 10 de mayo</div>
-  <h2 class="banner-madres-title">Para la mamá más <em>dulce</em></h2>
-  <p class="banner-madres-sub">Donas decoradas artesanalmente para celebrar su día como se merece</p>
+    {activeSeason && (
+      <>
+        <!-- ===== BANNER DE TEMPORADA ===== -->
+        <section class="banner-season">
+          <div class="petal">✨</div>
+          <div class="petal">🎉</div>
+          <div class="petal">🍩</div>
+          <div class="petal">✨</div>
+          <div class="petal">🎉</div>
+          <div class="petal">🍩</div>
 
-  <div class="banner-madres-gallery">
-    <div class="madres-thumb" id="thumb-0">
-      <img src="/images/donas-decoradas-monterrey/donas-decoradas-dia-de-las-madres.jpg" alt="Dona decorada Día de las Madres Monterrey" />
-      <div class="madres-overlay"><span>Ver foto</span></div>
-    </div>
-    <div class="madres-thumb" id="thumb-1">
-      <img src="/images/donas-decoradas-monterrey/donas-decoradas-10-de-mayo.jpg" alt="Dona especial para mamá Monterrey" />
-      <div class="madres-overlay"><span>Ver foto</span></div>
-    </div>
-  </div>
+          <div class="banner-season-tag">{activeSeason.tag}</div>
+          <h2 class="banner-season-title" set:html={activeSeason.title} />
+          <p class="banner-season-sub">{activeSeason.subtitle}</p>
 
-  <a href={whatsappURL} class="banner-madres-cta" target="_blank" rel="noopener">
-    💬 Hacer pedido por WhatsApp
-  </a>
-</section>
+          <div class="banner-season-gallery" id="seasonGallery">
+            {activeSeason.images.slice(0, 6).map((img, i) => (
+              <div class="season-thumb" data-index={i}>
+                <img src={img.src} alt={img.alt} loading="lazy" />
+                <div class="season-overlay"><span>Ver foto</span></div>
+              </div>
+            ))}
+          </div>
 
-<!-- LIGHTBOX -->
-<div class="lb-overlay" id="lb-overlay" onclick="handleOverlay(event)">
-  <div class="lb-inner">
-    <button class="lb-close" id="lb-close">✕</button>
-<button class="lb-prev" id="lb-prev">‹</button>
-<button class="lb-next" id="lb-next">›</button>
-    <img id="lb-img" src="" alt="" class="lb-img" />
-    <div class="lb-dots">
-      <button class="lb-dot active" id="lb-dot-0"></button>
-<button class="lb-dot" id="lb-dot-1"></button>
-    </div>
-  </div>
-</div>
+          <a href={whatsappURL} class="banner-season-cta" target="_blank" rel="noopener">
+            💬 {activeSeason.ctaText}
+          </a>
+        </section>
+
+        <!-- LIGHTBOX -->
+        <div class="lb-overlay" id="lb-overlay">
+          <div class="lb-inner">
+            <button class="lb-close" id="lb-close" aria-label="Cerrar">✕</button>
+            <button class="lb-prev" id="lb-prev" aria-label="Anterior">‹</button>
+            <button class="lb-next" id="lb-next" aria-label="Siguiente">›</button>
+            <img id="lb-img" src="" alt="" class="lb-img" />
+            <div class="lb-dots" id="lb-dots"></div>
+          </div>
+        </div>
+      </>
+    )}
 
     <!-- ===== HERO ===== -->
     <section class="hero" id="inicio">
@@ -140,7 +137,7 @@ const occasions = [
         <div class="donut-showcase">
           <div class="donut-ring donut-ring-outer"></div>
           <div class="donut-ring donut-ring-mid"></div>
-          <div class="donut-emoji-main">🍩</div>
+          <img src={content.heroImage.src} alt={content.heroImage.alt} class="donut-photo-main" fetchpriority="high" loading="eager" />
           <div class="floating-tag tag-1">¡Personalizadas!</div>
           <div class="floating-tag tag-2">Entrega en MTY 🛵</div>
         </div>
@@ -156,9 +153,9 @@ const occasions = [
           <p>Ingredientes de calidad, decoración artesanal y mucho cariño en cada pieza.</p>
         </div>
         <div class="flavors-grid">
-          {flavors.map((f) => (
+          {content.flavors.map((f) => (
             <div class="flavor-card">
-              {f.img ? <img src={f.img} alt={f.name} class="flavor-img" /> : <div class="flavor-emoji">{f.emoji}</div>}
+              {f.image ? <img src={f.image.src} alt={f.image.alt} class="flavor-img" loading="lazy" /> : <div class="flavor-emoji">{f.emoji}</div>}
               <h3>{f.name}</h3>
               <p>{f.desc}</p>
             </div>
@@ -191,15 +188,15 @@ const occasions = [
           <div class="note-card">
             <p>🌟 <strong>Diseños de temporada</strong> — Nuestro catálogo se renueva con cada fecha especial del año. Síguenos en redes para ver los diseños más recientes.</p>
             <div class="social-links">
-              <a href="https://www.instagram.com/donut.bites.co" target="_blank" rel="noopener" class="social-btn instagram">
+              <a href={content.social.instagram} target="_blank" rel="noopener" class="social-btn instagram">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 Instagram
               </a>
-              <a href="https://www.tiktok.com/@donut.bites85" target="_blank" rel="noopener" class="social-btn tiktok">
+              <a href={content.social.tiktok} target="_blank" rel="noopener" class="social-btn tiktok">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.05a8.26 8.26 0 004.84 1.55V7.15a4.85 4.85 0 01-1.07-.46z"/></svg>
                 TikTok
               </a>
-              <a href="https://www.facebook.com/donutbitesco" target="_blank" rel="noopener" class="social-btn facebook">
+              <a href={content.social.facebook} target="_blank" rel="noopener" class="social-btn facebook">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 Facebook
               </a>
@@ -286,13 +283,13 @@ const occasions = [
         </div>
         <p class="footer-tagline">Donas decoradas artesanales · Monterrey y Área Metropolitana</p>
         <div class="footer-socials">
-          <a href="https://www.instagram.com/donut.bites.co" target="_blank" rel="noopener" aria-label="Instagram">
+          <a href={content.social.instagram} target="_blank" rel="noopener" aria-label="Instagram">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           </a>
-          <a href="https://www.tiktok.com/@donut.bites85" target="_blank" rel="noopener" aria-label="TikTok">
+          <a href={content.social.tiktok} target="_blank" rel="noopener" aria-label="TikTok">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.05a8.26 8.26 0 004.84 1.55V7.15a4.85 4.85 0 01-1.07-.46z"/></svg>
           </a>
-          <a href="https://www.facebook.com/donutbitesco" target="_blank" rel="noopener" aria-label="Facebook">
+          <a href={content.social.facebook} target="_blank" rel="noopener" aria-label="Facebook">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           </a>
         </div>
@@ -529,16 +526,20 @@ const occasions = [
   }
   @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
 
-  .donut-emoji-main {
+  .donut-photo-main {
     position: absolute; top: 50%; left: 50%;
     transform: translate(-50%,-50%);
-    font-size: 9rem; line-height: 1;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 8px solid var(--white);
     animation: bounce 3s ease-in-out infinite;
+    box-shadow: var(--shadow-lg);
     filter: drop-shadow(0 20px 30px rgba(232,73,106,.3));
   }
   @keyframes bounce {
-    0%, 100% { transform: translate(-50%,-50%) rotate(-5deg) scale(1); }
-    50% { transform: translate(-50%,-56%) rotate(5deg) scale(1.05); }
+    0%, 100% { transform: translate(-50%,-50%) rotate(-3deg) scale(1); }
+    50% { transform: translate(-50%,-56%) rotate(3deg) scale(1.03); }
   }
 
   .floating-tag {
@@ -765,8 +766,9 @@ const occasions = [
   }
   .footer-socials a:hover { color: var(--white); transform: translateY(-2px); }
   .footer-copy { font-size: .8rem; color: rgba(255,255,255,.4); }
-/* ---- BANNER DÍA DE LAS MADRES ---- */
-.banner-madres {
+
+/* ---- BANNER DE TEMPORADA ---- */
+.banner-season {
   background: linear-gradient(135deg, #FAE8EE 0%, #FFF0F5 50%, #FAE8EE 100%);
   border-bottom: 1.5px solid #F2C4D0;
   padding: 48px 32px 52px;
@@ -791,7 +793,7 @@ const occasions = [
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50%       { transform: translateY(-12px) rotate(8deg); }
 }
-.banner-madres-tag {
+.banner-season-tag {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -805,27 +807,30 @@ const occasions = [
   border-radius: 999px;
   margin-bottom: 16px;
 }
-.banner-madres-title {
+.banner-season-title {
   font-family: var(--ff-display);
   font-size: clamp(28px, 5vw, 48px);
   color: var(--choco);
   line-height: 1.15;
   margin-bottom: 10px;
 }
-.banner-madres-title em { color: #C8446A; font-style: italic; }
-.banner-madres-sub {
+.banner-season-title em { color: #C8446A; font-style: italic; }
+.banner-season-sub {
   font-size: 15px;
   color: var(--gray);
   margin-bottom: 28px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.banner-madres-gallery {
+.banner-season-gallery {
   display: flex;
   gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 28px;
 }
-.madres-thumb {
+.season-thumb {
   width: 200px;
   height: 200px;
   border-radius: 20px;
@@ -836,18 +841,18 @@ const occasions = [
   border: 3px solid #fff;
   transition: transform .25s, box-shadow .25s;
 }
-.madres-thumb:hover {
+.season-thumb:hover {
   transform: translateY(-6px) scale(1.03);
   box-shadow: 0 16px 48px rgba(200,68,106,.28);
 }
-.madres-thumb img {
+.season-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform .4s;
 }
-.madres-thumb:hover img { transform: scale(1.06); }
-.madres-overlay {
+.season-thumb:hover img { transform: scale(1.06); }
+.season-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, rgba(200,68,106,.5) 0%, transparent 60%);
@@ -858,9 +863,9 @@ const occasions = [
   justify-content: center;
   padding-bottom: 14px;
 }
-.madres-thumb:hover .madres-overlay { opacity: 1; }
-.madres-overlay span { color: #fff; font-size: 12px; font-weight: 700; }
-.banner-madres-cta {
+.season-thumb:hover .season-overlay { opacity: 1; }
+.season-overlay span { color: #fff; font-size: 12px; font-weight: 700; }
+.banner-season-cta {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -874,7 +879,7 @@ const occasions = [
   box-shadow: 0 4px 20px rgba(200,68,106,.35);
   transition: all .2s;
 }
-.banner-madres-cta:hover { background: #a8345a; transform: translateY(-2px); }
+.banner-season-cta:hover { background: #a8345a; transform: translateY(-2px); }
 
 /* ---- LIGHTBOX ---- */
 .lb-overlay {
@@ -983,20 +988,19 @@ const occasions = [
   }
 </style>
 
-<script>
+<script define:vars={{ seasonPhotos: activeSeason ? activeSeason.images.map((i) => i.src) : [] }} is:inline>
   // Mobile menu
   const ham = document.getElementById('hamburger');
   const menu = document.getElementById('mobileMenu');
   ham?.addEventListener('click', () => menu?.classList.toggle('open'));
 
-  // Close menu on link click
-  menu?.querySelectorAll('a').forEach(a => {
+  menu?.querySelectorAll('a').forEach((a) => {
     a.addEventListener('click', () => menu.classList.remove('open'));
   });
 
   // Scroll reveal
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
+    entries.forEach((e) => {
       if (e.isIntersecting) {
         e.target.style.opacity = '1';
         e.target.style.transform = 'translateY(0)';
@@ -1004,41 +1008,51 @@ const occasions = [
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.flavor-card, .step, .occasion-chip').forEach(el => {
-    (el as HTMLElement).style.opacity = '0';
-    (el as HTMLElement).style.transform = 'translateY(30px)';
-    (el as HTMLElement).style.transition = 'opacity .6s ease, transform .6s ease';
+  document.querySelectorAll('.flavor-card, .step, .occasion-chip').forEach((el) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity .6s ease, transform .6s ease';
     observer.observe(el);
   });
-  // Lightbox Día de las Madres
-    document.getElementById('thumb-0')?.addEventListener('click', () => openLightbox(0));
-  document.getElementById('thumb-1')?.addEventListener('click', () => openLightbox(1));
-  document.getElementById('lb-close')?.addEventListener('click', () => closeLightbox());
-  document.getElementById('lb-prev')?.addEventListener('click', () => navigate(-1));
-  document.getElementById('lb-next')?.addEventListener('click', () => navigate(1));
-  document.getElementById('lb-dot-0')?.addEventListener('click', () => goTo(0));
-  document.getElementById('lb-dot-1')?.addEventListener('click', () => goTo(1));
 
-  const photos = [
-    "/images/donas-decoradas-monterrey/donas-decoradas-dia-de-las-madres.jpg",
-    "/images/donas-decoradas-monterrey/donas-decoradas-10-de-mayo.jpg",
-  ];
+  // Lightbox de temporada
+  const photos = seasonPhotos;
   let current = 0;
 
-  function openLightbox(index) {
+  const lbOverlay = document.getElementById('lb-overlay');
+  const lbImg = document.getElementById('lb-img');
+  const lbDots = document.getElementById('lb-dots');
 
+  if (lbDots && photos.length > 1) {
+    photos.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'lb-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      lbDots.appendChild(dot);
+    });
+  }
+
+  document.querySelectorAll('.season-thumb').forEach((thumb) => {
+    thumb.addEventListener('click', () => {
+      openLightbox(Number(thumb.dataset.index));
+    });
+  });
+  document.getElementById('lb-close')?.addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev')?.addEventListener('click', () => navigate(-1));
+  document.getElementById('lb-next')?.addEventListener('click', () => navigate(1));
+  lbOverlay?.addEventListener('click', (e) => {
+    if (e.target === lbOverlay) closeLightbox();
+  });
+
+  function openLightbox(index) {
     current = index;
     renderLb();
-    document.getElementById('lb-overlay')!.classList.add('open');
+    lbOverlay?.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
   function closeLightbox() {
-    document.getElementById('lb-overlay')!.classList.remove('open');
+    lbOverlay?.classList.remove('open');
     document.body.style.overflow = '';
-  }
-  function handleOverlay(e) {
-
-    if (e.target === document.getElementById('lb-overlay')) closeLightbox();
   }
   function navigate(dir) {
     current = (current + dir + photos.length) % photos.length;
@@ -1049,18 +1063,16 @@ const occasions = [
     renderLb();
   }
   function renderLb() {
-    (document.getElementById('lb-img') as HTMLImageElement).src = photos[current];
+    if (lbImg) lbImg.src = photos[current];
     document.querySelectorAll('.lb-dot').forEach((d, i) => {
       d.classList.toggle('active', i === current);
     });
   }
   document.addEventListener('keydown', (e) => {
-    if (!document.getElementById('lb-overlay')!.classList.contains('open')) return;
+    if (!lbOverlay?.classList.contains('open')) return;
     if (e.key === 'ArrowRight') navigate(1);
-    if (e.key === 'ArrowLeft')  navigate(-1);
-    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft') navigate(-1);
+    if (e.key === 'Escape') closeLightbox();
   });
-
-
 </script>
-  
+</Layout>

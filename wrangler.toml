@@ -1,0 +1,12 @@
+name = "donut-bites"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "./dist"
+
+[[kv_namespaces]]
+binding = "SITE_CONTENT"
+id = "07088921913d4375a97ae22ac225ff6f"
+
+[[r2_buckets]]
+binding = "SITE_IMAGES"
+bucket_name = "donut-bites-images"

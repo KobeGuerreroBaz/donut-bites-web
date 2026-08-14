@@ -3,16 +3,19 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  phone?: string;
 }
 
 const {
   title = "Donut Bites.co | Donas Decoradas en Monterrey y Área Metropolitana",
   description = "Donas decoradas artesanales en Monterrey y toda el Área Metropolitana. Diseños únicos por temporada, hechas con amor para cada ocasión especial. Pedidos por WhatsApp.",
-  image = "/og-image.jpg",
+  image = "/images/library/general/catalogo-donas-decoradas-monterrey.jpeg",
+  phone,
 } = Astro.props;
 
 const siteUrl = "https://donutbitesco.com";
 const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const telephone = phone ? `+${phone}` : undefined;
 
 const schema = {
   "@context": "https://schema.org",
@@ -20,6 +23,8 @@ const schema = {
   "name": "Donut Bites.co",
   "description": description,
   "url": siteUrl,
+  ...(telephone ? { telephone } : {}),
+  "priceRange": "$$",
   "areaServed": [
     "Monterrey", "San Pedro Garza García", "San Nicolás de los Garza",
     "Guadalupe", "Apodaca", "Escobedo", "Santa Catarina", "Juárez"
@@ -39,6 +44,7 @@ const schema = {
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "customer service",
+    ...(telephone ? { telephone } : {}),
     "availableLanguage": "Spanish"
   }
 };
@@ -50,6 +56,7 @@ const schema = {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#E8496A" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="canonical" href={canonicalURL} />
 
   <!-- SEO Primary -->

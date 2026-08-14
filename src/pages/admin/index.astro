@@ -1,0 +1,476 @@
+---
+export const prerender = false;
+
+import { getContent } from '../../lib/content';
+import { isValidSession } from '../../lib/auth';
+
+const env = Astro.locals.runtime?.env;
+
+if (!env) {
+  return Astro.redirect('/admin/login');
+}
+
+const valid = await isValidSession(Astro.request.headers.get('cookie'), env.SESSION_SECRET);
+if (!valid) {
+  return Astro.redirect('/admin/login');
+}
+
+const content = await getContent(env);
+const seasonEntries = Object.entries(content.seasons);
+---
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Panel de administración | Donut Bites.co</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,900;1,9..144,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-title">🍩 Panel de Donut Bites</div>
+    <div class="topbar-actions">
+      <a href="/" target="_blank" class="btn-ghost">Ver sitio ↗</a>
+      <form method="POST" action="/api/admin-logout"><button type="submit" class="btn-ghost">Cerrar sesión</button></form>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div id="saveBar" class="save-bar">
+      <span id="saveStatus">Sin cambios guardados todavía.</span>
+      <button id="saveBtn" class="btn-primary">Guardar cambios</button>
+    </div>
+
+    <section class="panel">
+      <h2>Temporada del sitio</h2>
+      <p class="hint">Elige qué temporada quieres editar abajo. Marca la casilla para que se muestre a los visitantes ahora mismo.</p>
+      <label class="field">
+        <span>Editando temporada:</span>
+        <select id="editSeasonSelect"></select>
+      </label>
+      <label class="checkbox-field">
+        <input type="checkbox" id="activeCheckbox" />
+        <span>Mostrar esta temporada en el sitio ahora</span>
+      </label>
+      <p class="hint" id="activeNote"></p>
+    </section>
+
+    <section class="panel">
+      <h2 id="seasonEditorTitle">Contenido de la temporada</h2>
+      <label class="field">
+        <span>Etiqueta pequeña (ej. "🎃 Edición especial · Halloween")</span>
+        <input type="text" id="seasonTag" />
+      </label>
+      <label class="field">
+        <span>Título grande (puedes usar &lt;em&gt;palabra&lt;/em&gt; para resaltarla en rosa)</span>
+        <input type="text" id="seasonTitle" />
+      </label>
+      <label class="field">
+        <span>Subtítulo</span>
+        <textarea id="seasonSubtitle" rows="2"></textarea>
+      </label>
+      <label class="field">
+        <span>Texto del botón de WhatsApp</span>
+        <input type="text" id="seasonCta" />
+      </label>
+
+      <h3>Fotos de esta temporada</h3>
+      <div class="image-grid" id="seasonImageGrid"></div>
+      <form id="seasonUploadForm" class="upload-form">
+        <input type="text" id="seasonUploadDesc" placeholder="Descripción corta (ej. calabaza sonriente)" required />
+        <input type="file" id="seasonUploadFile" accept="image/*" required />
+        <button type="submit" class="btn-secondary">Subir foto</button>
+      </form>
+      <p class="hint" id="seasonUploadStatus"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Foto principal del sitio (hero)</h2>
+      <p class="hint">Es la foto grande que aparece al abrir el sitio.</p>
+      <div class="image-grid single" id="heroImageGrid"></div>
+      <label class="field">
+        <span>Elegir de la biblioteca general</span>
+        <select id="heroSelect"></select>
+      </label>
+      <form id="heroUploadForm" class="upload-form">
+        <input type="text" id="heroUploadDesc" placeholder="Descripción corta (ej. torre de donas)" required />
+        <input type="file" id="heroUploadFile" accept="image/*" required />
+        <button type="submit" class="btn-secondary">Subir y usar como foto principal</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Datos generales</h2>
+      <label class="field">
+        <span>Número de WhatsApp (con código de país, sin +, ej. 528146812034)</span>
+        <input type="text" id="whatsappNumber" />
+      </label>
+      <label class="field">
+        <span>Instagram (URL completa)</span>
+        <input type="text" id="socialInstagram" />
+      </label>
+      <label class="field">
+        <span>TikTok (URL completa)</span>
+        <input type="text" id="socialTiktok" />
+      </label>
+      <label class="field">
+        <span>Facebook (URL completa)</span>
+        <input type="text" id="socialFacebook" />
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2>Sabores destacados</h2>
+      <p class="hint">Hasta 6 tarjetas en la sección "Nuestros Sabores" del sitio.</p>
+      <div id="flavorsList"></div>
+      <button id="addFlavorBtn" class="btn-secondary" type="button">+ Agregar sabor</button>
+    </section>
+  </main>
+
+  <style is:global>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Nunito', system-ui, sans-serif;
+      background: #FFF8F0;
+      color: #3D1A0E;
+      margin: 0;
+      padding-bottom: 80px;
+    }
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px;
+      background: #fff;
+      border-bottom: 1px solid #F9B8C7;
+    }
+    .topbar-title { font-family: 'Fraunces', Georgia, serif; font-size: 1.2rem; font-weight: 900; }
+    .topbar-actions { display: flex; gap: 12px; align-items: center; }
+    .btn-ghost {
+      background: none; border: 1.5px solid #F9B8C7; color: #3D1A0E;
+      padding: 8px 16px; border-radius: 999px; font-weight: 700; font-size: .85rem;
+      text-decoration: none; cursor: pointer; font-family: inherit;
+    }
+    .admin-main { max-width: 720px; margin: 0 auto; padding: 24px; }
+    .panel {
+      background: #fff; border-radius: 16px; padding: 24px;
+      margin-bottom: 20px; box-shadow: 0 2px 8px rgba(61,26,14,.08);
+    }
+    .panel h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.2rem; margin: 0 0 6px; }
+    .panel h3 { font-size: 1rem; margin: 20px 0 10px; }
+    .hint { color: #6B6B6B; font-size: .85rem; margin: 0 0 16px; }
+    .field { display: block; margin-bottom: 16px; }
+    .field span { display: block; font-weight: 700; font-size: .85rem; margin-bottom: 6px; }
+    .field input, .field textarea, .field select {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      border: 1.5px solid #F9B8C7; font-size: .95rem; font-family: inherit;
+    }
+    .checkbox-field { display: flex; align-items: center; gap: 8px; font-weight: 700; margin-bottom: 8px; }
+    .checkbox-field input { width: 18px; height: 18px; }
+    .image-grid {
+      display: flex; flex-wrap: wrap;
+      gap: 12px; margin-bottom: 16px;
+    }
+    .thumb {
+      position: relative; flex: 0 0 auto;
+      width: 110px; height: 110px;
+      border-radius: 10px; overflow: hidden;
+    }
+    .image-grid.single .thumb { width: 160px; height: 160px; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumb button {
+      position: absolute; top: 4px; right: 4px;
+      width: 24px; height: 24px; border-radius: 50%; border: none;
+      background: rgba(200,68,106,.9); color: #fff; font-weight: 900; cursor: pointer;
+    }
+    .upload-form { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .upload-form input[type="text"] { flex: 1; min-width: 180px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #F9B8C7; font-family: inherit; }
+    .upload-form input[type="file"] { flex: 1; min-width: 180px; }
+    .btn-secondary {
+      background: #FFF0F3; border: 1.5px solid #E8496A; color: #E8496A;
+      padding: 10px 18px; border-radius: 999px; font-weight: 700; cursor: pointer; font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #E8496A, #F4736A); border: none; color: #fff;
+      padding: 10px 22px; border-radius: 999px; font-weight: 800; cursor: pointer; font-family: inherit;
+    }
+    .save-bar {
+      position: sticky; top: 66px; z-index: 15;
+      display: flex; align-items: center; justify-content: space-between;
+      background: #3D1A0E; color: #fff; padding: 12px 20px; border-radius: 16px;
+      margin-bottom: 20px; font-size: .9rem;
+    }
+    .flavor-row { border: 1.5px solid #F9B8C7; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+    .flavor-row .row-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .flavor-row .remove-flavor { background: none; border: none; color: #C8446A; font-weight: 700; cursor: pointer; }
+  </style>
+
+  <script type="application/json" id="initial-content" set:html={JSON.stringify(content)} />
+  <script type="application/json" id="season-keys" set:html={JSON.stringify(seasonEntries.map(([key, s]) => ({ key, label: s.label })))} />
+
+  <script is:inline>
+    const state = JSON.parse(document.getElementById('initial-content').textContent);
+    const seasonKeys = JSON.parse(document.getElementById('season-keys').textContent);
+
+    const editSeasonSelect = document.getElementById('editSeasonSelect');
+    const activeCheckbox = document.getElementById('activeCheckbox');
+    const activeNote = document.getElementById('activeNote');
+    const seasonEditorTitle = document.getElementById('seasonEditorTitle');
+    const seasonTag = document.getElementById('seasonTag');
+    const seasonTitle = document.getElementById('seasonTitle');
+    const seasonSubtitle = document.getElementById('seasonSubtitle');
+    const seasonCta = document.getElementById('seasonCta');
+    const seasonImageGrid = document.getElementById('seasonImageGrid');
+    const heroImageGrid = document.getElementById('heroImageGrid');
+    const heroSelect = document.getElementById('heroSelect');
+    const flavorsList = document.getElementById('flavorsList');
+    const saveStatus = document.getElementById('saveStatus');
+
+    let currentSeasonKey = state.activeSeason !== 'ninguna' ? state.activeSeason : seasonKeys[0]?.key;
+
+    // ---- Season selector ----
+    seasonKeys.forEach(({ key, label }) => {
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = label;
+      editSeasonSelect.appendChild(opt);
+    });
+    editSeasonSelect.value = currentSeasonKey;
+    editSeasonSelect.addEventListener('change', () => {
+      currentSeasonKey = editSeasonSelect.value;
+      renderSeasonEditor();
+    });
+    activeCheckbox.addEventListener('change', () => {
+      state.activeSeason = activeCheckbox.checked ? currentSeasonKey : 'ninguna';
+      renderActiveNote();
+      markDirty();
+    });
+
+    function renderActiveNote() {
+      if (state.activeSeason === 'ninguna') {
+        activeNote.textContent = 'Ahora mismo no se muestra ningún banner de temporada en el sitio.';
+      } else {
+        const label = seasonKeys.find((s) => s.key === state.activeSeason)?.label ?? state.activeSeason;
+        activeNote.textContent = `Ahora mismo se muestra la temporada "${label}" en el sitio.`;
+      }
+    }
+
+    function renderSeasonEditor() {
+      const season = state.seasons[currentSeasonKey];
+      seasonEditorTitle.textContent = `Contenido de: ${season.label}`;
+      seasonTag.value = season.tag;
+      seasonTitle.value = season.title;
+      seasonSubtitle.value = season.subtitle;
+      seasonCta.value = season.ctaText;
+      activeCheckbox.checked = state.activeSeason === currentSeasonKey;
+      renderActiveNote();
+      renderImageGrid(seasonImageGrid, season.images, (idx) => {
+        season.images.splice(idx, 1);
+        renderSeasonEditor();
+        markDirty();
+      });
+    }
+
+    [seasonTag, seasonTitle, seasonSubtitle, seasonCta].forEach((el) => {
+      el.addEventListener('input', () => {
+        const season = state.seasons[currentSeasonKey];
+        season.tag = seasonTag.value;
+        season.title = seasonTitle.value;
+        season.subtitle = seasonSubtitle.value;
+        season.ctaText = seasonCta.value;
+        markDirty();
+      });
+    });
+
+    function renderImageGrid(container, images, onRemove) {
+      container.innerHTML = '';
+      images.forEach((img, idx) => {
+        const div = document.createElement('div');
+        div.className = 'thumb';
+        div.innerHTML = `<img src="${img.src}" alt="${img.alt}" /><button type="button" aria-label="Quitar">✕</button>`;
+        div.querySelector('button').addEventListener('click', () => onRemove(idx));
+        container.appendChild(div);
+      });
+    }
+
+    document.getElementById('seasonUploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const desc = document.getElementById('seasonUploadDesc');
+      const file = document.getElementById('seasonUploadFile');
+      const status = document.getElementById('seasonUploadStatus');
+      if (!file.files[0]) return;
+      status.textContent = 'Subiendo foto...';
+      try {
+        const img = await uploadImage(currentSeasonKey, desc.value, file.files[0]);
+        state.seasons[currentSeasonKey].images.push(img);
+        renderSeasonEditor();
+        desc.value = '';
+        file.value = '';
+        status.textContent = 'Foto agregada. No olvides guardar los cambios.';
+        markDirty();
+      } catch (err) {
+        status.textContent = 'No se pudo subir la foto. Intenta de nuevo.';
+      }
+    });
+
+    // ---- Hero ----
+    function renderHero() {
+      renderImageGrid(heroImageGrid, [state.heroImage], () => {});
+      heroSelect.innerHTML = '<option value="">— Elegir foto —</option>';
+      state.generalImages.forEach((img) => {
+        const opt = document.createElement('option');
+        opt.value = img.src;
+        opt.textContent = img.alt;
+        if (img.src === state.heroImage.src) opt.selected = true;
+        heroSelect.appendChild(opt);
+      });
+    }
+    heroSelect.addEventListener('change', () => {
+      const found = state.generalImages.find((img) => img.src === heroSelect.value);
+      if (found) {
+        state.heroImage = found;
+        renderHero();
+        markDirty();
+      }
+    });
+    document.getElementById('heroUploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const desc = document.getElementById('heroUploadDesc');
+      const file = document.getElementById('heroUploadFile');
+      if (!file.files[0]) return;
+      try {
+        const img = await uploadImage('general', desc.value, file.files[0]);
+        state.generalImages.push(img);
+        state.heroImage = img;
+        renderHero();
+        desc.value = '';
+        file.value = '';
+        markDirty();
+      } catch (err) {
+        alert('No se pudo subir la foto.');
+      }
+    });
+
+    // ---- Datos generales ----
+    const whatsappNumber = document.getElementById('whatsappNumber');
+    const socialInstagram = document.getElementById('socialInstagram');
+    const socialTiktok = document.getElementById('socialTiktok');
+    const socialFacebook = document.getElementById('socialFacebook');
+    whatsappNumber.value = state.whatsappNumber;
+    socialInstagram.value = state.social.instagram;
+    socialTiktok.value = state.social.tiktok;
+    socialFacebook.value = state.social.facebook;
+    whatsappNumber.addEventListener('input', () => { state.whatsappNumber = whatsappNumber.value; markDirty(); });
+    socialInstagram.addEventListener('input', () => { state.social.instagram = socialInstagram.value; markDirty(); });
+    socialTiktok.addEventListener('input', () => { state.social.tiktok = socialTiktok.value; markDirty(); });
+    socialFacebook.addEventListener('input', () => { state.social.facebook = socialFacebook.value; markDirty(); });
+
+    // ---- Sabores ----
+    function renderFlavors() {
+      flavorsList.innerHTML = '';
+      state.flavors.forEach((flavor, idx) => {
+        const row = document.createElement('div');
+        row.className = 'flavor-row';
+        const generalOptions = state.generalImages
+          .map((img) => `<option value="${img.src}" ${flavor.image?.src === img.src ? 'selected' : ''}>${img.alt}</option>`)
+          .join('');
+        row.innerHTML = `
+          <div class="row-top">
+            <strong>Sabor ${idx + 1}</strong>
+            <button type="button" class="remove-flavor">Quitar</button>
+          </div>
+          <label class="field"><span>Nombre</span><input type="text" class="f-name" value="${flavor.name}" /></label>
+          <label class="field"><span>Descripción</span><input type="text" class="f-desc" value="${flavor.desc}" /></label>
+          <label class="field"><span>Foto (o deja "Sin foto" para usar un emoji)</span>
+            <select class="f-image"><option value="">Sin foto (usar emoji)</option>${generalOptions}</select>
+          </label>
+          <label class="field f-emoji-field" style="${flavor.image ? 'display:none' : ''}"><span>Emoji</span><input type="text" class="f-emoji" value="${flavor.emoji ?? ''}" maxlength="4" /></label>
+        `;
+        row.querySelector('.remove-flavor').addEventListener('click', () => {
+          state.flavors.splice(idx, 1);
+          renderFlavors();
+          markDirty();
+        });
+        row.querySelector('.f-name').addEventListener('input', (e) => { flavor.name = e.target.value; markDirty(); });
+        row.querySelector('.f-desc').addEventListener('input', (e) => { flavor.desc = e.target.value; markDirty(); });
+        const emojiField = row.querySelector('.f-emoji-field');
+        row.querySelector('.f-image').addEventListener('change', (e) => {
+          const src = e.target.value;
+          if (!src) {
+            flavor.image = undefined;
+            emojiField.style.display = '';
+          } else {
+            flavor.image = state.generalImages.find((img) => img.src === src);
+            emojiField.style.display = 'none';
+          }
+          markDirty();
+        });
+        row.querySelector('.f-emoji').addEventListener('input', (e) => { flavor.emoji = e.target.value; markDirty(); });
+        flavorsList.appendChild(row);
+      });
+    }
+    document.getElementById('addFlavorBtn').addEventListener('click', () => {
+      if (state.flavors.length >= 8) return;
+      state.flavors.push({ name: 'Nuevo sabor', desc: 'Descripción', emoji: '🍩' });
+      renderFlavors();
+      markDirty();
+    });
+
+    // ---- Upload helper ----
+    async function compressImage(file, maxWidth, quality) {
+      try {
+        const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+        let width = bitmap.width;
+        let height = bitmap.height;
+        if (width > maxWidth) {
+          height = Math.round(height * (maxWidth / width));
+          width = maxWidth;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(bitmap, 0, 0, width, height);
+        const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', quality));
+        return blob || file;
+      } catch {
+        return file;
+      }
+    }
+
+    async function uploadImage(bucket, description, file) {
+      const compressed = await compressImage(file, 1600, 0.78);
+      const formData = new FormData();
+      formData.append('bucket', bucket);
+      formData.append('description', description || 'dona-decorada');
+      formData.append('file', compressed, file.name);
+      const res = await fetch('/api/admin-upload', { method: 'POST', body: formData });
+      if (!res.ok) throw new Error('upload failed');
+      return await res.json();
+    }
+
+    // ---- Save ----
+    function markDirty() {
+      saveStatus.textContent = 'Tienes cambios sin guardar.';
+    }
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      saveStatus.textContent = 'Guardando...';
+      try {
+        const res = await fetch('/api/admin-save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(state),
+        });
+        if (!res.ok) throw new Error('save failed');
+        saveStatus.textContent = '✅ Cambios guardados. Ya están visibles en el sitio.';
+      } catch (err) {
+        saveStatus.textContent = '❌ No se pudo guardar. Intenta de nuevo.';
+      }
+    });
+
+    renderSeasonEditor();
+    renderHero();
+    renderFlavors();
+  </script>
+</body>
+</html>
