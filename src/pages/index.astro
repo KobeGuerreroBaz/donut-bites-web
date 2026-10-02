@@ -5,11 +5,20 @@ import { getContent, defaultContent } from '../lib/content';
 const env = Astro.locals.runtime?.env;
 const content = env ? await getContent(env) : defaultContent;
 
-const whatsappMessage = encodeURIComponent("¡Hola! Vi su página y me gustaría hacer un pedido de donas 🍩");
+const whatsappMessage = encodeURIComponent("¡Hola! Vi su página y me gustaría cotizar un pedido de donas 🍩");
 const whatsappURL = `https://wa.me/${content.whatsappNumber}?text=${whatsappMessage}`;
 
 const activeSeason = content.activeSeason !== 'ninguna' ? content.seasons[content.activeSeason] : null;
 const ogImage = activeSeason?.images[0]?.src ?? content.heroImage.src;
+
+const year = new Date().getFullYear();
+
+const ICON = {
+  wa: "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z",
+  ig: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z",
+  tt: "M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.05a8.26 8.26 0 004.84 1.55V7.15a4.85 4.85 0 01-1.07-.46z",
+  fb: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z",
+};
 
 const occasions = [
   { icon: "🎂", label: "Cumpleaños" },
@@ -29,20 +38,20 @@ const occasions = [
     <!-- ===== HEADER ===== -->
     <header class="header">
       <nav class="nav">
-        <div class="logo">
+        <a href="/" class="logo" aria-label="Donut Bites, inicio">
           <span class="logo-icon">🍩</span>
           <span class="logo-text">Donut<strong>Bites</strong><span class="logo-co">.co</span></span>
-        </div>
+        </a>
         <div class="nav-links">
           <a href="#sabores">Sabores</a>
           <a href="#ocasiones">Ocasiones</a>
           <a href="#nosotros">Nosotros</a>
           <a href={whatsappURL} class="btn-nav-wapp" target="_blank" rel="noopener">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.wa} /></svg>
             Pedir ahora
           </a>
         </div>
-        <button class="hamburger" id="hamburger" aria-label="Menú">
+        <button class="hamburger" id="hamburger" aria-label="Menú" aria-expanded="false" aria-controls="mobileMenu">
           <span></span><span></span><span></span>
         </button>
       </nav>
@@ -66,7 +75,7 @@ const occasions = [
           <div class="petal">🍩</div>
 
           <div class="banner-season-tag">{activeSeason.tag}</div>
-          <h2 class="banner-season-title" set:html={activeSeason.title} />
+          <p class="banner-season-title" set:html={activeSeason.title} />
           <p class="banner-season-sub">{activeSeason.subtitle}</p>
 
           <div class="banner-season-gallery" id="seasonGallery">
@@ -89,7 +98,7 @@ const occasions = [
             <button class="lb-close" id="lb-close" aria-label="Cerrar">✕</button>
             <button class="lb-prev" id="lb-prev" aria-label="Anterior">‹</button>
             <button class="lb-next" id="lb-next" aria-label="Siguiente">›</button>
-            <img id="lb-img" src="" alt="" class="lb-img" />
+            <img id="lb-img" alt="" class="lb-img" />
             <div class="lb-dots" id="lb-dots"></div>
           </div>
         </div>
@@ -112,16 +121,16 @@ const occasions = [
         <div class="hero-badge">📍 Monterrey &amp; Área Metropolitana</div>
         <h1 class="hero-title">
           Donas decoradas<br />
-          <em>hechas con amor</em>
+          <em>para tus eventos</em>
         </h1>
         <p class="hero-subtitle">
-          Diseños únicos y artesanales que cambian con cada temporada.
-          Perfectas para cualquier ocasión especial. Solo por encargo.
+          Diseños artesanales y personalizados para regalos, cumpleaños y fechas especiales.
+          Pedidos por encargo con entrega a domicilio en Monterrey.
         </p>
         <div class="hero-ctas">
           <a href={whatsappURL} class="btn-primary" target="_blank" rel="noopener">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Hacer mi pedido
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.wa} /></svg>
+            Cotizar por WhatsApp
           </a>
           <a href="#sabores" class="btn-secondary">Ver sabores ↓</a>
         </div>
@@ -137,7 +146,10 @@ const occasions = [
         <div class="donut-showcase">
           <div class="donut-ring donut-ring-outer"></div>
           <div class="donut-ring donut-ring-mid"></div>
-          <img src={content.heroImage.src} alt={content.heroImage.alt} class="donut-photo-main" fetchpriority="high" loading="eager" />
+          <picture>
+            <source media="(max-width: 900px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+            <img src={content.heroImage.src} alt={content.heroImage.alt} class="donut-photo-main" width="280" height="280" fetchpriority="high" loading="eager" />
+          </picture>
           <div class="floating-tag tag-1">¡Personalizadas!</div>
           <div class="floating-tag tag-2">Entrega en MTY 🛵</div>
         </div>
@@ -173,8 +185,8 @@ const occasions = [
       <div class="container">
         <div class="section-header light">
           <span class="section-eyebrow">Para cada momento</span>
-          <h2>La dona perfecta para cada ocasión</h2>
-          <p>Nuestros diseños de temporada se adaptan a lo que necesitas celebrar.</p>
+          <h2>Donas personalizadas para cada ocasión</h2>
+          <p>Diseños temáticos para cumpleaños, regalos especiales y eventos corporativos.</p>
         </div>
         <div class="occasions-grid">
           {occasions.map((o) => (
@@ -189,15 +201,15 @@ const occasions = [
             <p>🌟 <strong>Diseños de temporada</strong> — Nuestro catálogo se renueva con cada fecha especial del año. Síguenos en redes para ver los diseños más recientes.</p>
             <div class="social-links">
               <a href={content.social.instagram} target="_blank" rel="noopener" class="social-btn instagram">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.ig} /></svg>
                 Instagram
               </a>
               <a href={content.social.tiktok} target="_blank" rel="noopener" class="social-btn tiktok">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.05a8.26 8.26 0 004.84 1.55V7.15a4.85 4.85 0 01-1.07-.46z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.tt} /></svg>
                 TikTok
               </a>
               <a href={content.social.facebook} target="_blank" rel="noopener" class="social-btn facebook">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.fb} /></svg>
                 Facebook
               </a>
             </div>
@@ -237,7 +249,7 @@ const occasions = [
         </div>
         <div class="process-cta">
           <a href={whatsappURL} class="btn-primary large" target="_blank" rel="noopener">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.wa} /></svg>
             Iniciar mi pedido ahora
           </a>
         </div>
@@ -270,7 +282,7 @@ const occasions = [
 
     <!-- ===== STICKY WHATSAPP ===== -->
     <a href={whatsappURL} class="wapp-sticky" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.wa} /></svg>
       <span>Pedir ahora</span>
     </a>
 
@@ -284,20 +296,19 @@ const occasions = [
         <p class="footer-tagline">Donas decoradas artesanales · Monterrey y Área Metropolitana</p>
         <div class="footer-socials">
           <a href={content.social.instagram} target="_blank" rel="noopener" aria-label="Instagram">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.ig} /></svg>
           </a>
           <a href={content.social.tiktok} target="_blank" rel="noopener" aria-label="TikTok">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.05a8.26 8.26 0 004.84 1.55V7.15a4.85 4.85 0 01-1.07-.46z"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.tt} /></svg>
           </a>
           <a href={content.social.facebook} target="_blank" rel="noopener" aria-label="Facebook">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.fb} /></svg>
           </a>
         </div>
-        <p class="footer-copy">© 2025 Donut Bites.co · Hecho con 🍩 en Monterrey, NL</p>
+        <p class="footer-copy">© {year} Donut Bites.co · Hecho con 🍩 en Monterrey, NL</p>
       </div>
     </footer>
   </div>
-</Layout>
 
 <style is:global>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -329,7 +340,8 @@ const occasions = [
     --shadow-lg: 0 20px 60px rgba(61,26,14,.18);
   }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: auto; }
+  section[id] { scroll-margin-top: 76px; }
 
   body {
     font-family: var(--ff-body);
@@ -596,7 +608,7 @@ const occasions = [
     border-color: var(--pink-lt);
   }
   .flavor-emoji { font-size: 3.5rem; margin-bottom: 16px; display: block; }
-.flavor-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 16px; display: block; }
+  .flavor-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 16px; display: block; }
   .flavor-card h3 {
     font-family: var(--ff-display); font-size: 1.2rem; font-weight: 700;
     color: var(--choco); margin-bottom: 10px;
@@ -767,199 +779,197 @@ const occasions = [
   .footer-socials a:hover { color: var(--white); transform: translateY(-2px); }
   .footer-copy { font-size: .8rem; color: rgba(255,255,255,.4); }
 
-/* ---- BANNER DE TEMPORADA ---- */
-.banner-season {
-  background: linear-gradient(135deg, #FAE8EE 0%, #FFF0F5 50%, #FAE8EE 100%);
-  border-bottom: 1.5px solid #F2C4D0;
-  padding: 48px 32px 52px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.petal {
-  position: absolute;
-  font-size: 28px;
-  opacity: .18;
-  animation: petalFloat 6s ease-in-out infinite;
-  pointer-events: none;
-}
-.petal:nth-child(1) { top: 10%; left: 5%;   animation-delay: 0s;   font-size: 22px; }
-.petal:nth-child(2) { top: 20%; left: 88%;  animation-delay: 1s;   font-size: 32px; }
-.petal:nth-child(3) { top: 65%; left: 3%;   animation-delay: 2s;   font-size: 18px; }
-.petal:nth-child(4) { top: 70%; left: 92%;  animation-delay: .5s;  font-size: 26px; }
-.petal:nth-child(5) { top: 40%; left: 95%;  animation-delay: 3s;   font-size: 16px; }
-.petal:nth-child(6) { top: 5%;  left: 50%;  animation-delay: 1.5s; font-size: 20px; }
-@keyframes petalFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%       { transform: translateY(-12px) rotate(8deg); }
-}
-.banner-season-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #C8446A;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  padding: 5px 14px;
-  border-radius: 999px;
-  margin-bottom: 16px;
-}
-.banner-season-title {
-  font-family: var(--ff-display);
-  font-size: clamp(28px, 5vw, 48px);
-  color: var(--choco);
-  line-height: 1.15;
-  margin-bottom: 10px;
-}
-.banner-season-title em { color: #C8446A; font-style: italic; }
-.banner-season-sub {
-  font-size: 15px;
-  color: var(--gray);
-  margin-bottom: 28px;
-  max-width: 560px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.banner-season-gallery {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
-}
-.season-thumb {
-  width: 200px;
-  height: 200px;
-  border-radius: 20px;
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
-  box-shadow: 0 8px 32px rgba(200,68,106,.18);
-  border: 3px solid #fff;
-  transition: transform .25s, box-shadow .25s;
-}
-.season-thumb:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 16px 48px rgba(200,68,106,.28);
-}
-.season-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform .4s;
-}
-.season-thumb:hover img { transform: scale(1.06); }
-.season-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(200,68,106,.5) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity .25s;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 14px;
-}
-.season-thumb:hover .season-overlay { opacity: 1; }
-.season-overlay span { color: #fff; font-size: 12px; font-weight: 700; }
-.banner-season-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #C8446A;
-  color: #fff;
-  padding: 13px 28px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  box-shadow: 0 4px 20px rgba(200,68,106,.35);
-  transition: all .2s;
-}
-.banner-season-cta:hover { background: #a8345a; transform: translateY(-2px); }
+  /* ---- BANNER DE TEMPORADA ---- */
+  .banner-season {
+    background: linear-gradient(135deg, #FAE8EE 0%, #FFF0F5 50%, #FAE8EE 100%);
+    border-bottom: 1.5px solid #F2C4D0;
+    padding: 48px 32px 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .petal {
+    position: absolute;
+    font-size: 28px;
+    opacity: .18;
+    animation: petalFloat 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .petal:nth-child(1) { top: 10%; left: 5%;   animation-delay: 0s;   font-size: 22px; }
+  .petal:nth-child(2) { top: 20%; left: 88%;  animation-delay: 1s;   font-size: 32px; }
+  .petal:nth-child(3) { top: 65%; left: 3%;   animation-delay: 2s;   font-size: 18px; }
+  .petal:nth-child(4) { top: 70%; left: 92%;  animation-delay: .5s;  font-size: 26px; }
+  .petal:nth-child(5) { top: 40%; left: 95%;  animation-delay: 3s;   font-size: 16px; }
+  .petal:nth-child(6) { top: 5%;  left: 50%;  animation-delay: 1.5s; font-size: 20px; }
+  @keyframes petalFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%       { transform: translateY(-12px) rotate(8deg); }
+  }
+  .banner-season-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #C8446A;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .banner-season-title {
+    font-family: var(--ff-display);
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 400;
+    color: var(--choco);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .banner-season-title em { color: #C8446A; font-style: italic; }
+  .banner-season-sub {
+    font-size: 15px;
+    color: var(--gray);
+    margin-bottom: 28px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .banner-season-gallery {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .season-thumb {
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(200,68,106,.18);
+    border: 3px solid #fff;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .season-thumb:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 16px 48px rgba(200,68,106,.28);
+  }
+  .season-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s;
+  }
+  .season-thumb:hover img { transform: scale(1.06); }
+  .season-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(200,68,106,.5) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity .25s;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 14px;
+  }
+  .season-thumb:hover .season-overlay { opacity: 1; }
+  .season-overlay span { color: #fff; font-size: 12px; font-weight: 700; }
+  .banner-season-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #C8446A;
+    color: #fff;
+    padding: 13px 28px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(200,68,106,.35);
+    transition: all .2s;
+  }
+  .banner-season-cta:hover { background: #a8345a; transform: translateY(-2px); }
 
-/* ---- LIGHTBOX ---- */
-.lb-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(20,5,10,.92);
-  z-index: 500;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(8px);
-  padding: 20px;
-}
-.lb-overlay.open { display: flex; animation: fadeIn .3s ease; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  /* ---- LIGHTBOX ---- */
+  .lb-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,5,10,.92);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    padding: 20px;
+  }
+  .lb-overlay.open { display: flex; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.lb-img {
-  animation: fadeIn .3s ease;
-}
-
-.lb-inner {
-  position: relative;
-  max-width: 520px;
-  width: 100%;
-}
-.lb-img {
-  width: 100%;
-  border-radius: 24px;
-  display: block;
-  box-shadow: 0 24px 80px rgba(0,0,0,.5);
-  max-height: 80vh;
-  object-fit: contain;
-}
-.lb-close {
-  position: absolute;
-  top: -16px; right: -16px;
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: #C8446A;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(200,68,106,.4);
-  transition: all .2s;
-  z-index: 10;
-}
-.lb-close:hover { background: #a8345a; transform: scale(1.1); }
-.lb-prev, .lb-next {
-  position: absolute;
-  top: 50%; transform: translateY(-50%);
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.15);
-  border: 1.5px solid rgba(255,255,255,.25);
-  color: #fff;
-  font-size: 22px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-}
-.lb-prev { left: -56px; }
-.lb-next { right: -56px; }
-.lb-prev:hover, .lb-next:hover { background: rgba(255,255,255,.3); }
-.lb-dots {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 16px;
-}
-.lb-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.3);
-  cursor: pointer;
-  border: none;
-  transition: all .2s;
-}
-.lb-dot.active { background: #F2C4D0; transform: scale(1.3); }
+  .lb-inner {
+    position: relative;
+    max-width: 520px;
+    width: 100%;
+  }
+  .lb-img {
+    width: 100%;
+    border-radius: 24px;
+    display: block;
+    box-shadow: 0 24px 80px rgba(0,0,0,.5);
+    max-height: 80vh;
+    object-fit: contain;
+    animation: fadeIn .3s ease;
+  }
+  .lb-close {
+    position: absolute;
+    top: -16px; right: -16px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #C8446A;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(200,68,106,.4);
+    transition: all .2s;
+    z-index: 10;
+  }
+  .lb-close:hover { background: #a8345a; transform: scale(1.1); }
+  .lb-prev, .lb-next {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.15);
+    border: 1.5px solid rgba(255,255,255,.25);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+  }
+  .lb-prev { left: -56px; }
+  .lb-next { right: -56px; }
+  .lb-prev:hover, .lb-next:hover { background: rgba(255,255,255,.3); }
+  .lb-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  .lb-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.3);
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+  }
+  .lb-dot.active { background: #F2C4D0; transform: scale(1.3); }
 
   /* ---- RESPONSIVE ---- */
   @media (max-width: 900px) {
@@ -983,37 +993,95 @@ const occasions = [
     .process-steps { flex-direction: column; }
     .step-arrow { transform: rotate(90deg); }
     .step { max-width: 100%; }
+    .hero-stats { margin-bottom: 20px; }
     .wapp-sticky span { display: none; }
-    .wapp-sticky { padding: 16px; border-radius: 50%; }
+    .wapp-sticky { padding: 14px; border-radius: 50%; bottom: 16px; right: 16px; }
+    .footer { padding-bottom: 88px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
   }
 </style>
 
-<script define:vars={{ seasonPhotos: activeSeason ? activeSeason.images.map((i) => i.src) : [] }} is:inline>
-  // Mobile menu
+<script define:vars={{ seasonPhotos: activeSeason ? activeSeason.images.map((i) => ({ src: i.src, alt: i.alt })) : [] }} is:inline>
+  // Menú móvil
   const ham = document.getElementById('hamburger');
   const menu = document.getElementById('mobileMenu');
-  ham?.addEventListener('click', () => menu?.classList.toggle('open'));
-
-  menu?.querySelectorAll('a').forEach((a) => {
-    a.addEventListener('click', () => menu.classList.remove('open'));
+  ham?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('open');
+    ham.setAttribute('aria-expanded', String(!!open));
   });
 
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
+  // Scroll suave con duración y aceleración propias
+  // (para cambiar la velocidad: sube o baja 900, 1600 y 0.7)
+  let scrollRaf = 0;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+  function scrollToTarget(target) {
+    cancelAnimationFrame(scrollRaf);
+    const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+    const startY = window.scrollY;
+    const endY = Math.max(0, target.getBoundingClientRect().top + startY - margin);
+    const distance = endY - startY;
+    if (reduce || Math.abs(distance) < 2) { window.scrollTo(0, endY); return; }
+    const duration = Math.min(1600, Math.max(900, Math.abs(distance) * 0.7));
+    const t0 = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / duration);
+      window.scrollTo(0, startY + distance * ease(p));
+      if (p < 1) scrollRaf = requestAnimationFrame(step);
+    };
+    scrollRaf = requestAnimationFrame(step);
+  }
+
+  // Si la persona toca, usa la rueda o el teclado, se detiene la animación
+  ['wheel', 'touchstart', 'keydown'].forEach((evt) =>
+    window.addEventListener(evt, () => cancelAnimationFrame(scrollRaf), { passive: true })
+  );
+
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (menu?.contains(a)) {
+        menu.classList.remove('open');
+        ham?.setAttribute('aria-expanded', 'false');
+      }
+      if (target) {
+        e.preventDefault();
+        requestAnimationFrame(() => scrollToTarget(target));
       }
     });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.flavor-card, .step, .occasion-chip').forEach((el) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity .6s ease, transform .6s ease';
-    observer.observe(el);
   });
+
+  // El enlace de WhatsApp del menú solo cierra el menú
+  menu?.querySelectorAll('a:not([href^="#"])').forEach((a) => {
+    a.addEventListener('click', () => {
+      menu.classList.remove('open');
+      ham?.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Aparición al hacer scroll (se omite si el usuario prefiere menos movimiento)
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.flavor-card, .step, .occasion-chip').forEach((el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity .6s ease, transform .6s ease';
+      observer.observe(el);
+    });
+  }
 
   // Lightbox de temporada
   const photos = seasonPhotos;
@@ -1027,6 +1095,7 @@ const occasions = [
     photos.forEach((_, i) => {
       const dot = document.createElement('button');
       dot.className = 'lb-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Foto ' + (i + 1));
       dot.addEventListener('click', () => goTo(i));
       lbDots.appendChild(dot);
     });
@@ -1063,7 +1132,10 @@ const occasions = [
     renderLb();
   }
   function renderLb() {
-    if (lbImg) lbImg.src = photos[current];
+    if (lbImg && photos[current]) {
+      lbImg.src = photos[current].src;
+      lbImg.alt = photos[current].alt || '';
+    }
     document.querySelectorAll('.lb-dot').forEach((d, i) => {
       d.classList.toggle('active', i === current);
     });
