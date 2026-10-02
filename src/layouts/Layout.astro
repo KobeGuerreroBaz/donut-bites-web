@@ -2,51 +2,77 @@
 interface Props {
   title?: string;
   description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
   image?: string;
+  imageAlt?: string;
   phone?: string;
+  noindex?: boolean;
 }
 
 const {
-  title = "Donut Bites.co | Donas Decoradas en Monterrey y Área Metropolitana",
-  description = "Donas decoradas artesanales en Monterrey y toda el Área Metropolitana. Diseños únicos por temporada, hechas con amor para cada ocasión especial. Pedidos por WhatsApp.",
+  title = "Donas Personalizadas en Monterrey y Eventos | Donut Bites",
+  description = "Donas decoradas artesanales para eventos, regalos y cumpleaños en Monterrey. Diseños exclusivos sobre pedido con entrega a domicilio. ¡Cotiza por WhatsApp!",
+  ogTitle = "Donas Personalizadas y Decoradas en Monterrey | Donut Bites",
+  ogDescription = "Sorprende en tus eventos y fechas especiales con donas decoradas artesanales. Envíos a domicilio en Monterrey y zona metropolitana.",
   image = "/images/library/general/catalogo-donas-decoradas-monterrey.jpeg",
+  imageAlt = "Donas decoradas artesanales de Donut Bites en Monterrey",
   phone,
+  noindex = false,
 } = Astro.props;
 
 const siteUrl = "https://donutbitesco.com";
 const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const absImage = image.startsWith("http") ? image : `${siteUrl}${image}`;
 const telephone = phone ? `+${phone}` : undefined;
+
+const cities = [
+  "Monterrey", "San Pedro Garza García", "San Nicolás de los Garza",
+  "Guadalupe", "Apodaca", "General Escobedo", "Santa Catarina", "Juárez",
+];
 
 const schema = {
   "@context": "https://schema.org",
-  "@type": "Bakery",
-  "name": "Donut Bites.co",
-  "description": description,
-  "url": siteUrl,
-  ...(telephone ? { telephone } : {}),
-  "priceRange": "$$",
-  "areaServed": [
-    "Monterrey", "San Pedro Garza García", "San Nicolás de los Garza",
-    "Guadalupe", "Apodaca", "Escobedo", "Santa Catarina", "Juárez"
+  "@graph": [
+    {
+      "@type": "Bakery",
+      "@id": `${siteUrl}/#negocio`,
+      "name": "Donut Bites",
+      "alternateName": "Donut Bites.co",
+      "description": "Donas decoradas artesanales por encargo para eventos, regalos y cumpleaños en Monterrey y su área metropolitana, con entrega a domicilio.",
+      "url": siteUrl,
+      "image": absImage,
+      ...(telephone ? { "telephone": telephone } : {}),
+      "priceRange": "$$",
+      "servesCuisine": "Donas decoradas artesanales",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Monterrey",
+        "addressRegion": "Nuevo León",
+        "addressCountry": "MX",
+      },
+      "areaServed": cities.map((name) => ({ "@type": "City", "name": name })),
+      "sameAs": [
+        "https://www.facebook.com/donutbitesco",
+        "https://www.instagram.com/donut.bites.co",
+        "https://www.tiktok.com/@donut.bites85",
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        ...(telephone ? { "telephone": telephone } : {}),
+        "availableLanguage": "Spanish",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "Donut Bites",
+      "inLanguage": "es-MX",
+      "publisher": { "@id": `${siteUrl}/#negocio` },
+    },
   ],
-  "address": {
-    "@type": "PostalAddress",
-    "addressRegion": "Nuevo León",
-    "addressCountry": "MX",
-    "addressLocality": "Monterrey"
-  },
-  "servesCuisine": "Donas decoradas artesanales",
-  "sameAs": [
-  "https://www.facebook.com/donutbitesco",
-  "https://www.instagram.com/donut.bites.co",
-  "https://www.tiktok.com/@donut.bites85"
-],
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "customer service",
-    ...(telephone ? { telephone } : {}),
-    "availableLanguage": "Spanish"
-  }
 };
 ---
 
@@ -62,34 +88,35 @@ const schema = {
   <!-- SEO Primary -->
   <title>{title}</title>
   <meta name="description" content={description} />
-  <meta name="keywords" content="donas decoradas Monterrey, donas artesanales Monterrey, donas personalizadas MTY, donas por encargo Monterrey, repostería Monterrey, donas Área Metropolitana" />
-  <meta name="author" content="Donut Bites.co" />
-  <meta name="robots" content="index, follow" />
-  <meta name="geo.region" content="MX-NL" />
-  <meta name="geo.placename" content="Monterrey, Nuevo León" />
+  <meta name="author" content="Donut Bites" />
+  <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large"} />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalURL} />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:image" content={`${siteUrl}${image}`} />
+  <meta property="og:title" content={ogTitle} />
+  <meta property="og:description" content={ogDescription} />
+  <meta property="og:image" content={absImage} />
+  <meta property="og:image:alt" content={imageAlt} />
   <meta property="og:locale" content="es_MX" />
-  <meta property="og:site_name" content="Donut Bites.co" />
+  <meta property="og:site_name" content="Donut Bites" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={`${siteUrl}${image}`} />
+  <meta name="twitter:title" content={ogTitle} />
+  <meta name="twitter:description" content={ogDescription} />
+  <meta name="twitter:image" content={absImage} />
 
-  <!-- Preconnect fonts -->
+  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Schema.org Local Business -->
+  <!-- Schema.org del negocio (sitio completo) -->
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <!-- Schema u otros elementos propios de cada página -->
+  <slot name="head" />
 </head>
 <body>
   <slot />
