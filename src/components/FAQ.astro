@@ -1,0 +1,112 @@
+---
+// src/components/FAQ.astro
+// Muestra preguntas frecuentes y agrega el JSON-LD FAQPage automáticamente.
+import type { FaqItem } from '../lib/faq-pedidos';
+
+interface Props {
+  items: FaqItem[];
+  title?: string;
+  /** Abre la primera pregunta por defecto */
+  openFirst?: boolean;
+}
+
+const { items, title = 'Preguntas frecuentes', openFirst = false } = Astro.props;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+---
+
+{items.length > 0 && (
+  <section class="faq" aria-labelledby="faq-title">
+    <h2 id="faq-title" class="faq-title">{title}</h2>
+    <div class="faq-list">
+      {items.map((item, i) => (
+        <details class="faq-item" open={openFirst && i === 0}>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </section>
+)}
+
+<style>
+  .faq {
+    max-width: 760px;
+    margin: 3rem auto;
+    padding: 0 1.25rem;
+  }
+  .faq-title {
+    font-family: 'Fraunces', serif;
+    color: var(--choco, #3D1A0E);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    text-align: center;
+    margin: 0 0 1.5rem;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .faq-item {
+    background: #fff;
+    border: 2px solid rgba(61, 26, 14, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+  .faq-item[open] {
+    border-color: var(--pink, #E8496A);
+  }
+  .faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1rem 3rem 1rem 1.25rem;
+    min-height: 48px;
+    position: relative;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--choco, #3D1A0E);
+  }
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item summary::after {
+    content: '+';
+    position: absolute;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--pink, #E8496A);
+    transition: transform 0.2s ease;
+  }
+  .faq-item[open] summary::after {
+    content: '–';
+  }
+  .faq-item summary:focus-visible {
+    outline: 3px solid var(--gold, #F4A629);
+    outline-offset: -3px;
+    border-radius: 14px;
+  }
+  .faq-item p {
+    margin: 0;
+    padding: 0 1.25rem 1.25rem;
+    font-family: 'Nunito', sans-serif;
+    line-height: 1.65;
+    color: var(--choco, #3D1A0E);
+  }
+</style>

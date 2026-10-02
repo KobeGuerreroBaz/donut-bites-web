@@ -1,0 +1,90 @@
+---
+// src/components/Breadcrumbs.astro
+// Migas de pan visibles + JSON-LD BreadcrumbList.
+// "Inicio" se agrega solo; tú pasas el resto de la ruta.
+export interface Crumb {
+  name: string;
+  /** Ruta relativa (ej. '/cobertura'). Se omite en la página actual. */
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+
+const site = (Astro.site?.origin ?? 'https://donutbitesco.com').replace(/\/$/, '');
+
+const all: Crumb[] = [{ name: 'Inicio', href: '/' }, ...items];
+
+const toAbsolute = (href?: string): string =>
+  href ? `${site}${href.startsWith('/') ? href : `/${href}`}` : Astro.url.href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: all.map((crumb, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: crumb.name,
+    item: toAbsolute(crumb.href),
+  })),
+};
+---
+
+<nav class="crumbs" aria-label="Ruta de navegación">
+  <ol>
+    {all.map((crumb, i) => {
+      const isLast = i === all.length - 1;
+      return (
+        <li>
+          {isLast || !crumb.href ? (
+            <span aria-current="page">{crumb.name}</span>
+          ) : (
+            <a href={crumb.href}>{crumb.name}</a>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</nav>
+
+<style>
+  .crumbs {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0.75rem 1.25rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+  }
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .crumbs li + li::before {
+    content: '›';
+    margin-right: 0.35rem;
+    color: var(--gold, #F4A629);
+    font-weight: 800;
+  }
+  .crumbs a {
+    color: var(--pink, #E8496A);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .crumbs a:hover,
+  .crumbs a:focus-visible {
+    text-decoration: underline;
+  }
+  .crumbs span[aria-current='page'] {
+    color: var(--choco, #3D1A0E);
+    font-weight: 700;
+  }
+</style>
