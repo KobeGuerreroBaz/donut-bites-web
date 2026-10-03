@@ -1,0 +1,42 @@
+---
+// src/components/SiteFooter.astro
+// Botón flotante de WhatsApp + footer. Úsalo en todas las páginas públicas.
+import { ICON } from '../lib/icons';
+
+interface Props {
+  whatsappURL: string;
+  social: { instagram: string; tiktok: string; facebook: string };
+}
+
+const { whatsappURL, social } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<!-- ===== STICKY WHATSAPP ===== -->
+<a href={whatsappURL} class="wapp-sticky" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.wa} /></svg>
+  <span>Pedir ahora</span>
+</a>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-logo">
+      <span>🍩</span>
+      <span>Donut<strong>Bites</strong>.co</span>
+    </div>
+    <p class="footer-tagline">Donas decoradas artesanales · Monterrey y Área Metropolitana</p>
+    <div class="footer-socials">
+      <a href={social.instagram} target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.ig} /></svg>
+      </a>
+      <a href={social.tiktok} target="_blank" rel="noopener" aria-label="TikTok">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.tt} /></svg>
+      </a>
+      <a href={social.facebook} target="_blank" rel="noopener" aria-label="Facebook">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.fb} /></svg>
+      </a>
+    </div>
+    <p class="footer-copy">© {year} Donut Bites.co · Hecho con 🍩 en Monterrey, NL</p>
+  </div>
+</footer>
