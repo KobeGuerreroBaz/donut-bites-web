@@ -1,0 +1,307 @@
+---
+// src/pages/donas-decoradas-[municipio].astro
+// Una sola plantilla para todas las páginas locales: /donas-decoradas-guadalupe, etc.
+// Los datos de cada municipio viven en src/lib/municipios.ts.
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import FAQ from '../components/FAQ.astro';
+import { getContent, defaultContent } from '../lib/content';
+import { faqPedidos } from '../lib/faq-pedidos';
+import { municipios, otrosMunicipios, rutaMunicipio } from '../lib/municipios';
+import { whatsappUrl } from '../lib/whatsapp';
+
+const { municipio: slug } = Astro.params;
+const m = municipios.find((x) => x.slug === slug);
+
+// Si el municipio no existe en municipios.ts, responde 404
+if (!m) {
+  return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+
+const env = Astro.locals.runtime?.env;
+const content = env ? await getContent(env) : defaultContent;
+
+const waNumber = content.whatsappNumber;
+const waURL = whatsappUrl(m.mensajeWhatsApp, waNumber);
+
+// Preguntas propias del municipio primero, luego las generales
+const faqItems = [...m.faq, ...faqPedidos];
+
+// Enlaces a otras páginas locales ya publicadas
+const otrasPaginas = municipios.filter((x) => x.slug !== m.slug);
+// Municipios que aún no tienen página: se muestran solo como texto
+const sinPagina = otrosMunicipios.filter((n) => {
+  const nl = n.toLowerCase();
+  const tienePagina = municipios.some((x) => nl.includes(x.nombre.toLowerCase()));
+  return !tienePagina;
+});
+
+const siteUrl = 'https://donutbitesco.com';
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: `Donas decoradas en ${m.nombre}`,
+  serviceType: 'Donas decoradas artesanales',
+  url: `${siteUrl}${rutaMunicipio(m.slug)}`,
+  provider: { '@id': `${siteUrl}/#negocio` },
+  areaServed: {
+    '@type': 'City',
+    name: m.nombre,
+    containedInPlace: { '@type': 'AdministrativeArea', name: 'Nuevo León' },
+  },
+};
+---
+
+<Layout
+  title={m.title}
+  description={m.description}
+  ogTitle={m.title}
+  ogDescription={m.description}
+  phone={waNumber}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+
+  <div class="site-wrapper">
+    <SiteHeader whatsappURL={waURL} />
+
+    <Breadcrumbs items={[{ name: m.h1 }]} />
+
+    <main>
+      <!-- ===== HERO LOCAL ===== -->
+      <section class="local-hero">
+        <div class="container local-hero-inner">
+          <div class="hero-badge">📍 {m.nombre}, Nuevo León</div>
+          <h1 class="local-title">{m.h1}</h1>
+          <p class="local-intro">{m.intro}</p>
+          <div class="local-ctas">
+            <WhatsAppButton
+              number={waNumber}
+              message={m.mensajeWhatsApp}
+              label="Cotizar por WhatsApp"
+            />
+            <a href="/#sabores" class="btn-secondary">Ver sabores</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== COBERTURA ===== -->
+      <section class="local-section">
+        <div class="container local-narrow">
+          <div class="section-header">
+            <span class="section-eyebrow">Entrega a domicilio</span>
+            <h2>Llegamos a tu puerta en {m.nombre}</h2>
+            <p>{m.cobertura}</p>
+          </div>
+
+          <div class="chip-group">
+            <p class="chip-title">Algunas de las colonias que atendemos</p>
+            <ul class="chips">
+              {m.colonias.map((c) => <li class="chip">{c}</li>)}
+            </ul>
+          </div>
+
+          <div class="chip-group">
+            <p class="chip-title">Zonas de referencia</p>
+            <ul class="chips chips-soft">
+              {m.referencias.map((r) => <li class="chip">{r}</li>)}
+            </ul>
+          </div>
+
+          <p class="local-note">{m.nota}</p>
+        </div>
+      </section>
+
+      <!-- ===== CÓMO PEDIR ===== -->
+      <section class="local-section local-steps-bg">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">¿Cómo pedir?</span>
+            <h2>Tu pedido en {m.nombre}, paso a paso</h2>
+          </div>
+          <div class="local-steps">
+            <div class="local-step">
+              <div class="local-step-icon">💬</div>
+              <h3>1. Escríbenos</h3>
+              <p>Cuéntanos tu idea, la fecha y la cantidad por WhatsApp. Pide con 3 días de anticipación y te cotizamos sin compromiso.</p>
+            </div>
+            <div class="local-step">
+              <div class="local-step-icon">🎨</div>
+              <h3>2. Diseñamos</h3>
+              <p>Armamos el diseño de tus donas con el tema y los colores de tu evento, desde una caja de 6.</p>
+            </div>
+            <div class="local-step">
+              <div class="local-step-icon">🛵</div>
+              <h3>3. Las recibes</h3>
+              <p>Te las llevamos a domicilio en {m.nombre}, listas para sorprender.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== FAQ ===== -->
+      <FAQ items={faqItems} title={`Preguntas frecuentes sobre donas decoradas en ${m.nombre}`} />
+
+      <!-- ===== OTROS MUNICIPIOS ===== -->
+      {(otrasPaginas.length > 0 || sinPagina.length > 0) && (
+        <section class="local-section local-others">
+          <div class="container local-narrow">
+            <h2 class="local-others-title">También llevamos donas decoradas a</h2>
+            <ul class="chips chips-center">
+              {otrasPaginas.map((x) => (
+                <li><a class="chip chip-link" href={rutaMunicipio(x.slug)}>{x.nombre}</a></li>
+              ))}
+              {sinPagina.map((n) => <li class="chip">{n}</li>)}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      <!-- ===== CTA FINAL ===== -->
+      <section class="local-cta">
+        <div class="container local-narrow">
+          <h2>¿Listo para pedir tus donas en {m.nombre}?</h2>
+          <p>Escríbenos y te cotizamos a tu medida.</p>
+          <WhatsAppButton
+            number={waNumber}
+            message={m.mensajeWhatsApp}
+            label="Iniciar mi pedido ahora"
+          />
+        </div>
+      </section>
+    </main>
+
+    <SiteFooter whatsappURL={waURL} social={content.social} />
+  </div>
+</Layout>
+
+<style>
+  .local-hero {
+    background: linear-gradient(135deg, #FFF0F3 0%, #FFF8F0 50%, #FFF3E8 100%);
+    padding: 48px 0 56px;
+    text-align: center;
+  }
+  .local-hero-inner { max-width: 760px; }
+  .local-title {
+    font-family: var(--ff-display);
+    font-size: clamp(2.2rem, 7vw, 3.6rem);
+    font-weight: 900;
+    line-height: 1.12;
+    color: var(--choco);
+    margin: 0 0 18px;
+  }
+  .local-intro {
+    font-size: 1.1rem;
+    color: var(--gray);
+    line-height: 1.7;
+    margin: 0 auto 28px;
+    max-width: 620px;
+  }
+  .local-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .local-section { padding: 72px 0; }
+  .local-narrow { max-width: 760px; }
+  .local-section .section-header { margin-bottom: 36px; }
+
+  .chip-group { margin-bottom: 24px; text-align: center; }
+  .chip-title {
+    font-weight: 800;
+    font-size: .85rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--choco-mid);
+    margin: 0 0 12px;
+  }
+  .chips {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+  }
+  .chip {
+    display: inline-block;
+    background: var(--pink-pale);
+    color: var(--pink);
+    border: 1.5px solid var(--pink-lt);
+    border-radius: var(--r-full);
+    padding: 8px 18px;
+    font-weight: 700;
+    font-size: .92rem;
+  }
+  .chips-soft .chip {
+    background: var(--white);
+    color: var(--choco);
+    border-color: rgba(61, 26, 14, .15);
+  }
+  .chip-link { text-decoration: none; transition: background .2s, color .2s; }
+  .chip-link:hover { background: var(--pink); color: var(--white); }
+
+  .local-note {
+    text-align: center;
+    font-size: 1.02rem;
+    color: var(--gray);
+    line-height: 1.7;
+    margin: 28px auto 0;
+    max-width: 560px;
+  }
+
+  .local-steps-bg { background: var(--pink-pale); }
+  .local-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .local-step {
+    background: var(--white);
+    border-radius: var(--r-lg);
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+  }
+  .local-step-icon { font-size: 2.6rem; margin-bottom: 12px; }
+  .local-step h3 {
+    font-family: var(--ff-display);
+    font-size: 1.15rem;
+    color: var(--choco);
+    margin: 0 0 8px;
+  }
+  .local-step p { font-size: .95rem; color: var(--gray); line-height: 1.6; margin: 0; }
+
+  .local-others { padding: 24px 0 56px; text-align: center; }
+  .local-others-title {
+    font-family: var(--ff-display);
+    font-size: 1.3rem;
+    color: var(--choco);
+    margin: 0 0 16px;
+  }
+  .chips-center { justify-content: center; }
+
+  .local-cta {
+    background: linear-gradient(135deg, var(--choco) 0%, #5C2A10 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 64px 0;
+  }
+  .local-cta h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    margin: 0 0 10px;
+  }
+  .local-cta p { color: rgba(255, 255, 255, .8); margin: 0 0 24px; }
+
+  @media (max-width: 700px) {
+    .local-hero { padding: 36px 0 44px; }
+    .local-section { padding: 52px 0; }
+    .local-steps { grid-template-columns: 1fr; }
+  }
+</style>
