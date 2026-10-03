@@ -2,6 +2,7 @@
 // src/components/SiteFooter.astro
 // Botón flotante de WhatsApp + footer. Úsalo en todas las páginas públicas.
 import { ICON } from '../lib/icons';
+import { municipios, rutaMunicipio } from '../lib/municipios';
 
 interface Props {
   whatsappURL: string;
@@ -26,6 +27,14 @@ const year = new Date().getFullYear();
       <span>Donut<strong>Bites</strong>.co</span>
     </div>
     <p class="footer-tagline">Donas decoradas artesanales · Monterrey y Área Metropolitana</p>
+    <nav class="footer-zonas" aria-label="Donas decoradas por municipio">
+      <p class="footer-zonas-title">Donas decoradas en tu zona</p>
+      <ul>
+        {municipios.map((m) => (
+          <li><a href={rutaMunicipio(m.slug)}>Donas decoradas en {m.nombre}</a></li>
+        ))}
+      </ul>
+    </nav>
     <div class="footer-socials">
       <a href={social.instagram} target="_blank" rel="noopener" aria-label="Instagram">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.ig} /></svg>
@@ -40,3 +49,31 @@ const year = new Date().getFullYear();
     <p class="footer-copy">© {year} Donut Bites.co · Hecho con 🍩 en Monterrey, NL</p>
   </div>
 </footer>
+
+<style>
+  .footer-zonas { margin-bottom: 28px; }
+  .footer-zonas-title {
+    font-size: .8rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .85);
+    margin-bottom: 12px;
+  }
+  .footer-zonas ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 18px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .footer-zonas a {
+    color: rgba(255, 255, 255, .65);
+    font-size: .9rem;
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .footer-zonas a:hover { color: var(--white); text-decoration: underline; }
+</style>
