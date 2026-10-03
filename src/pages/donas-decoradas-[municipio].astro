@@ -12,6 +12,7 @@ import { getContent, defaultContent } from '../lib/content';
 import { faqPedidos } from '../lib/faq-pedidos';
 import { municipios, otrosMunicipios, rutaMunicipio } from '../lib/municipios';
 import { whatsappUrl } from '../lib/whatsapp';
+import { fotosParaMunicipio } from '../lib/fotos-locales';
 
 const { municipio: slug } = Astro.params;
 const m = municipios.find((x) => x.slug === slug);
@@ -27,8 +28,9 @@ const content = env ? await getContent(env) : defaultContent;
 const waNumber = content.whatsappNumber;
 const waURL = whatsappUrl(m.mensajeWhatsApp, waNumber);
 
-// Preguntas propias del municipio primero, luego las generales
-const faqItems = [...m.faq, ...faqPedidos];
+// Preguntas propias del municipio primero, luego solo 3 generales (anticipación, mínimo y cotización)
+// para no repetir el mismo FAQ completo en todas las páginas.
+const faqItems = [...m.faq, ...faqPedidos.slice(0, 3)];
 
 // Enlaces a otras páginas locales ya publicadas
 const otrasPaginas = municipios.filter((x) => x.slug !== m.slug);
@@ -38,6 +40,8 @@ const sinPagina = otrosMunicipios.filter((n) => {
   const tienePagina = municipios.some((x) => nl.includes(x.nombre.toLowerCase()));
   return !tienePagina;
 });
+
+const fotos = fotosParaMunicipio(m.nombre, municipios.indexOf(m));
 
 const siteUrl = 'https://donutbitesco.com';
 const serviceSchema = {
@@ -87,6 +91,27 @@ const serviceSchema = {
         </div>
       </section>
 
+      <!-- ===== GALERÍA ===== -->
+      <section class="local-section local-gallery">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">Hechas a mano</span>
+            <h2>Así quedan nuestras donas decoradas</h2>
+            <p>Cada pedido se diseña a tu medida. Aquí tienes algunos ejemplos para inspirarte.</p>
+          </div>
+          <ul class="gallery">
+            {fotos.map((f) => (
+              <li class="gallery-item">
+                <img src={f.src} alt={f.alt} width="800" height="800" loading="lazy" decoding="async" />
+              </li>
+            ))}
+          </ul>
+          <div class="gallery-cta">
+            <WhatsAppButton number={waNumber} message={m.mensajeWhatsApp} label="Quiero las mías" />
+          </div>
+        </div>
+      </section>
+
       <!-- ===== COBERTURA ===== -->
       <section class="local-section">
         <div class="container local-narrow">
@@ -111,6 +136,14 @@ const serviceSchema = {
           </div>
 
           <p class="local-note">{m.nota}</p>
+        </div>
+      </section>
+
+      <!-- ===== IDEAS (texto único por municipio) ===== -->
+      <section class="local-section local-ideas">
+        <div class="container local-narrow">
+          <h2 class="local-ideas-title">{m.ideasTitulo}</h2>
+          <p class="local-ideas-text">{m.ideasTexto}</p>
         </div>
       </section>
 
@@ -206,6 +239,25 @@ const serviceSchema = {
     gap: 14px;
   }
 
+  .local-gallery { padding-top: 56px; padding-bottom: 56px; }
+  .gallery {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .gallery-item {
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    aspect-ratio: 1 / 1;
+    background: var(--pink-pale);
+  }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gallery-cta { text-align: center; margin-top: 32px; }
+
   .local-section { padding: 72px 0; }
   .local-narrow { max-width: 760px; }
   .local-section .section-header { margin-bottom: 36px; }
@@ -253,6 +305,21 @@ const serviceSchema = {
     line-height: 1.7;
     margin: 28px auto 0;
     max-width: 560px;
+  }
+
+  .local-ideas { padding: 8px 0 56px; text-align: center; }
+  .local-ideas-title {
+    font-family: var(--ff-display);
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    color: var(--choco);
+    margin: 0 0 14px;
+  }
+  .local-ideas-text {
+    font-size: 1.05rem;
+    color: var(--gray);
+    line-height: 1.75;
+    margin: 0 auto;
+    max-width: 640px;
   }
 
   .local-steps-bg { background: var(--pink-pale); }
@@ -303,5 +370,19 @@ const serviceSchema = {
     .local-hero { padding: 36px 0 44px; }
     .local-section { padding: 52px 0; }
     .local-steps { grid-template-columns: 1fr; }
+    .local-gallery { padding-top: 40px; padding-bottom: 40px; }
+    .gallery {
+      display: flex;
+      gap: 12px;
+      margin: 0 -20px;
+      padding: 4px 20px 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: 20px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .gallery::-webkit-scrollbar { display: none; }
+    .gallery-item { flex: 0 0 auto; width: min(72vw, 300px); scroll-snap-align: start; }
   }
 </style>
