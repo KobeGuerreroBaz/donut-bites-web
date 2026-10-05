@@ -212,15 +212,15 @@ export const municipios: Municipio[] = [
 
   {
     slug: 'escobedo',
-    nombre: 'General Escobedo',
-    title: 'Donas Decoradas en General Escobedo, N.L. | Donut Bites',
+    nombre: 'Escobedo',
+    title: 'Donas Decoradas en Escobedo, N.L. | Donut Bites',
     description:
-      'Donas decoradas artesanales a domicilio en General Escobedo, Nuevo León. Diseños para fiestas infantiles, cumpleaños y eventos. Cotiza por WhatsApp.',
-    h1: 'Donas decoradas en General Escobedo',
+      'Donas decoradas artesanales a domicilio en Escobedo, Nuevo León. Diseños para fiestas infantiles, cumpleaños y eventos. Cotiza por WhatsApp.',
+    h1: 'Donas decoradas en Escobedo',
     intro:
       'En Escobedo las familias festejan en grande, con piñatas, parques y mucha gente querida. Nuestras donas decoradas ponen el toque dulce en fiestas infantiles, cumpleaños y reuniones, con el diseño que más le guste al festejado.',
     cobertura:
-      'Llegamos a tu domicilio en General Escobedo, en colonias como Belisario Domínguez, Ex-Hacienda El Canadá, Las Malvinas, Pedregal del Topo Chico y Jardines de Escobedo, y cerca de Plaza Sendero Escobedo y el Parque Lineal.',
+      'Llegamos a tu domicilio en Escobedo, en colonias como Belisario Domínguez, Ex-Hacienda El Canadá, Las Malvinas, Pedregal del Topo Chico y Jardines de Escobedo, y cerca de Plaza Sendero Escobedo y el Parque Lineal.',
     colonias: ['Belisario Domínguez', 'Ex-Hacienda El Canadá', 'Las Malvinas', 'Pedregal del Topo Chico', 'Jardines de Escobedo'],
     referencias: ['Parque Lineal Escobedo', 'Parque Metropolitano Escobedo (Divertiparque)', 'Plaza Sendero Escobedo', 'Museo Histórico Escobedo'],
     nota:
@@ -229,10 +229,10 @@ export const municipios: Municipio[] = [
     ideasTexto:
       'Piensa en una caja de donas con el tema de la piñata, donas para la mesa de dulces o un detalle para los invitados después de la fiesta en el parque. Cuéntanos tu idea y la preparamos.',
     mensajeWhatsApp:
-      '¡Hola! Vi la página de donas decoradas en General Escobedo y me gustaría cotizar un pedido 🍩',
+      '¡Hola! Vi la página de donas decoradas en Escobedo y me gustaría cotizar un pedido 🍩',
     faq: [
       {
-        q: '¿Hacen donas decoradas para fiestas infantiles en General Escobedo?',
+        q: '¿Hacen donas decoradas para fiestas infantiles en Escobedo?',
         a: 'Sí, son de nuestras favoritas. Diseñamos las donas con el tema y los colores que le gusten al festejado. Cuéntanos la fecha y la cantidad por WhatsApp y te cotizamos.',
       },
       {
@@ -289,7 +289,7 @@ export const otrosMunicipios: string[] = [
   'San Pedro Garza García',
   'San Nicolás de los Garza',
   'Apodaca',
-  'General Escobedo',
+  'Escobedo',
   'Santa Catarina',
 ];
 
