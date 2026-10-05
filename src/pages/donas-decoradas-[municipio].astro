@@ -9,11 +9,14 @@ import ResenasGoogle from '../components/ResenasGoogle.astro';
 import { getContent, defaultContent } from '../lib/content';
 import { faqPedidos } from '../lib/faq-pedidos';
 import { municipios, otrosMunicipios, rutaMunicipio } from '../lib/municipios';
+import { zonas, zonasDe } from '../lib/zonas';
 import { whatsappUrl } from '../lib/whatsapp';
 import { fotosParaMunicipio } from '../lib/fotos-locales';
 
 const { municipio: slug } = Astro.params;
-const m = municipios.find((x) => x.slug === slug);
+const municipioEncontrado = municipios.find((x) => x.slug === slug);
+const zona = municipioEncontrado ? undefined : zonas.find((x) => x.slug === slug);
+const m = municipioEncontrado ?? zona;
 
 if (!m) {
   return new Response(null, { status: 404, statusText: 'Not Found' });
@@ -27,14 +30,26 @@ const waURL = whatsappUrl(m.mensajeWhatsApp, waNumber);
 
 const faqItems = [...m.faq, ...faqPedidos.slice(0, 3)];
 
-const otrasPaginas = municipios.filter((x) => x.slug !== m.slug);
-const sinPagina = otrosMunicipios.filter((n) => {
+const padre = zona ? municipios.find((x) => x.slug === zona.municipio) : undefined;
+const zonasHijas = zona ? [] : zonasDe(m.slug);
+const zonasHermanas = zona ? zonasDe(zona.municipio).filter((z) => z.slug !== zona.slug) : [];
+
+const otrasPaginas = zona && padre
+  ? [padre, ...municipios.filter((x) => x.slug !== padre.slug)]
+  : municipios.filter((x) => x.slug !== m.slug);
+const sinPagina = zona ? [] : otrosMunicipios.filter((n) => {
   const nl = n.toLowerCase();
   const tienePagina = municipios.some((x) => nl.includes(x.nombre.toLowerCase()));
   return !tienePagina;
 });
 
-const todas = fotosParaMunicipio(m.nombre, municipios.indexOf(m));
+const indiceFotos = zona ? municipios.length + zonas.indexOf(zona) : municipios.indexOf(m);
+const todas = fotosParaMunicipio(m.nombre, indiceFotos);
+
+const badge = zona && padre ? `${m.nombre}, ${padre.nombre}` : `${m.nombre}, Nuevo León`;
+const migas = zona && padre
+  ? [{ name: padre.nombre, href: rutaMunicipio(padre.slug) }, { name: m.h1 }]
+  : [{ name: m.h1 }];
 const fotosHero = todas.slice(0, 4);
 const fotos = todas.slice(4, 10);
 
@@ -46,11 +61,21 @@ const serviceSchema = {
   serviceType: 'Donas decoradas artesanales',
   url: `${siteUrl}${rutaMunicipio(m.slug)}`,
   provider: { '@id': `${siteUrl}/#negocio` },
-  areaServed: {
-    '@type': 'City',
-    name: m.nombre,
-    containedInPlace: { '@type': 'AdministrativeArea', name: 'Nuevo León' },
-  },
+  areaServed: zona && padre
+    ? {
+        '@type': 'Place',
+        name: `${m.nombre}, ${padre.nombre}`,
+        containedInPlace: {
+          '@type': 'City',
+          name: padre.nombre,
+          containedInPlace: { '@type': 'AdministrativeArea', name: 'Nuevo León' },
+        },
+      }
+    : {
+        '@type': 'City',
+        name: m.nombre,
+        containedInPlace: { '@type': 'AdministrativeArea', name: 'Nuevo León' },
+      },
 };
 ---
 
@@ -66,12 +91,12 @@ const serviceSchema = {
   <div class="site-wrapper">
     <SiteHeader whatsappURL={waURL} />
 
-    <Breadcrumbs items={[{ name: m.h1 }]} />
+    <Breadcrumbs items={migas} />
 
     <main>
       <section class="local-hero">
         <div class="container local-hero-inner">
-          <div class="hero-badge">📍 {m.nombre}, Nuevo León</div>
+          <div class="hero-badge">📍 {badge}</div>
           <h1 class="local-title">{m.h1}</h1>
           <p class="local-intro">{m.intro}</p>
           <ul class="hero-strip">
@@ -120,7 +145,29 @@ const serviceSchema = {
         </div>
       </section>
 
-      <ResenasGoogle max={3} compacta prioridad="entrega" title="Lo que dicen de nuestras entregas" />
+      {zona?.colegio && (
+        <section class="local-section local-colegio">
+          <div class="container local-narrow">
+            <div class="section-header">
+              <span class="section-eyebrow">{zona.colegio.eyebrow}</span>
+              <h2>{zona.colegio.titulo}</h2>
+              <p>{zona.colegio.texto}</p>
+            </div>
+            <ul class="colegio-puntos">
+              {zona.colegio.puntos.map((p) => <li>{p}</li>)}
+            </ul>
+            <div class="gallery-cta">
+              <WhatsAppButton
+                number={waNumber}
+                message={zona.colegio.mensajeWhatsApp}
+                label="Cotizar donas para el colegio"
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
+      <ResenasGoogle max={3} compacta prioridad="entrega" title="Nuestros clientes opinan" />
 
       <section class="local-section">
         <div class="container local-narrow">
@@ -130,12 +177,14 @@ const serviceSchema = {
             <p>{m.cobertura}</p>
           </div>
 
-          <div class="chip-group">
-            <p class="chip-title">Algunas de las colonias que atendemos</p>
-            <ul class="chips">
-              {m.colonias.map((c) => <li class="chip">{c}</li>)}
-            </ul>
-          </div>
+          {m.colonias.length > 0 && (
+            <div class="chip-group">
+              <p class="chip-title">Algunas de las colonias que atendemos</p>
+              <ul class="chips">
+                {m.colonias.map((c) => <li class="chip">{c}</li>)}
+              </ul>
+            </div>
+          )}
 
           <div class="chip-group">
             <p class="chip-title">Zonas de referencia</p>
@@ -183,6 +232,19 @@ const serviceSchema = {
 
       <FAQ items={faqItems} title={`Preguntas frecuentes sobre donas decoradas en ${m.nombre}`} />
 
+      {zonasHijas.length > 0 && (
+        <section class="local-section local-others">
+          <div class="container local-narrow">
+            <h2 class="local-others-title">Zonas de {m.nombre} que atendemos</h2>
+            <ul class="chips chips-center">
+              {zonasHijas.map((z) => (
+                <li><a class="chip chip-link" href={rutaMunicipio(z.slug)}>Donas decoradas en {z.nombre}</a></li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
       {(otrasPaginas.length > 0 || sinPagina.length > 0) && (
         <section class="local-section local-others">
           <div class="container local-narrow">
@@ -190,6 +252,9 @@ const serviceSchema = {
             <ul class="chips chips-center">
               {otrasPaginas.map((x) => (
                 <li><a class="chip chip-link" href={rutaMunicipio(x.slug)}>{x.nombre}</a></li>
+              ))}
+              {zonasHermanas.map((z) => (
+                <li><a class="chip chip-link" href={rutaMunicipio(z.slug)}>{z.nombre}</a></li>
               ))}
               {sinPagina.map((n) => <li class="chip">{n}</li>)}
             </ul>
@@ -343,6 +408,32 @@ const serviceSchema = {
     line-height: 1.75;
     margin: 0 auto;
     max-width: 640px;
+  }
+
+  .local-colegio { background: var(--pink-pale); }
+  .colegio-puntos {
+    list-style: none;
+    margin: 0 0 8px;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+  .colegio-puntos li {
+    position: relative;
+    background: var(--white);
+    border-radius: var(--r-lg);
+    padding: 16px 18px 16px 54px;
+    box-shadow: var(--shadow-md);
+    color: var(--choco);
+    font-weight: 600;
+    line-height: 1.55;
+  }
+  .colegio-puntos li::before {
+    content: '🍩';
+    position: absolute;
+    left: 16px;
+    top: 14px;
+    font-size: 1.3rem;
   }
 
   .local-steps-bg { background: var(--pink-pale); }

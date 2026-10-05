@@ -10,7 +10,7 @@ export const fotosPool: Foto[] = [
   { file: 'donas-decoradas-cumpleanos-set-6-monterrey.jpg', alt: 'Caja de 6 donas decoradas de cumpleaños' },
   { file: 'dona-decorada-lentes-de-sol-sonrisa-monterrey.jpg', alt: 'Dona decorada con lentes de sol y sonrisa' },
   { file: 'dona-decorada-gomitas-carita-monterrey.jpg', alt: 'Dona decorada con carita de gomitas' },
-  { file: 'torre-donas-chocolate-nuez-monterrey.jpg', alt: 'Torre de donas de chocolate y nuez' },
+  { file: 'torre-donas-chocolate-nuez-monterrey.jpg', alt: 'Pastel de donas decoradas' },
   { file: 'dona-decorada-chocolate-grageas-monterrey.jpg', alt: 'Dona de chocolate decorada con grageas' },
   { file: 'dona-decorada-kinder-sorpresa-monterrey.jpg', alt: 'Dona decorada con huevo sorpresa para cumpleaños' },
   { file: 'dona-decorada-chocolate-carita-feliz-monterrey.jpg', alt: 'Dona de chocolate con carita feliz' },
