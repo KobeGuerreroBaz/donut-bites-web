@@ -9,6 +9,7 @@ export interface Resena {
   estrellas: 1 | 2 | 3 | 4 | 5;
   municipio?: string; // slug del municipio de entrega, solo si es seguro
   destacada?: boolean;
+  entrega?: boolean; // habla de la entrega/puntualidad: se prioriza en las páginas locales
 }
 
 // Datos del perfil de Google (actualizar a mano cuando cambien)
@@ -23,6 +24,7 @@ export const resenas: Resena[] = [
     estrellas: 5,
     municipio: "apodaca",
     destacada: true,
+    entrega: true,
   },
   {
     autor: "Mónica I.",
@@ -44,12 +46,14 @@ export const resenas: Resena[] = [
       "Suuuper recomendadas, quedaron hermosas y deliciosas. Me hicieron entrega el día y hra acordados en el sur. Muchas gracias Éxito!!",
     estrellas: 5,
     destacada: true,
+    entrega: true,
   },
   {
     autor: "Mariana L.",
     texto:
       "Simplemente las mejores.\nExcelente servicio,atención ,puntualidad pero lo más importante el sabor😋😋\nSúper recomendables",
     estrellas: 5,
+    entrega: true,
   },
   {
     autor: "Pochart",

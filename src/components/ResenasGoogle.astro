@@ -14,8 +14,12 @@ interface Props {
   title?: string;
   eyebrow?: string;
   subtitle?: string;
-  /** Muestra la calificación general (5.0 · 9 opiniones) */
+  /** Muestra la calificación general (5.0 · 9 opiniones). Si hay link a Google, es un enlace a la ficha. */
   mostrarResumen?: boolean;
+  /** Versión chica: sin etiqueta ni subtítulo y con menos espacio (para páginas locales) */
+  compacta?: boolean;
+  /** 'entrega' = salen primero las reseñas que hablan de la entrega y la puntualidad */
+  prioridad?: 'entrega';
   id?: string;
 }
 
@@ -26,12 +30,16 @@ const {
   eyebrow = 'Reseñas en Google',
   subtitle = 'Opiniones reales de quienes ya probaron nuestras donas.',
   mostrarResumen = true,
+  compacta = false,
+  prioridad,
   id = 'resenas',
 } = Astro.props;
 
-// Orden: primero las del municipio, luego las destacadas, luego el resto.
+// Orden: prioridad temática, luego las del municipio, luego las destacadas, luego el resto.
 const puntaje = (r: (typeof resenas)[number]) =>
-  (municipio && r.municipio === municipio ? 2 : 0) + (r.destacada ? 1 : 0);
+  (prioridad === 'entrega' && r.entrega ? 4 : 0) +
+  (municipio && r.municipio === municipio ? 2 : 0) +
+  (r.destacada ? 1 : 0);
 
 const lista = resenas
   .map((r, i) => ({ r, i }))
@@ -44,17 +52,32 @@ const promedio = CALIFICACION_GOOGLE.toFixed(1);
 ---
 
 {lista.length > 0 && (
-  <section class="resenas" id={id} aria-labelledby={`${id}-titulo`}>
+  <section class:list={['resenas', { 'resenas--compacta': compacta }]} id={id} aria-labelledby={`${id}-titulo`}>
     <div class="resenas-inner">
       <div class="resenas-head">
-        <span class="resenas-eyebrow">{eyebrow}</span>
+        {!compacta && <span class="resenas-eyebrow">{eyebrow}</span>}
         <h2 id={`${id}-titulo`}>{title}</h2>
-        <p>{subtitle}</p>
+        {!compacta && <p>{subtitle}</p>}
         {mostrarResumen && (
-          <p class="resenas-resumen">
-            <span class="resenas-resumen-stars" aria-hidden="true">★★★★★</span>
-            <strong>{promedio}</strong> · {TOTAL_RESENAS_GOOGLE} opiniones en Google
-          </p>
+          GOOGLE_PERFIL_URL ? (
+            <a
+              class="resenas-resumen resenas-resumen--link"
+              href={GOOGLE_PERFIL_URL}
+              target="_blank"
+              rel="noopener"
+              aria-label={`${promedio} de 5 estrellas, ${TOTAL_RESENAS_GOOGLE} opiniones en Google. Ver nuestra ficha en Google`}
+            >
+              <span class="resenas-resumen-stars" aria-hidden="true">★★★★★</span>
+              <strong>{promedio}</strong>
+              <span>· {TOTAL_RESENAS_GOOGLE} opiniones en Google</span>
+            </a>
+          ) : (
+            <p class="resenas-resumen">
+              <span class="resenas-resumen-stars" aria-hidden="true">★★★★★</span>
+              <strong>{promedio}</strong>
+              <span>· {TOTAL_RESENAS_GOOGLE} opiniones en Google</span>
+            </p>
+          )
         )}
       </div>
 
@@ -133,15 +156,38 @@ const promedio = CALIFICACION_GOOGLE.toFixed(1);
     max-width: 520px;
     margin: 0 auto;
   }
-  .resenas-head .resenas-resumen {
+  .resenas-resumen {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     margin-top: 16px;
     font-size: 0.95rem;
     color: var(--choco, #3D1A0E);
+    text-decoration: none;
+  }
+  .resenas-head p.resenas-resumen {
+    display: flex;
+    justify-content: center;
+    max-width: none;
+    font-size: 0.95rem;
+    color: var(--choco, #3D1A0E);
+  }
+  .resenas-resumen--link {
+    padding: 8px 16px;
+    background: #fff;
+    border: 1.5px solid var(--pink-lt, #F9B8C7);
+    border-radius: 999px;
+    box-shadow: var(--shadow-sm, 0 2px 8px rgba(61, 26, 14, 0.08));
+    font-weight: 700;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .resenas-resumen--link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md, 0 8px 32px rgba(61, 26, 14, 0.12));
   }
   .resenas-resumen-stars {
     color: var(--gold, #F4A629);
     letter-spacing: 2px;
-    margin-right: 6px;
   }
 
   /* ---- Lista: carrusel en móvil, cuadrícula en escritorio ---- */
@@ -231,10 +277,31 @@ const promedio = CALIFICACION_GOOGLE.toFixed(1);
     box-shadow: 0 10px 24px rgba(232, 73, 106, 0.4);
   }
 
+  /* ---- Versión compacta (páginas locales) ---- */
+  .resenas--compacta {
+    padding: 52px 0;
+  }
+  .resenas--compacta .resenas-head {
+    margin-bottom: 22px;
+  }
+  .resenas--compacta .resenas-head h2 {
+    font-size: clamp(1.5rem, 4.5vw, 2rem);
+    margin-bottom: 4px;
+  }
+  .resenas--compacta .resenas-resumen {
+    margin-top: 10px;
+  }
+  .resenas--compacta .resenas-lista {
+    margin-bottom: 18px;
+  }
+
   /* ---- Escritorio ---- */
   @media (min-width: 900px) {
     .resenas {
       padding: 100px 0;
+    }
+    .resenas--compacta {
+      padding: 64px 0;
     }
     .resenas-lista {
       display: grid;
@@ -243,6 +310,9 @@ const promedio = CALIFICACION_GOOGLE.toFixed(1);
       margin: 0 0 40px;
       padding: 0;
       overflow: visible;
+    }
+    .resenas--compacta .resenas-lista {
+      margin-bottom: 28px;
     }
     .resena-card {
       width: auto;

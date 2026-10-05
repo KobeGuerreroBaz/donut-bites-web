@@ -5,6 +5,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
 import FAQ from '../components/FAQ.astro';
+import ResenasGoogle from '../components/ResenasGoogle.astro';
 import { getContent, defaultContent } from '../lib/content';
 import { faqPedidos } from '../lib/faq-pedidos';
 import { municipios, otrosMunicipios, rutaMunicipio } from '../lib/municipios';
@@ -118,6 +119,8 @@ const serviceSchema = {
           </div>
         </div>
       </section>
+
+      <ResenasGoogle max={3} compacta prioridad="entrega" title="Lo que dicen de nuestras entregas" />
 
       <section class="local-section">
         <div class="container local-narrow">
