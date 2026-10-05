@@ -1,7 +1,4 @@
 ---
-// src/pages/donas-decoradas-[municipio].astro
-// Una sola plantilla para todas las páginas locales: /donas-decoradas-guadalupe, etc.
-// Los datos de cada municipio viven en src/lib/municipios.ts.
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
@@ -17,7 +14,6 @@ import { fotosParaMunicipio } from '../lib/fotos-locales';
 const { municipio: slug } = Astro.params;
 const m = municipios.find((x) => x.slug === slug);
 
-// Si el municipio no existe en municipios.ts, responde 404
 if (!m) {
   return new Response(null, { status: 404, statusText: 'Not Found' });
 }
@@ -28,13 +24,9 @@ const content = env ? await getContent(env) : defaultContent;
 const waNumber = content.whatsappNumber;
 const waURL = whatsappUrl(m.mensajeWhatsApp, waNumber);
 
-// Preguntas propias del municipio primero, luego solo 3 generales (anticipación, mínimo y cotización)
-// para no repetir el mismo FAQ completo en todas las páginas.
 const faqItems = [...m.faq, ...faqPedidos.slice(0, 3)];
 
-// Enlaces a otras páginas locales ya publicadas
 const otrasPaginas = municipios.filter((x) => x.slug !== m.slug);
-// Municipios que aún no tienen página: se muestran solo como texto
 const sinPagina = otrosMunicipios.filter((n) => {
   const nl = n.toLowerCase();
   const tienePagina = municipios.some((x) => nl.includes(x.nombre.toLowerCase()));
@@ -42,8 +34,8 @@ const sinPagina = otrosMunicipios.filter((n) => {
 });
 
 const todas = fotosParaMunicipio(m.nombre, municipios.indexOf(m));
-const fotosHero = todas.slice(0, 4); // tira chica en el hero
-const fotos = todas.slice(4, 10); // galería de abajo (otras 6, sin repetir)
+const fotosHero = todas.slice(0, 4);
+const fotos = todas.slice(4, 10);
 
 const siteUrl = 'https://donutbitesco.com';
 const serviceSchema = {
@@ -76,7 +68,6 @@ const serviceSchema = {
     <Breadcrumbs items={[{ name: m.h1 }]} />
 
     <main>
-      <!-- ===== HERO LOCAL ===== -->
       <section class="local-hero">
         <div class="container local-hero-inner">
           <div class="hero-badge">📍 {m.nombre}, Nuevo León</div>
@@ -108,7 +99,6 @@ const serviceSchema = {
         </div>
       </section>
 
-      <!-- ===== GALERÍA ===== -->
       <section class="local-section local-gallery">
         <div class="container">
           <div class="section-header">
@@ -129,7 +119,6 @@ const serviceSchema = {
         </div>
       </section>
 
-      <!-- ===== COBERTURA ===== -->
       <section class="local-section">
         <div class="container local-narrow">
           <div class="section-header">
@@ -156,7 +145,6 @@ const serviceSchema = {
         </div>
       </section>
 
-      <!-- ===== IDEAS (texto único por municipio) ===== -->
       <section class="local-section local-ideas">
         <div class="container local-narrow">
           <h2 class="local-ideas-title">{m.ideasTitulo}</h2>
@@ -164,7 +152,6 @@ const serviceSchema = {
         </div>
       </section>
 
-      <!-- ===== CÓMO PEDIR ===== -->
       <section class="local-section local-steps-bg">
         <div class="container">
           <div class="section-header">
@@ -191,10 +178,8 @@ const serviceSchema = {
         </div>
       </section>
 
-      <!-- ===== FAQ ===== -->
       <FAQ items={faqItems} title={`Preguntas frecuentes sobre donas decoradas en ${m.nombre}`} />
 
-      <!-- ===== OTROS MUNICIPIOS ===== -->
       {(otrasPaginas.length > 0 || sinPagina.length > 0) && (
         <section class="local-section local-others">
           <div class="container local-narrow">
@@ -209,7 +194,6 @@ const serviceSchema = {
         </section>
       )}
 
-      <!-- ===== CTA FINAL ===== -->
       <section class="local-cta">
         <div class="container local-narrow">
           <h2>¿Listo para pedir tus donas en {m.nombre}?</h2>

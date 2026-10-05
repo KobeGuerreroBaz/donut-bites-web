@@ -1,0 +1,70 @@
+---
+// src/components/ResenasMini.astro
+// Franja chiquita con la calificación de Google, para el hero de la home.
+// Lleva a la sección #resenas de la misma página. Sin datos estructurados.
+import { CALIFICACION_GOOGLE, TOTAL_RESENAS_GOOGLE } from '../lib/resenas';
+
+interface Props {
+  /** A dónde lleva al tocarla (por defecto, la sección de reseñas de la home) */
+  href?: string;
+}
+
+const { href = '#resenas' } = Astro.props;
+const promedio = CALIFICACION_GOOGLE.toFixed(1);
+---
+
+<a
+  class="resenas-mini"
+  href={href}
+  aria-label={`${promedio} de 5 estrellas, ${TOTAL_RESENAS_GOOGLE} opiniones en Google. Ver reseñas`}
+>
+  <span class="resenas-mini-stars" aria-hidden="true">★★★★★</span>
+  <strong>{promedio}</strong>
+  <span class="resenas-mini-texto">· {TOTAL_RESENAS_GOOGLE} opiniones en Google</span>
+</a>
+
+<style>
+  .resenas-mini {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    margin: -28px 0 24px;
+    padding: 8px 16px;
+    background: #fff;
+    border: 1.5px solid var(--pink-lt, #F9B8C7);
+    border-radius: 999px;
+    box-shadow: var(--shadow-sm, 0 2px 8px rgba(61, 26, 14, 0.08));
+    color: var(--choco, #3D1A0E);
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .resenas-mini:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md, 0 8px 32px rgba(61, 26, 14, 0.12));
+  }
+  .resenas-mini-stars {
+    color: var(--gold, #F4A629);
+    letter-spacing: 1px;
+  }
+  .resenas-mini-texto {
+    color: var(--gray, #6B6B6B);
+    font-weight: 600;
+  }
+
+  /* En móvil el hero va centrado */
+  @media (max-width: 900px) {
+    .resenas-mini {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  @media (max-width: 400px) {
+    .resenas-mini {
+      font-size: 0.8rem;
+      padding: 8px 12px;
+    }
+  }
+</style>

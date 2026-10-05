@@ -1,0 +1,251 @@
+---
+// src/components/ResenasGoogle.astro
+// Muestra reseñas reales de Google tal como las escribieron los clientes.
+// OJO: a propósito NO lleva datos estructurados (Review / AggregateRating),
+// porque Google ignora las reseñas que un negocio publica sobre sí mismo.
+import { resenas, CALIFICACION_GOOGLE, TOTAL_RESENAS_GOOGLE } from '../lib/resenas';
+import { GOOGLE_PERFIL_URL, GOOGLE_ESCRIBIR_RESENA_URL } from '../lib/google';
+
+interface Props {
+  /** Slug del municipio (igual que en municipios.ts). Sus reseñas salen primero. */
+  municipio?: string;
+  /** Máximo de reseñas a mostrar */
+  max?: number;
+  title?: string;
+  eyebrow?: string;
+  subtitle?: string;
+  /** Muestra la calificación general (5.0 · 9 opiniones) */
+  mostrarResumen?: boolean;
+  id?: string;
+}
+
+const {
+  municipio,
+  max = 6,
+  title = 'Lo que dicen nuestros clientes',
+  eyebrow = 'Reseñas en Google',
+  subtitle = 'Opiniones reales de quienes ya probaron nuestras donas.',
+  mostrarResumen = true,
+  id = 'resenas',
+} = Astro.props;
+
+// Orden: primero las del municipio, luego las destacadas, luego el resto.
+const puntaje = (r: (typeof resenas)[number]) =>
+  (municipio && r.municipio === municipio ? 2 : 0) + (r.destacada ? 1 : 0);
+
+const lista = resenas
+  .map((r, i) => ({ r, i }))
+  .sort((a, b) => puntaje(b.r) - puntaje(a.r) || a.i - b.i)
+  .slice(0, max)
+  .map(({ r }) => r);
+
+const estrellas = (n: number) => '★'.repeat(n) + '☆'.repeat(5 - n);
+const promedio = CALIFICACION_GOOGLE.toFixed(1);
+---
+
+{lista.length > 0 && (
+  <section class="resenas" id={id} aria-labelledby={`${id}-titulo`}>
+    <div class="resenas-inner">
+      <div class="resenas-head">
+        <span class="resenas-eyebrow">{eyebrow}</span>
+        <h2 id={`${id}-titulo`}>{title}</h2>
+        <p>{subtitle}</p>
+        {mostrarResumen && (
+          <p class="resenas-resumen">
+            <span class="resenas-resumen-stars" aria-hidden="true">★★★★★</span>
+            <strong>{promedio}</strong> · {TOTAL_RESENAS_GOOGLE} opiniones en Google
+          </p>
+        )}
+      </div>
+
+      <ul class="resenas-lista">
+        {lista.map((r) => (
+          <li class="resena-card">
+            <div class="resena-stars" role="img" aria-label={`${r.estrellas} de 5 estrellas`}>
+              {estrellas(r.estrellas)}
+            </div>
+            <blockquote class="resena-texto">{r.texto}</blockquote>
+            <div class="resena-pie">
+              <span class="resena-autor">{r.autor}</span>
+              <span class="resena-fuente">Reseña de Google</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      {(GOOGLE_PERFIL_URL || GOOGLE_ESCRIBIR_RESENA_URL) && (
+        <div class="resenas-ctas">
+          {GOOGLE_PERFIL_URL && (
+            <a href={GOOGLE_PERFIL_URL} class="btn-secondary" target="_blank" rel="noopener">
+              Ver todas las reseñas en Google
+            </a>
+          )}
+          {GOOGLE_ESCRIBIR_RESENA_URL && (
+            <a href={GOOGLE_ESCRIBIR_RESENA_URL} class="resenas-btn-dejar" target="_blank" rel="noopener">
+              ⭐ Déjanos tu reseña
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  </section>
+)}
+
+<style>
+  .resenas {
+    padding: 72px 0;
+    background: var(--pink-pale, #FFF0F3);
+  }
+  .resenas-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---- Encabezado ---- */
+  .resenas-head {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .resenas-eyebrow {
+    display: inline-block;
+    background: var(--pink-pale, #FFF0F3);
+    color: var(--pink, #E8496A);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .resenas-head h2 {
+    font-family: var(--ff-display, 'Fraunces', Georgia, serif);
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 900;
+    color: var(--choco, #3D1A0E);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .resenas-head p {
+    font-size: 1.05rem;
+    color: var(--gray, #6B6B6B);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .resenas-head .resenas-resumen {
+    margin-top: 16px;
+    font-size: 0.95rem;
+    color: var(--choco, #3D1A0E);
+  }
+  .resenas-resumen-stars {
+    color: var(--gold, #F4A629);
+    letter-spacing: 2px;
+    margin-right: 6px;
+  }
+
+  /* ---- Lista: carrusel en móvil, cuadrícula en escritorio ---- */
+  .resenas-lista {
+    list-style: none;
+    display: flex;
+    gap: 14px;
+    margin: 0 -24px 28px;
+    padding: 4px 24px 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 24px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .resenas-lista::-webkit-scrollbar {
+    display: none;
+  }
+  .resena-card {
+    flex: 0 0 auto;
+    width: min(82vw, 320px);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fff;
+    border: 1.5px solid var(--pink-lt, #F9B8C7);
+    border-radius: 20px;
+    padding: 22px 20px;
+    box-shadow: var(--shadow-sm, 0 2px 8px rgba(61, 26, 14, 0.08));
+  }
+  .resena-stars {
+    color: var(--gold, #F4A629);
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .resena-texto {
+    margin: 0;
+    flex: 1;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--choco, #3D1A0E);
+    white-space: pre-line;
+  }
+  .resena-pie {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--pink-pale, #FFF0F3);
+  }
+  .resena-autor {
+    font-weight: 800;
+    color: var(--choco, #3D1A0E);
+  }
+  .resena-fuente {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gray, #6B6B6B);
+  }
+
+  /* ---- Botones ---- */
+  .resenas-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  .resenas-btn-dejar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--pink, #E8496A);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 14px 24px;
+    border-radius: 999px;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(232, 73, 106, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .resenas-btn-dejar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(232, 73, 106, 0.4);
+  }
+
+  /* ---- Escritorio ---- */
+  @media (min-width: 900px) {
+    .resenas {
+      padding: 100px 0;
+    }
+    .resenas-lista {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 0 0 40px;
+      padding: 0;
+      overflow: visible;
+    }
+    .resena-card {
+      width: auto;
+    }
+  }
+</style>

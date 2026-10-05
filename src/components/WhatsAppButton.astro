@@ -1,17 +1,11 @@
 ---
-// src/components/WhatsAppButton.astro
 import { whatsappUrl, MENSAJE_BASE } from '../lib/whatsapp';
 
 interface Props {
-  /** Mensaje prellenado. Cámbialo por página para saber de dónde viene el cliente. */
   message?: string;
-  /** Número de WhatsApp (pásalo desde content.whatsappNumber). Si falta, usa el de respaldo. */
   number?: string;
-  /** Texto del botón */
   label?: string;
-  /** 'solid' (verde, como la home) o 'outline' (borde rosa) */
   variant?: 'solid' | 'outline';
-  /** Ocupa todo el ancho (útil en móvil) */
   full?: boolean;
   class?: string;
 }
@@ -50,7 +44,7 @@ const href = whatsappUrl(message, number);
     align-items: center;
     justify-content: center;
     gap: 0.6rem;
-    min-height: 48px; /* zona táctil cómoda en móvil */
+    min-height: 48px;
     padding: 0.75rem 1.5rem;
     border-radius: 999px;
     border: 2px solid var(--pink, #E8496A);
@@ -62,7 +56,7 @@ const href = whatsappUrl(message, number);
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
   }
-  /* Mismo verde que los botones de la home (.btn-primary) */
+
   .wa-solid {
     background: linear-gradient(135deg, #25D366, #1DA851);
     border-color: transparent;

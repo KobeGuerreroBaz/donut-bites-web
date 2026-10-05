@@ -1,6 +1,4 @@
 ---
-// src/components/SiteFooter.astro
-// Botón flotante de WhatsApp + footer. Úsalo en todas las páginas públicas.
 import { ICON } from '../lib/icons';
 import { municipios, rutaMunicipio } from '../lib/municipios';
 
@@ -13,13 +11,11 @@ const { whatsappURL, social } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
-<!-- ===== STICKY WHATSAPP ===== -->
 <a href={whatsappURL} class="wapp-sticky" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
   <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.wa} /></svg>
   <span>Pedir ahora</span>
 </a>
 
-<!-- ===== FOOTER ===== -->
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-logo">

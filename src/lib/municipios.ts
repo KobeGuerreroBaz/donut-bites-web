@@ -1,6 +1,3 @@
-// src/lib/municipios.ts
-// Datos de cada página local. Para agregar un municipio, copia un bloque y cambia TODO el texto:
-// cada página debe tener su propio contenido (no copies y pegues frases entre municipios).
 import type { FaqItem } from './faq-pedidos';
 
 export interface Municipio {
@@ -33,7 +30,6 @@ export interface Municipio {
 }
 
 export const municipios: Municipio[] = [
-  // ---------------------------------------------------------------- GUADALUPE
   {
     slug: 'guadalupe',
     nombre: 'Guadalupe',
@@ -70,7 +66,6 @@ export const municipios: Municipio[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- MONTERREY
   {
     slug: 'monterrey',
     nombre: 'Monterrey',
@@ -107,7 +102,6 @@ export const municipios: Municipio[] = [
     ],
   },
 
-  // -------------------------------------------------------- SAN PEDRO GARZA GARCÍA
   {
     slug: 'san-pedro',
     nombre: 'San Pedro Garza García',
@@ -144,7 +138,6 @@ export const municipios: Municipio[] = [
     ],
   },
 
-  // --------------------------------------------------------- SAN NICOLÁS DE LOS GARZA
   {
     slug: 'san-nicolas',
     nombre: 'San Nicolás de los Garza',
@@ -181,7 +174,6 @@ export const municipios: Municipio[] = [
     ],
   },
 
-  // ----------------------------------------------------------------------- APODACA
   {
     slug: 'apodaca',
     nombre: 'Apodaca',
@@ -218,7 +210,6 @@ export const municipios: Municipio[] = [
     ],
   },
 
-  // -------------------------------------------------------------- GENERAL ESCOBEDO
   {
     slug: 'escobedo',
     nombre: 'General Escobedo',
@@ -255,7 +246,6 @@ export const municipios: Municipio[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- SANTA CATARINA
   {
     slug: 'santa-catarina',
     nombre: 'Santa Catarina',

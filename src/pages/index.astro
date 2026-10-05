@@ -5,6 +5,8 @@ import { ICON } from '../lib/icons';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import FAQ from '../components/FAQ.astro';
+import ResenasGoogle from '../components/ResenasGoogle.astro';
+import ResenasMini from '../components/ResenasMini.astro';
 import { faqPedidos } from '../lib/faq-pedidos';
 
 const env = Astro.locals.runtime?.env;
@@ -105,6 +107,7 @@ const occasions = [
           </a>
           <a href="#sabores" class="btn-secondary">Ver sabores ↓</a>
         </div>
+        <ResenasMini />
         <div class="hero-stats">
           <div class="stat"><strong>100%</strong><span>Artesanal</span></div>
           <div class="stat-divider"></div>
@@ -150,6 +153,9 @@ const occasions = [
         </div>
       </div>
     </section>
+
+    <!-- ===== RESEÑAS DE GOOGLE ===== -->
+    <ResenasGoogle max={6} />
 
     <!-- ===== OCASIONES ===== -->
     <section class="section-occasions" id="ocasiones">
