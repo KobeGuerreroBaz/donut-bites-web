@@ -63,6 +63,9 @@ const occasions = [
           <a href={whatsappURL} class="banner-season-cta" target="_blank" rel="noopener">
             💬 {activeSeason.ctaText}
           </a>
+          {activeSeason.enlace && (
+            <a href={activeSeason.enlace} class="banner-season-link">Ver diseños de {activeSeason.label}</a>
+          )}
         </section>
 
         <!-- LIGHTBOX -->
@@ -674,6 +677,17 @@ const occasions = [
     transition: all .2s;
   }
   .banner-season-cta:hover { background: #a8345a; transform: translateY(-2px); }
+  .banner-season-link {
+    display: block;
+    margin-top: 16px;
+    text-align: center;
+    color: #C8446A;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .banner-season-link:hover { color: #a8345a; }
 
   /* ---- LIGHTBOX ---- */
   .lb-overlay {

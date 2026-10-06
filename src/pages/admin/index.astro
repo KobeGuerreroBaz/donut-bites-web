@@ -74,6 +74,10 @@ const seasonEntries = Object.entries(content.seasons);
         <span>Texto del botón de WhatsApp</span>
         <input type="text" id="seasonCta" />
       </label>
+      <label class="field">
+        <span>Enlace a la página de la temporada (opcional, ej. /donas-decoradas-para-halloween-monterrey)</span>
+        <input type="text" id="seasonLink" />
+      </label>
 
       <h3>Fotos de esta temporada</h3>
       <div class="image-grid" id="seasonImageGrid"></div>
@@ -220,6 +224,7 @@ const seasonEntries = Object.entries(content.seasons);
     const seasonTitle = document.getElementById('seasonTitle');
     const seasonSubtitle = document.getElementById('seasonSubtitle');
     const seasonCta = document.getElementById('seasonCta');
+    const seasonLink = document.getElementById('seasonLink');
     const seasonImageGrid = document.getElementById('seasonImageGrid');
     const heroImageGrid = document.getElementById('heroImageGrid');
     const heroSelect = document.getElementById('heroSelect');
@@ -262,6 +267,7 @@ const seasonEntries = Object.entries(content.seasons);
       seasonTitle.value = season.title;
       seasonSubtitle.value = season.subtitle;
       seasonCta.value = season.ctaText;
+      seasonLink.value = season.enlace ?? '';
       activeCheckbox.checked = state.activeSeason === currentSeasonKey;
       renderActiveNote();
       renderImageGrid(seasonImageGrid, season.images, (idx) => {
@@ -271,13 +277,14 @@ const seasonEntries = Object.entries(content.seasons);
       });
     }
 
-    [seasonTag, seasonTitle, seasonSubtitle, seasonCta].forEach((el) => {
+    [seasonTag, seasonTitle, seasonSubtitle, seasonCta, seasonLink].forEach((el) => {
       el.addEventListener('input', () => {
         const season = state.seasons[currentSeasonKey];
         season.tag = seasonTag.value;
         season.title = seasonTitle.value;
         season.subtitle = seasonSubtitle.value;
         season.ctaText = seasonCta.value;
+        season.enlace = seasonLink.value.trim();
         markDirty();
       });
     });

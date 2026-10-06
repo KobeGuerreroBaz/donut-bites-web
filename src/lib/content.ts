@@ -9,6 +9,7 @@ export interface SeasonContent {
   title: string;
   subtitle: string;
   ctaText: string;
+  enlace?: string;
   images: SiteImage[];
 }
 
@@ -56,6 +57,7 @@ export const defaultContent: SiteContent = {
       title: 'Donas que dan <em>miedo</em> de lo ricas',
       subtitle: 'Diseños de temporada con telarañas, calabazas y mucho chocolate — por encargo para tu fiesta de Halloween en Monterrey.',
       ctaText: 'Pedir mis donas de Halloween',
+      enlace: '/donas-decoradas-para-halloween-monterrey',
       images: [
         { src: `${LIB}/halloween/donas-decoradas-halloween-oreo-casa-embrujada-monterrey.jpeg`, alt: 'Dona decorada de Halloween con Oreo de casa embrujada, Monterrey' },
         { src: `${LIB}/halloween/donas-decoradas-halloween-sprinkles-terror-monterrey.jpeg`, alt: 'Dona decorada de Halloween con grageas de terror, Monterrey' },
@@ -215,7 +217,13 @@ export async function getContent(env: Env): Promise<SiteContent> {
     const raw = await env.SITE_CONTENT.get(CONTENT_KEY);
     if (!raw) return defaultContent;
     const parsed = JSON.parse(raw) as SiteContent;
-    return { ...defaultContent, ...parsed };
+    const seasons = Object.fromEntries(
+      Object.entries(parsed.seasons ?? defaultContent.seasons).map(([key, season]) => [
+        key,
+        { ...defaultContent.seasons[key], ...season },
+      ]),
+    ) as Record<string, SeasonContent>;
+    return { ...defaultContent, ...parsed, seasons };
   } catch {
     // KV sin configurar todavia, o dato invalido: el sitio publico sigue funcionando con los valores por defecto.
     return defaultContent;
