@@ -1,0 +1,337 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import FAQ from './FAQ.astro';
+import ResenasGoogle from './ResenasGoogle.astro';
+import { getContent, defaultContent } from '../lib/content';
+import { temporadas, rutaTemporada } from '../lib/temporadas';
+import { municipios, rutaMunicipio } from '../lib/municipios';
+import { zonas } from '../lib/zonas';
+import { whatsappUrl } from '../lib/whatsapp';
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const t = temporadas.find((x) => x.slug === slug);
+
+if (!t) {
+  throw new Error(`Temporada no encontrada: ${slug}`);
+}
+
+const env = Astro.locals.runtime?.env;
+const content = env ? await getContent(env) : defaultContent;
+
+const waNumber = content.whatsappNumber;
+const waURL = whatsappUrl(t.mensajeWhatsApp, waNumber);
+
+const nombresCortos: Record<string, string> = {
+  'san-nicolas': 'San Nicolás',
+  'san-pedro': 'San Pedro',
+};
+
+const siteUrl = 'https://donutbitesco.com';
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: t.h1,
+  serviceType: `Donas decoradas para ${t.nombre}`,
+  url: `${siteUrl}${rutaTemporada(t.slug)}`,
+  provider: { '@id': `${siteUrl}/#negocio` },
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Área metropolitana de Monterrey',
+    containedInPlace: { '@type': 'AdministrativeArea', name: 'Nuevo León' },
+  },
+};
+---
+
+<Layout
+  title={t.title}
+  description={t.description}
+  ogTitle={t.title}
+  ogDescription={t.description}
+  image={t.hero.src}
+  imageAlt={t.hero.alt}
+  phone={waNumber}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+
+  <div class="site-wrapper">
+    <SiteHeader whatsappURL={waURL} />
+
+    <Breadcrumbs items={[{ name: t.h1 }]} />
+
+    <main>
+      <section class="temp-hero">
+        <div class="container temp-hero-inner">
+          <div class="hero-badge">{t.badge}</div>
+          <h1 class="temp-title">{t.h1}</h1>
+          <p class="temp-intro">{t.intro}</p>
+          <div class="temp-hero-photo">
+            <img
+              src={t.hero.src}
+              alt={t.hero.alt}
+              width="960"
+              height="960"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </div>
+          <div class="temp-ctas">
+            <WhatsAppButton number={waNumber} message={t.mensajeWhatsApp} label="Cotizar por WhatsApp" />
+            <a href="#disenos" class="btn-secondary">Ver diseños</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="temp-section temp-gallery" id="disenos">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">Hechas a mano</span>
+            <h2>{t.disenosTitulo}</h2>
+            <p>{t.disenosTexto}</p>
+          </div>
+          <ul class="chips chips-center temp-chips">
+            {t.disenos.map((d) => <li class="chip">{d}</li>)}
+          </ul>
+          <div class="temp-menu-photo">
+            <img src={t.menu.src} alt={t.menu.alt} width="773" height="1000" loading="lazy" decoding="async" />
+          </div>
+          <div class="temp-cta-row">
+            <WhatsAppButton number={waNumber} message={t.mensajeWhatsApp} label="Quiero las mías" />
+          </div>
+        </div>
+      </section>
+
+      <ResenasGoogle max={3} compacta prioridad="entrega" title="Nuestros clientes opinan" />
+
+      <section class="temp-section temp-ocasiones">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">Ideas</span>
+            <h2>{t.ocasionesTitulo}</h2>
+          </div>
+          <div class="temp-cards">
+            {t.ocasiones.map((o) => (
+              <div class="temp-card">
+                <div class="temp-card-icon">{o.emoji}</div>
+                <h3>{o.titulo}</h3>
+                <p>{o.texto}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="temp-section temp-steps-bg">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">¿Cómo pedir?</span>
+            <h2>Tus donas de {t.nombre}, paso a paso</h2>
+          </div>
+          <div class="temp-steps">
+            <div class="temp-step">
+              <div class="temp-step-icon">💬</div>
+              <h3>1. Escríbenos</h3>
+              <p>Cuéntanos la fecha, la cantidad y tu idea por WhatsApp. Pide con 3 días de anticipación y te cotizamos sin compromiso.</p>
+            </div>
+            <div class="temp-step">
+              <div class="temp-step-icon">🎨</div>
+              <h3>2. Diseñamos</h3>
+              <p>Armamos tu caja con los diseños de la temporada o con el tema que imaginaste, desde una caja de 6.</p>
+            </div>
+            <div class="temp-step">
+              <div class="temp-step-icon">🛵</div>
+              <h3>3. Las recibes</h3>
+              <p>Te las llevamos a domicilio en toda el área metropolitana de Monterrey, listas para sorprender.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <FAQ items={t.faq} title={`Preguntas frecuentes sobre donas decoradas para ${t.nombre}`} />
+
+      <section class="temp-section temp-others">
+        <div class="container temp-narrow">
+          <h2 class="temp-others-title">Donas decoradas para {t.nombre} en tu zona</h2>
+          <ul class="chips chips-center">
+            {municipios.map((m) => (
+              <li><a class="chip chip-link" href={rutaMunicipio(m.slug)}>Donas decoradas en {nombresCortos[m.slug] ?? m.nombre}</a></li>
+            ))}
+            {zonas.map((z) => (
+              <li><a class="chip chip-link" href={rutaMunicipio(z.slug)}>Donas decoradas en {z.nombre}</a></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="temp-cta">
+        <div class="container temp-narrow">
+          <h2>¿Listo para pedir tus donas de {t.nombre}?</h2>
+          <p>Escríbenos y te cotizamos a tu medida.</p>
+          <WhatsAppButton number={waNumber} message={t.mensajeWhatsApp} label="Iniciar mi pedido ahora" />
+        </div>
+      </section>
+    </main>
+
+    <SiteFooter whatsappURL={waURL} social={content.social} />
+  </div>
+</Layout>
+
+<style>
+  .temp-hero {
+    background: linear-gradient(135deg, #FFF0F3 0%, #FFF8F0 50%, #FFF3E8 100%);
+    padding: 48px 0 56px;
+    text-align: center;
+  }
+  .temp-hero-inner { max-width: 760px; }
+  .temp-title {
+    font-family: var(--ff-display);
+    font-size: clamp(2.1rem, 7vw, 3.4rem);
+    font-weight: 900;
+    line-height: 1.12;
+    color: var(--choco);
+    margin: 0 0 18px;
+  }
+  .temp-intro {
+    font-size: 1.1rem;
+    color: var(--gray);
+    line-height: 1.7;
+    margin: 0 auto 28px;
+    max-width: 620px;
+  }
+  .temp-hero-photo {
+    width: min(100%, 460px);
+    aspect-ratio: 1 / 1;
+    margin: 0 auto 28px;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    background: var(--pink-pale);
+  }
+  .temp-hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .temp-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .temp-section { padding: 72px 0; }
+  .temp-narrow { max-width: 760px; }
+  .temp-section .section-header { margin-bottom: 36px; }
+
+  .temp-gallery { padding-top: 56px; padding-bottom: 56px; }
+  .temp-gallery .section-header { margin-bottom: 28px; }
+  .temp-cta-row { text-align: center; margin-top: 32px; }
+
+  .temp-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .temp-card {
+    background: var(--white);
+    border-radius: var(--r-lg);
+    padding: 28px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+  }
+  .temp-card-icon { font-size: 2.4rem; margin-bottom: 10px; }
+  .temp-card h3 {
+    font-family: var(--ff-display);
+    font-size: 1.15rem;
+    color: var(--choco);
+    margin: 0 0 8px;
+  }
+  .temp-card p { font-size: .95rem; color: var(--gray); line-height: 1.6; margin: 0; }
+
+  .temp-menu-photo {
+    width: min(100%, 420px);
+    margin: 32px auto 0;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .temp-menu-photo img { width: 100%; height: auto; display: block; }
+
+  .temp-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .temp-step {
+    background: var(--white);
+    border-radius: var(--r-lg);
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+  }
+  .temp-step-icon { font-size: 2.6rem; margin-bottom: 12px; }
+  .temp-step h3 {
+    font-family: var(--ff-display);
+    font-size: 1.15rem;
+    color: var(--choco);
+    margin: 0 0 8px;
+  }
+  .temp-step p { font-size: .95rem; color: var(--gray); line-height: 1.6; margin: 0; }
+
+  .chips {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+  }
+  .chip {
+    display: inline-block;
+    background: var(--pink-pale);
+    color: var(--pink);
+    border: 1.5px solid var(--pink-lt);
+    border-radius: var(--r-full);
+    padding: 8px 18px;
+    font-weight: 700;
+    font-size: .92rem;
+  }
+  .chip-link { text-decoration: none; transition: background .2s, color .2s; }
+  .chip-link:hover { background: var(--pink); color: var(--white); }
+
+  .temp-others { padding: 24px 0 56px; text-align: center; }
+  .temp-others-title {
+    font-family: var(--ff-display);
+    font-size: 1.3rem;
+    color: var(--choco);
+    margin: 0 0 16px;
+  }
+
+  .temp-cta {
+    background: linear-gradient(135deg, var(--choco) 0%, #5C2A10 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 64px 0;
+  }
+  .temp-cta h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    margin: 0 0 10px;
+  }
+  .temp-cta p { color: rgba(255, 255, 255, .8); margin: 0 0 24px; }
+
+  @media (max-width: 700px) {
+    .temp-hero { padding: 28px 0 36px; }
+    .temp-intro { font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
+    .temp-hero-photo { margin-bottom: 22px; }
+    .temp-section { padding: 52px 0; }
+    .temp-gallery { padding-top: 40px; padding-bottom: 40px; }
+    .temp-cards { grid-template-columns: 1fr; }
+    .temp-steps { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import { ICON } from '../lib/icons';
 import { municipios, rutaMunicipio } from '../lib/municipios';
+import { temporadas, rutaTemporada } from '../lib/temporadas';
 
 interface Props {
   whatsappURL: string;
@@ -28,6 +29,14 @@ const year = new Date().getFullYear();
       <ul>
         {municipios.map((m) => (
           <li><a href={rutaMunicipio(m.slug)}>Donas decoradas en {m.nombre}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <nav class="footer-zonas" aria-label="Donas decoradas por temporada">
+      <p class="footer-zonas-title">Donas por temporada</p>
+      <ul>
+        {temporadas.map((t) => (
+          <li><a href={rutaTemporada(t.slug)}>Donas decoradas para {t.nombre}</a></li>
         ))}
       </ul>
     </nav>
