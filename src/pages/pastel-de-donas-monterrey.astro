@@ -1,0 +1,408 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import FAQ from '../components/FAQ.astro';
+import ResenasGoogle from '../components/ResenasGoogle.astro';
+import { getContent, defaultContent } from '../lib/content';
+import { municipios, rutaMunicipio } from '../lib/municipios';
+import { zonas } from '../lib/zonas';
+import { whatsappUrl } from '../lib/whatsapp';
+import type { FaqItem } from '../lib/faq-pedidos';
+
+const env = Astro.locals.runtime?.env;
+const content = env ? await getContent(env) : defaultContent;
+const waNumber = content.whatsappNumber;
+
+const IMG = '/images/library/pastel-de-donas';
+const siteUrl = 'https://donutbitesco.com';
+const ruta = '/pastel-de-donas-monterrey';
+
+const title = 'Pastel de Donas en Monterrey para Cumpleaños | Donut Bites';
+const description =
+  'Pastel de donas o torre de donas en Monterrey con tu tema y cake toppers personalizados. Desde 15 donas, con entrega a domicilio. Cotiza por WhatsApp.';
+const h1 = 'Pastel de donas en Monterrey';
+const mensajeWhatsApp = '¡Hola! Vi la página de pastel de donas y me gustaría cotizar uno 🍩🎂';
+const waURL = whatsappUrl(mensajeWhatsApp, waNumber);
+
+const hero = {
+  src: `${IMG}/pastel-de-donas-azul-oreo-cumpleanos-monterrey.jpg`,
+  alt: 'Pastel de donas azul con toppings de Oreo, pretzels y cereal, con cake toppers personalizados de cumpleaños',
+};
+
+const galeria = [
+  {
+    src: `${IMG}/pastel-de-donas-capibara-cumpleanos-monterrey.jpg`,
+    alt: 'Torre de donas para cumpleaños con cake toppers de capibaras y arcoíris, en Monterrey',
+    tema: 'Tema de personajes',
+  },
+  {
+    src: `${IMG}/pastel-de-donas-kpop-demon-hunters-monterrey.jpg`,
+    alt: 'Pastel de donas con tema KPop Demon Hunters, cake toppers de micrófonos y esferas disco, en Monterrey',
+    tema: 'Tema de películas y música',
+  },
+  {
+    src: hero.src,
+    alt: hero.alt,
+    tema: 'Toppings a tu gusto',
+  },
+];
+
+const incluye = [
+  { emoji: '🍩', titulo: 'Donas decoradas a mano', texto: 'Cada dona se decora con el tema y los colores que elijas, y se arma en forma de pastel sobre su base.' },
+  { emoji: '🍫', titulo: 'Toppings a tu gusto', texto: 'Oreo, pretzels, chispas, cereal y más, para que cada dona se vea y sepa como te imaginaste.' },
+  { emoji: '🎉', titulo: 'Cake toppers personalizados', texto: 'Incluye cake toppers personalizados a tu elección: nombre, edad, personaje o tema.' },
+  { emoji: '📏', titulo: 'Del tamaño que necesites', texto: 'Desde 15 donas y hasta la cantidad que pida tu evento. Cada invitado se lleva su dona.' },
+];
+
+const ocasiones = ['Cumpleaños', 'Bodas', 'Bautizos', 'Baby shower', 'Despedidas de soltera', 'Convivios en el colegio', 'Fiestas y eventos'];
+
+const pasos = [
+  { emoji: '💬', titulo: '1. Escríbenos', texto: 'Cuéntanos la fecha, cuántos invitados serán y el tema por WhatsApp. Pide con 3 días de anticipación y te cotizamos sin compromiso.' },
+  { emoji: '🎨', titulo: '2. Lo diseñamos', texto: 'Elegimos contigo los colores, los toppings y los cake toppers. El pedido es desde 15 donas.' },
+  { emoji: '🛵', titulo: '3. Lo recibes', texto: 'Te lo llevamos a domicilio en toda el área metropolitana de Monterrey, listo para la mesa de tu fiesta.' },
+];
+
+const faq: FaqItem[] = [
+  {
+    q: '¿Qué es un pastel de donas (o torre de donas)?',
+    a: 'Es un pastel armado con donas decoradas apiladas sobre una base, en lugar de un pastel tradicional. Se le conoce como pastel de donas o torre de donas, y cada invitado toma su propia dona. Lo decoramos con el tema, los colores y los cake toppers que elijas.',
+  },
+  {
+    q: '¿Cuántas donas lleva y cuál es el pedido mínimo?',
+    a: 'El pastel de donas es desde 15 donas y hasta la cantidad que necesites. Te recomendamos una dona por invitado: dinos cuántos serán y te ayudamos a calcular el tamaño.',
+  },
+  {
+    q: '¿Incluye cake toppers personalizados?',
+    a: 'Sí. Incluye cake toppers personalizados a tu elección: con el nombre y la edad del festejado, o con el personaje o tema que quieras. Cuéntanos tu idea por WhatsApp.',
+  },
+  {
+    q: '¿Puedo elegir el tema, los colores y los toppings?',
+    a: 'Claro. Tú eliges el tema y los colores, y decoramos las donas con toppings como Oreo, pretzels, chispas o cereal. Hemos hecho pasteles de donas con personajes, películas, música y colores lisos.',
+  },
+  {
+    q: '¿Con cuánta anticipación debo pedir mi pastel de donas?',
+    a: 'Te recomendamos escribirnos con al menos 3 días de anticipación. Si tu fiesta es en fin de semana o en una fecha con mucha demanda, apártala cuanto antes y revisamos disponibilidad.',
+  },
+  {
+    q: '¿Entregan el pastel de donas a domicilio?',
+    a: 'Sí, lo llevamos a domicilio en toda el área metropolitana de Monterrey: Monterrey, Guadalupe, San Pedro, San Nicolás, Apodaca, Escobedo y Santa Catarina, incluida la zona de Cumbres. Mándanos tu dirección por WhatsApp y te confirmamos los detalles.',
+  },
+];
+
+const nombresCortos: Record<string, string> = {
+  'san-nicolas': 'San Nicolás',
+  'san-pedro': 'San Pedro',
+};
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: h1,
+  serviceType: 'Pastel de donas y torre de donas decoradas',
+  url: `${siteUrl}${ruta}`,
+  provider: { '@id': `${siteUrl}/#negocio` },
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Área metropolitana de Monterrey',
+    containedInPlace: { '@type': 'AdministrativeArea', name: 'Nuevo León' },
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  ogTitle={title}
+  ogDescription={description}
+  image={hero.src}
+  imageAlt={hero.alt}
+  phone={waNumber}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+
+  <div class="site-wrapper">
+    <SiteHeader whatsappURL={waURL} />
+
+    <Breadcrumbs items={[{ name: h1 }]} />
+
+    <main>
+      <section class="pd-hero">
+        <div class="container pd-hero-inner">
+          <div class="pd-badge">🎂 Pastel de donas en Monterrey</div>
+          <h1 class="pd-title">{h1}</h1>
+          <p class="pd-subtitle">Pastel o torre de donas, hecho a tu gusto</p>
+          <p class="pd-intro">
+            Armamos tu pastel de donas con donas decoradas a mano, los toppings que elijas y cake toppers personalizados a tu elección.
+            Es la torre de donas que se roba la mesa en cumpleaños, bodas, bautizos, baby showers, despedidas de soltera, fiestas y eventos, y cada invitado se lleva su dona.
+          </p>
+          <div class="pd-hero-photo">
+            <img src={hero.src} alt={hero.alt} width="900" height="1200" loading="eager" fetchpriority="high" decoding="async" />
+          </div>
+          <div class="pd-ctas">
+            <WhatsAppButton number={waNumber} message={mensajeWhatsApp} label="Cotizar mi pastel de donas" />
+            <a href="#galeria" class="btn-secondary">Ver más pasteles</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="pd-section" id="galeria">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">Hechos por encargo</span>
+            <h2>Torres de donas para cada fiesta</h2>
+            <p>Personajes, películas, música o colores lisos: tú pones el tema y nosotros armamos el pastel de donas.</p>
+          </div>
+          <div class="pd-galeria">
+            {galeria.map((f) => (
+              <figure class="pd-foto">
+                <img src={f.src} alt={f.alt} width="900" height="1200" loading="lazy" decoding="async" />
+                <figcaption>{f.tema}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <div class="pd-cta-row">
+            <WhatsAppButton number={waNumber} message={mensajeWhatsApp} label="Quiero mi pastel de donas" />
+          </div>
+        </div>
+      </section>
+
+      <section class="pd-section pd-soft">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">¿Qué incluye?</span>
+            <h2>Tu pastel de donas, a tu medida</h2>
+          </div>
+          <div class="pd-cards">
+            {incluye.map((c) => (
+              <div class="pd-card">
+                <div class="pd-card-icon">{c.emoji}</div>
+                <h3>{c.titulo}</h3>
+                <p>{c.texto}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <ResenasGoogle max={3} compacta prioridad="entrega" title="Nuestros clientes opinan" />
+
+      <section class="pd-section">
+        <div class="container pd-narrow">
+          <div class="section-header">
+            <span class="section-eyebrow">Ocasiones</span>
+            <h2>Pastel de donas para cada celebración</h2>
+          </div>
+          <ul class="pd-chips">
+            {ocasiones.map((o) => <li class="pd-chip">{o}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section class="pd-section pd-soft">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">¿Cómo pedir?</span>
+            <h2>Tu pastel de donas, paso a paso</h2>
+          </div>
+          <div class="pd-steps">
+            {pasos.map((p) => (
+              <div class="pd-step">
+                <div class="pd-card-icon">{p.emoji}</div>
+                <h3>{p.titulo}</h3>
+                <p>{p.texto}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <FAQ items={faq} title="Preguntas frecuentes sobre el pastel de donas" />
+
+      <section class="pd-section pd-others">
+        <div class="container pd-narrow">
+          <h2 class="pd-others-title">Pastel de donas con entrega en tu zona</h2>
+          <ul class="pd-chips">
+            {municipios.map((m) => (
+              <li><a class="pd-chip pd-chip-link" href={rutaMunicipio(m.slug)}>Donas decoradas en {nombresCortos[m.slug] ?? m.nombre}</a></li>
+            ))}
+            {zonas.map((z) => (
+              <li><a class="pd-chip pd-chip-link" href={rutaMunicipio(z.slug)}>Donas decoradas en {z.nombre}</a></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="pd-cta">
+        <div class="container pd-narrow">
+          <h2>¿Listo para pedir tu pastel de donas?</h2>
+          <p>Escríbenos y te cotizamos a tu medida.</p>
+          <WhatsAppButton number={waNumber} message={mensajeWhatsApp} label="Iniciar mi pedido ahora" />
+        </div>
+      </section>
+    </main>
+
+    <SiteFooter whatsappURL={waURL} social={content.social} />
+  </div>
+</Layout>
+
+<style>
+  .pd-hero {
+    background: linear-gradient(135deg, #FFF0F3 0%, #FFF8F0 50%, #FFF3E8 100%);
+    padding: 48px 0 56px;
+    text-align: center;
+  }
+  .pd-hero-inner { max-width: 760px; }
+  .pd-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--white); border: 1.5px solid var(--pink-lt);
+    color: var(--pink); font-weight: 700; font-size: .85rem;
+    padding: 8px 16px; border-radius: var(--r-full);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .pd-title {
+    font-family: var(--ff-display);
+    font-size: clamp(2.1rem, 7vw, 3.4rem);
+    font-weight: 900;
+    line-height: 1.12;
+    color: var(--choco);
+    margin: 0 0 8px;
+  }
+  .pd-subtitle {
+    font-family: var(--ff-display);
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    color: var(--pink);
+    margin: 0 0 18px;
+  }
+  .pd-intro {
+    font-size: 1.1rem;
+    color: var(--gray);
+    line-height: 1.7;
+    margin: 0 auto 28px;
+    max-width: 620px;
+  }
+  .pd-hero-photo {
+    width: min(100%, 400px);
+    aspect-ratio: 3 / 4;
+    margin: 0 auto 28px;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    background: var(--pink-pale);
+  }
+  .pd-hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pd-ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+
+  .pd-section { padding: 72px 0; }
+  .pd-soft { background: #FFF8F0; }
+  .pd-narrow { max-width: 760px; }
+  .pd-section .section-header { margin-bottom: 36px; }
+  .pd-cta-row { text-align: center; margin-top: 32px; }
+
+  .pd-galeria {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .pd-foto {
+    margin: 0;
+    background: var(--white);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .pd-foto img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 30%; display: block; }
+  .pd-foto figcaption {
+    padding: 14px 16px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--choco);
+    font-size: .95rem;
+  }
+
+  .pd-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .pd-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .pd-card, .pd-step {
+    background: var(--white);
+    border-radius: var(--r-lg);
+    padding: 28px 22px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+  }
+  .pd-card-icon { font-size: 2.4rem; margin-bottom: 10px; }
+  .pd-card h3, .pd-step h3 {
+    font-family: var(--ff-display);
+    font-size: 1.15rem;
+    color: var(--choco);
+    margin: 0 0 8px;
+  }
+  .pd-card p, .pd-step p { font-size: .95rem; color: var(--gray); line-height: 1.6; margin: 0; }
+
+  .pd-chips {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+  }
+  .pd-chip {
+    display: inline-block;
+    background: var(--pink-pale);
+    color: var(--pink);
+    border: 1.5px solid var(--pink-lt);
+    border-radius: var(--r-full);
+    padding: 8px 18px;
+    font-weight: 700;
+    font-size: .92rem;
+  }
+  .pd-chip-link { text-decoration: none; transition: background .2s, color .2s; }
+  .pd-chip-link:hover { background: var(--pink); color: var(--white); }
+
+  .pd-others { padding: 24px 0 56px; text-align: center; }
+  .pd-others-title {
+    font-family: var(--ff-display);
+    font-size: 1.3rem;
+    color: var(--choco);
+    margin: 0 0 16px;
+  }
+
+  .pd-cta {
+    background: linear-gradient(135deg, var(--choco) 0%, #5C2A10 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 64px 0;
+  }
+  .pd-cta h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    margin: 0 0 10px;
+  }
+  .pd-cta p { color: rgba(255, 255, 255, .8); margin: 0 0 24px; }
+
+  @media (max-width: 900px) {
+    .pd-cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 700px) {
+    .pd-hero { padding: 28px 0 36px; }
+    .pd-intro { font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
+    .pd-hero-photo { width: min(100%, 340px); aspect-ratio: 1 / 1; margin-bottom: 22px; }
+    .pd-section { padding: 52px 0; }
+    .pd-cards, .pd-steps { grid-template-columns: 1fr; }
+    .pd-galeria { grid-template-columns: 1fr; justify-items: center; gap: 18px; }
+    .pd-foto { width: min(100%, 340px); }
+    .pd-foto img { aspect-ratio: 1 / 1; }
+  }
+</style>
