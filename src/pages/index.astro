@@ -16,7 +16,8 @@ const whatsappMessage = encodeURIComponent("¡Hola! Vi su página y me gustaría
 const whatsappURL = `https://wa.me/${content.whatsappNumber}?text=${whatsappMessage}`;
 
 const activeSeason = content.activeSeason !== 'ninguna' ? content.seasons[content.activeSeason] : null;
-const ogImage = activeSeason?.images[0]?.src ?? content.heroImage.src;
+// Vista previa al compartir (WhatsApp): usa el JPEG por defecto de Layout.astro, no WebP
+const ogImage = undefined;
 
 const occasions = [
   { icon: "🎂", label: "Cumpleaños" },
@@ -54,7 +55,7 @@ const occasions = [
           <div class="banner-season-gallery" id="seasonGallery">
             {activeSeason.images.slice(0, 6).map((img, i) => (
               <div class="season-thumb" data-index={i}>
-                <img src={img.src} alt={img.alt} loading="lazy" />
+                <img src={img.src} alt={img.alt} loading={i === 0 ? "eager" : "lazy"} fetchpriority={i === 0 ? "high" : undefined} decoding="async" />
                 <div class="season-overlay"><span>Ver foto</span></div>
               </div>
             ))}

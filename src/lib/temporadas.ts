@@ -54,32 +54,32 @@ export const temporadas: Temporada[] = [
     disenos: ['Calabaza', 'Momia', 'Telaraña', 'Araña de Oreo', 'BOO', 'Grageas de terror'],
     fotos: [
       {
-        src: `${HALLOWEEN}/donas-decoradas-halloween-oreo-casa-embrujada-monterrey.jpeg`,
+        src: `${HALLOWEEN}/donas-decoradas-halloween-oreo-casa-embrujada-monterrey.webp`,
         alt: 'Dona decorada de Halloween con Oreo de casa embrujada',
       },
       {
-        src: `${HALLOWEEN}/donas-decoradas-halloween-sprinkles-terror-monterrey.jpeg`,
+        src: `${HALLOWEEN}/donas-decoradas-halloween-sprinkles-terror-monterrey.webp`,
         alt: 'Dona decorada de Halloween con grageas de terror',
       },
       {
-        src: `${HALLOWEEN}/donas-decoradas-halloween-calabaza-monterrey.jpeg`,
+        src: `${HALLOWEEN}/donas-decoradas-halloween-calabaza-monterrey.webp`,
         alt: 'Dona decorada de calabaza para Halloween',
       },
       {
-        src: `${HALLOWEEN}/donas-decoradas-halloween-telarana-monterrey.jpeg`,
+        src: `${HALLOWEEN}/donas-decoradas-halloween-telarana-monterrey.webp`,
         alt: 'Dona decorada con telaraña de chocolate para Halloween',
       },
       {
-        src: `${HALLOWEEN}/donas-decoradas-halloween-boo-monterrey.jpeg`,
+        src: `${HALLOWEEN}/donas-decoradas-halloween-boo-monterrey.webp`,
         alt: 'Dona decorada con mensaje BOO para Halloween',
       },
       {
-        src: `${HALLOWEEN}/donas-decoradas-halloween-momia-arana-monterrey.jpg`,
+        src: `${HALLOWEEN}/donas-decoradas-halloween-momia-arana-monterrey.webp`,
         alt: 'Donas decoradas de momia y araña para Halloween',
       },
     ],
     menu: {
-      src: `${HALLOWEEN}/menu-donas-halloween-monterrey.jpeg`,
+      src: `${HALLOWEEN}/menu-donas-halloween-monterrey.webp`,
       alt: 'Menú de donas decoradas de Halloween de Donut Bites Monterrey',
     },
     ocasionesTitulo: 'Para cada fiesta de Halloween',
