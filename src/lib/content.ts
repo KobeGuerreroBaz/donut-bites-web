@@ -212,6 +212,22 @@ export const defaultContent: SiteContent = {
   ],
 };
 
+// Rutas viejas guardadas en KV -> versiones WebP optimizadas
+const SIN_WEBP = ['donas-decoradas-halloween-set-6-piezas-monterrey.jpg'];
+function aWebp<T>(valor: T): T {
+  if (typeof valor === 'string') {
+    if (valor.startsWith('/images/library/') && /\.jpe?g$/i.test(valor) && !SIN_WEBP.some((f) => valor.endsWith(f))) {
+      return valor.replace(/\.jpe?g$/i, '.webp') as T;
+    }
+    return valor;
+  }
+  if (Array.isArray(valor)) return valor.map(aWebp) as T;
+  if (valor && typeof valor === 'object') {
+    return Object.fromEntries(Object.entries(valor).map(([k, v]) => [k, aWebp(v)])) as T;
+  }
+  return valor;
+}
+
 export async function getContent(env: Env): Promise<SiteContent> {
   try {
     const raw = await env.SITE_CONTENT.get(CONTENT_KEY);
@@ -223,7 +239,7 @@ export async function getContent(env: Env): Promise<SiteContent> {
         { ...defaultContent.seasons[key], ...season },
       ]),
     ) as Record<string, SeasonContent>;
-    return { ...defaultContent, ...parsed, seasons };
+    return aWebp({ ...defaultContent, ...parsed, seasons });
   } catch {
     // KV sin configurar todavia, o dato invalido: el sitio publico sigue funcionando con los valores por defecto.
     return defaultContent;
