@@ -446,7 +446,7 @@ const seasonEntries = Object.entries(content.seasons);
     }
 
     async function uploadImage(bucket, description, file) {
-      const compressed = await compressImage(file, 1600, 0.78);
+      const compressed = await compressImage(file, 1000, 0.78);
       const formData = new FormData();
       formData.append('bucket', bucket);
       formData.append('description', description || 'dona-decorada');
