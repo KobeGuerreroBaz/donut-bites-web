@@ -43,6 +43,8 @@ const occasions = [
     <!-- ===== HEADER ===== -->
     <SiteHeader whatsappURL={whatsappURL} home />
 
+    <main>
+
     {activeSeason && (
       <>
         <!-- ===== BANNER DE TEMPORADA ===== -->
@@ -271,6 +273,8 @@ const occasions = [
       </div>
     </section>
 
+    </main>
+
     <SiteFooter whatsappURL={whatsappURL} social={content.social} />
   </div>
 
@@ -329,7 +333,7 @@ const occasions = [
   .hero-badge {
     display: inline-flex; align-items: center; gap: 6px;
     background: var(--white); border: 1.5px solid var(--pink-lt);
-    color: var(--pink); font-weight: 700; font-size: .85rem;
+    color: var(--pink-text); font-weight: 700; font-size: .85rem;
     padding: 8px 16px; border-radius: var(--r-full);
     margin-bottom: 24px;
     box-shadow: var(--shadow-sm);
@@ -496,7 +500,7 @@ const occasions = [
   .social-btn:hover { transform: translateY(-2px); opacity: .9; }
   .social-btn.instagram { background: linear-gradient(135deg, #E1306C, #833AB4); color: var(--white); }
   .social-btn.tiktok    { background: var(--choco); color: var(--white); }
-  .social-btn.facebook  { background: #1877F2; color: var(--white); }
+  .social-btn.facebook  { background: #1565D8; color: var(--white); }
 
   /* ---- PROCESS ---- */
   .section-process {
@@ -565,7 +569,7 @@ const occasions = [
 
   .about-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
   .badge {
-    background: var(--pink-pale); color: var(--pink);
+    background: var(--pink-pale); color: var(--pink-text);
     border: 1.5px solid var(--pink-lt);
     border-radius: var(--r-full); padding: 8px 18px;
     font-weight: 700; font-size: .9rem;

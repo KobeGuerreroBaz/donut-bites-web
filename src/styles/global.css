@@ -7,6 +7,7 @@
 
 :root {
   --pink:      #E8496A;
+  --pink-text: #C2365A; /* rosa mas oscuro solo para texto pequeno (contraste AA) */
   --pink-lt:   #F9B8C7;
   --pink-pale: #FFF0F3;
   --choco:     #3D1A0E;
@@ -60,8 +61,8 @@ body {
 .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
 .logo-icon { font-size: 2rem; line-height: 1; }
 .logo-text { font-family: var(--ff-display); font-size: 1.4rem; font-weight: 400; color: var(--choco); }
-.logo-text strong { color: var(--pink); }
-.logo-co { color: var(--gold); }
+.logo-text strong { color: var(--pink-text); }
+.logo-co { color: #9A5B00; }
 
 .nav-links { display: flex; align-items: center; gap: 28px; }
 .nav-links a { text-decoration: none; color: var(--choco); font-weight: 600; font-size: .95rem; transition: color .2s; }
@@ -109,7 +110,7 @@ body {
 
 .btn-secondary {
   display: inline-flex; align-items: center; gap: 8px;
-  border: 2px solid var(--pink); color: var(--pink);
+  border: 2px solid var(--pink-text); color: var(--pink-text);
   font-weight: 700; font-size: 1rem;
   padding: 14px 24px; border-radius: var(--r-full);
   text-decoration: none;
@@ -121,7 +122,7 @@ body {
 .section-header { text-align: center; margin-bottom: 56px; }
 .section-eyebrow {
   display: inline-block;
-  background: var(--pink-pale); color: var(--pink);
+  background: var(--pink-pale); color: var(--pink-text);
   font-weight: 800; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
   padding: 6px 16px; border-radius: var(--r-full); margin-bottom: 16px;
 }
@@ -173,7 +174,7 @@ body {
   display: flex;
 }
 .footer-socials a:hover { color: var(--white); transform: translateY(-2px); }
-.footer-copy { font-size: .8rem; color: rgba(255,255,255,.4); }
+.footer-copy { font-size: .8rem; color: rgba(255,255,255,.6); }
 
 /* ---- RESPONSIVE (compartido) ---- */
 @media (max-width: 600px) {
