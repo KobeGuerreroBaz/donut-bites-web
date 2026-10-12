@@ -20,6 +20,9 @@ const activeSeason = content.activeSeason !== 'ninguna' ? content.seasons[conten
 const ogImage = undefined;
 
 // Miniaturas (500x500) de las fotos de temporada de la biblioteca; las subidas desde el admin se dejan igual
+const saborSrc = (src: string) =>
+  /\/general\/(catalogo-donas-decoradas-monterrey|donas-gourmet-variedad-monterrey)\.webp$/.test(src)
+    ? src.replace('.webp', '-sabor.webp') : src;
 const thumbSrc = (src: string) =>
   /^\/images\/library\/(halloween|navidad|san-valentin|dia-de-las-madres|accion-de-gracias|dia-del-padre|fiestas-patrias)\/.+\.(jpe?g|webp)$/i.test(src)
     ? src.replace(/\.(jpe?g|webp)$/i, '-thumb.webp')
@@ -153,7 +156,7 @@ const occasions = [
         <div class="flavors-grid">
           {content.flavors.map((f) => (
             <div class="flavor-card">
-              {f.image ? <img src={f.image.src} alt={f.image.alt} class="flavor-img" loading="lazy" /> : <div class="flavor-emoji">{f.emoji}</div>}
+              {f.image ? <img src={saborSrc(f.image.src)} alt={f.image.alt} class="flavor-img" loading="lazy" /> : <div class="flavor-emoji">{f.emoji}</div>}
               <h3>{f.name}</h3>
               <p>{f.desc}</p>
             </div>
