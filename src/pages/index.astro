@@ -19,6 +19,12 @@ const activeSeason = content.activeSeason !== 'ninguna' ? content.seasons[conten
 // Vista previa al compartir (WhatsApp): usa el JPEG por defecto de Layout.astro, no WebP
 const ogImage = undefined;
 
+// Miniaturas (500x500) de las fotos de temporada de la biblioteca; las subidas desde el admin se dejan igual
+const thumbSrc = (src: string) =>
+  /^\/images\/library\/(halloween|navidad|san-valentin|dia-de-las-madres|accion-de-gracias|dia-del-padre|fiestas-patrias)\/.+\.(jpe?g|webp)$/i.test(src)
+    ? src.replace(/\.(jpe?g|webp)$/i, '-thumb.webp')
+    : src;
+
 const occasions = [
   { icon: "🎂", label: "Cumpleaños" },
   { icon: "💍", label: "Boda" },
@@ -55,7 +61,7 @@ const occasions = [
           <div class="banner-season-gallery" id="seasonGallery">
             {activeSeason.images.slice(0, 6).map((img, i) => (
               <div class="season-thumb" data-index={i}>
-                <img src={img.src} alt={img.alt} loading={i === 0 ? "eager" : "lazy"} fetchpriority={i === 0 ? "high" : undefined} decoding="async" />
+                <img src={thumbSrc(img.src)} alt={img.alt} loading={i === 0 ? "eager" : "lazy"} fetchpriority={i === 0 ? "high" : undefined} decoding="async" />
                 <div class="season-overlay"><span>Ver foto</span></div>
               </div>
             ))}
