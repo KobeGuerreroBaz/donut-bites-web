@@ -1,6 +1,7 @@
 ---
 import { ICON } from '../lib/icons';
 import { municipios, rutaMunicipio } from '../lib/municipios';
+import { zonas } from '../lib/zonas';
 import { temporadas, rutaTemporada } from '../lib/temporadas';
 
 interface Props {
@@ -29,6 +30,9 @@ const year = new Date().getFullYear();
       <ul>
         {municipios.map((m) => (
           <li><a href={rutaMunicipio(m.slug)}>Donas decoradas en {m.nombre}</a></li>
+        ))}
+        {zonas.map((z) => (
+          <li><a href={rutaMunicipio(z.slug)}>Donas decoradas en {z.nombre}</a></li>
         ))}
       </ul>
     </nav>

@@ -492,6 +492,15 @@ const occasions = [
     color: var(--white);
   }
   .note-card p { font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
+  /* Fondo chocolate: el rosa base no contrasta, se usa el dorado claro. */
+  .note-card a {
+    color: var(--gold-lt);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+  }
+  .note-card a:hover { color: var(--white); }
 
   .social-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
   .social-btn {

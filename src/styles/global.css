@@ -44,6 +44,19 @@ body {
   overflow-x: hidden;
 }
 
+/* ---- ENLACES DE TEXTO ----
+   Estilo base para que ningun enlace en linea herede el azul del navegador.
+   Los enlaces con clase propia (.nav-links a, .btn, .chip-link, .social-btn)
+   siguen mandando sobre esto porque definen su color y text-decoration. */
+a {
+  color: var(--pink-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: color .2s;
+}
+a:hover { color: var(--pink); }
+
 .site-wrapper { position: relative; }
 .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
