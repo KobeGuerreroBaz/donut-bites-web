@@ -5,6 +5,7 @@ export default defineConfig({
   site: 'https://donutbitesco.com',
   compressHTML: true,
   output: 'server',
+  session: false,
   adapter: cloudflare({
     imageService: 'compile',
   }),
