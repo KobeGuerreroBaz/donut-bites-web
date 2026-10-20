@@ -9,11 +9,20 @@ import ResenasGoogle from '../components/ResenasGoogle.astro';
 import ResenasMini from '../components/ResenasMini.astro';
 import { faqPedidos } from '../lib/faq-pedidos';
 import { env } from 'cloudflare:workers';
+import { listasHoy } from '../lib/listas-hoy';
 
 const content = env ? await getContent(env) : defaultContent;
 
+// SEO de la home: entrega el mismo día
+const seoTitle = 'Donas en Monterrey con Entrega el Mismo Día | Donut Bites';
+const seoDescription = `Donas en Monterrey: entrega hoy si pides antes de las ${listasHoy.horaCorte}, o ${listasHoy.entregaSiguienteDia}. También donas personalizadas por encargo con diseños especiales.`;
+const seoOgTitle = 'Donas en Monterrey con Entrega el Mismo Día | Donut Bites';
+const seoOgDescription = `Donas con entrega hoy o ${listasHoy.entregaSiguienteDia} en Monterrey y área metropolitana, y diseños especiales por encargo.`;
+
 const whatsappMessage = encodeURIComponent("¡Hola! Vi su página y me gustaría cotizar un pedido de donas 🍩");
 const whatsappURL = `https://wa.me/${content.whatsappNumber}?text=${whatsappMessage}`;
+
+const whatsappHoyURL = `https://wa.me/${content.whatsappNumber}?text=${encodeURIComponent(listasHoy.mensajeWhatsApp)}`;
 
 const activeSeason = content.activeSeason !== 'ninguna' ? content.seasons[content.activeSeason] : null;
 // Vista previa al compartir (WhatsApp): usa el JPEG por defecto de Layout.astro, no WebP
@@ -40,7 +49,7 @@ const occasions = [
 ];
 ---
 
-<Layout image={ogImage} phone={content.whatsappNumber}>
+<Layout image={ogImage} phone={content.whatsappNumber} title={seoTitle} description={seoDescription} ogTitle={seoOgTitle} ogDescription={seoOgDescription}>
   <div class="site-wrapper">
 
     <!-- ===== HEADER ===== -->
@@ -106,14 +115,14 @@ const occasions = [
         </div>
       </div>
       <div class="hero-content">
-        <div class="hero-badge">📍 Monterrey &amp; Área Metropolitana</div>
+        <div class="hero-badge">📍 Entrega el mismo día en Monterrey y área metro</div>
         <h1 class="hero-title">
           Donas decoradas<br />
           <em>para tus eventos</em>
         </h1>
         <p class="hero-subtitle">
-          Diseños artesanales y personalizados para regalos, cumpleaños y fechas especiales.
-          Pedidos por encargo con entrega a domicilio en Monterrey.
+          Pide antes de las {listasHoy.horaCorte} y recibe tus donas el mismo día, o {listasHoy.entregaSiguienteDia}.
+          ¿Quieres algo más especial? Hacemos donas con diseños personalizados por encargo, con 3 días de anticipación.
         </p>
         <div class="hero-ctas">
           <a href={whatsappURL} class="btn-primary" target="_blank" rel="noopener">
@@ -128,7 +137,7 @@ const occasions = [
           <div class="stat-divider"></div>
           <div class="stat"><strong>MTY</strong><span>y Área Metro</span></div>
           <div class="stat-divider"></div>
-          <div class="stat"><strong>🍩</strong><span>Por encargo</span></div>
+          <div class="stat"><strong>🍩</strong><span>Entrega hoy</span></div>
         </div>
       </div>
       <div class="hero-visual">
@@ -140,7 +149,50 @@ const occasions = [
             <img src={content.heroImage.src} alt={content.heroImage.alt} class="donut-photo-main" width="280" height="280" fetchpriority="high" loading="eager" />
           </picture>
           <div class="floating-tag tag-1">¡Personalizadas!</div>
-          <div class="floating-tag tag-2">Entrega en MTY 🛵</div>
+          <div class="floating-tag tag-2">¡Pide hoy, recibe hoy! 🛵</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== LISTAS PARA HOY (entrega el mismo día) ===== -->
+    <section class="section-today" id="para-hoy">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Listas para hoy</span>
+          <h2>Donas con entrega el mismo día</h2>
+          <p>
+            Elige los sabores que quieras y combínalos en tu caja de 6 donas. Pide antes de las {listasHoy.horaCorte} y
+            las recibes hoy, según disponibilidad. Cupo limitado: separa temprano.
+          </p>
+        </div>
+
+        <div class="today-gallery">
+          {listasHoy.fotos.map((f) => (
+            <img src={f.src} alt={f.alt} width="1000" height="750" loading="lazy" decoding="async" />
+          ))}
+        </div>
+        <p class="today-note">Las cajas son ilustrativas: tú eliges los sabores.</p>
+
+        <div class="today-flavors">
+          <h3>Sabores disponibles hoy</h3>
+          <ul class="today-flavor-list">
+            {listasHoy.sabores.map((s) => <li>{s}</li>)}
+          </ul>
+          <p class="today-sprinkles">{listasHoy.notaSprinkles}</p>
+        </div>
+
+        <ul class="today-rules">
+          {listasHoy.condiciones.map((c) => <li>{c}</li>)}
+        </ul>
+
+        <div class="today-cta">
+          <a href={whatsappHoyURL} class="btn-primary large" target="_blank" rel="noopener">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={ICON.wa} /></svg>
+            Pedir para hoy por WhatsApp
+          </a>
+          <p class="today-more">
+            ¿Algo más elaborado? <a href={whatsappURL} target="_blank" rel="noopener">Haz tu encargo de donas personalizadas</a> con 3 días de anticipación.
+          </p>
         </div>
       </div>
     </section>
@@ -223,7 +275,7 @@ const occasions = [
             <div class="step-num">1</div>
             <div class="step-icon">💬</div>
             <h3>Escríbenos</h3>
-            <p>Cuéntanos por WhatsApp tu idea, cantidad y fecha, y te cotizamos sin compromiso. Pide con 3 días de anticipación.</p>
+            <p>Cuéntanos por WhatsApp tu idea, cantidad y fecha, y te cotizamos sin compromiso. Para hoy, pide antes de las {listasHoy.horaCorte}; los diseños elaborados, con 3 días de anticipación.</p>
           </div>
           <div class="step-arrow">→</div>
           <div class="step">
@@ -426,6 +478,44 @@ const occasions = [
   }
 
   /* ---- FLAVORS ---- */
+  /* ---- LISTAS PARA HOY ---- */
+  .section-today { padding: 90px 0; background: var(--pink-pale); }
+  .today-gallery {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px; margin-bottom: 12px;
+  }
+  .today-gallery img {
+    width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover;
+    border-radius: var(--r-lg); box-shadow: var(--shadow-md); display: block;
+  }
+  .today-note { text-align: center; font-size: .85rem; color: var(--gray); margin-bottom: 40px; }
+  .today-flavors { text-align: center; margin-bottom: 32px; }
+  .today-flavors h3 {
+    font-family: var(--ff-display); font-size: 1.3rem; font-weight: 700;
+    color: var(--choco); margin-bottom: 16px;
+  }
+  .today-flavor-list {
+    list-style: none; padding: 0; margin: 0 auto; max-width: 760px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  }
+  .today-flavor-list li {
+    background: var(--white); border: 1.5px solid var(--pink-lt);
+    color: var(--pink-text); font-weight: 700; font-size: .95rem;
+    padding: 8px 16px; border-radius: var(--r-full);
+  }
+  .today-sprinkles { margin: 16px auto 0; max-width: 560px; font-size: .95rem; color: var(--gray); line-height: 1.5; }
+  .today-rules {
+    list-style: none; padding: 0; margin: 0 auto 36px; max-width: 640px;
+    display: grid; gap: 10px;
+  }
+  .today-rules li {
+    position: relative; padding-left: 28px; color: var(--choco); line-height: 1.5; font-weight: 600;
+  }
+  .today-rules li::before { content: "✓"; position: absolute; left: 0; color: var(--pink); font-weight: 900; }
+  .today-cta { text-align: center; }
+  .today-more { margin-top: 18px; color: var(--gray); font-size: 1rem; }
+  .today-more a { color: var(--pink-text); font-weight: 700; text-decoration: underline; }
+
   .section-flavors { padding: 100px 0; background: var(--cream); }
 
   .flavors-grid {

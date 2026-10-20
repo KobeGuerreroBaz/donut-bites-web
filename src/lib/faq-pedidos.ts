@@ -9,7 +9,7 @@ export interface FaqItem {
 export const faqPedidos: FaqItem[] = [
   {
     q: '¿Con cuánta anticipación debo hacer mi pedido?',
-    a: 'Te recomendamos escribirnos con 3 días de anticipación para tener tu pedido listo y bien decorado para tu fecha. Si tu evento es antes, escríbenos por WhatsApp y con gusto revisamos disponibilidad.',
+    a: 'Depende del diseño. Los diseños sencillos con los sabores disponibles pueden salir el mismo día si pides antes de las 2 pm; después de esa hora, se entregan al día siguiente por la mañana. Los diseños más elaborados o personalizados requieren 3 días de anticipación. Si tu evento es antes, escríbenos por WhatsApp y con gusto revisamos disponibilidad.',
   },
   {
     q: '¿Cuál es el pedido mínimo?',
