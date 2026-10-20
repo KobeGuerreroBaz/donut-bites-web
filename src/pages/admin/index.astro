@@ -3,8 +3,8 @@ export const prerender = false;
 
 import { getContent } from '../../lib/content';
 import { isValidSession } from '../../lib/auth';
+import { env } from 'cloudflare:workers';
 
-const env = Astro.locals.runtime?.env;
 
 if (!env) {
   return Astro.redirect('/admin/login');

@@ -1,11 +1,11 @@
 import type { APIRoute } from 'astro';
 import { isValidSession } from '../../lib/auth';
 import { saveContent, type SiteContent } from '../../lib/content';
+import { env } from 'cloudflare:workers';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const env = locals.runtime?.env;
   if (!env) return new Response('Server not configured', { status: 500 });
 
   const valid = await isValidSession(request.headers.get('cookie'), env.SESSION_SECRET);

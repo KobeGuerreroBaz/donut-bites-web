@@ -7,12 +7,12 @@ import WhatsAppButton from '../components/WhatsAppButton.astro';
 import FAQ from '../components/FAQ.astro';
 import ResenasGoogle from '../components/ResenasGoogle.astro';
 import { getContent, defaultContent } from '../lib/content';
+import { env } from 'cloudflare:workers';
 import { municipios, rutaMunicipio } from '../lib/municipios';
 import { zonas } from '../lib/zonas';
 import { whatsappUrl } from '../lib/whatsapp';
 import type { FaqItem } from '../lib/faq-pedidos';
 
-const env = Astro.locals.runtime?.env;
 const content = env ? await getContent(env) : defaultContent;
 const waNumber = content.whatsappNumber;
 

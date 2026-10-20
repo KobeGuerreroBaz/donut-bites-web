@@ -1,0 +1,48 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "donut-bites",
+	"compatibility_date": "2026-07-20",
+	"compatibility_flags": ["nodejs_compat"],
+
+	// El adaptador v13+ ya no soporta Cloudflare Pages: el sitio se despliega
+	// como Worker con assets estaticos. Este entrypoint lo provee el adaptador.
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	},
+
+	"observability": {
+		"enabled": true
+	},
+
+	"kv_namespaces": [
+		{
+			"binding": "SITE_CONTENT",
+			"id": "07088921913d4375a97ae22ac225ff6f"
+		}
+	],
+
+	// En Pages este binding tenia que configurarse desde el dashboard porque la
+	// funcion via wrangler.toml estaba en BETA y no resolvia el bucket. En
+	// Workers si se declara aqui; si fallara, volver a configurarlo en el panel.
+	"r2_buckets": [
+		{
+			"binding": "SITE_IMAGES",
+			"bucket_name": "donut-bites-images"
+		}
+	],
+
+	// Dominio personalizado: el Worker atiende donutbitesco.com directamente.
+	"routes": [
+		{
+			"pattern": "donutbitesco.com",
+			"zone_name": "donutbitesco.com",
+			"custom_domain": true
+		}
+	],
+
+	// Sin URL de pruebas ni previews publicas (igual que hgshop).
+	"workers_dev": false,
+	"preview_urls": false
+}

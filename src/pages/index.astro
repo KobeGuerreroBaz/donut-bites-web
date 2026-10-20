@@ -8,8 +8,8 @@ import FAQ from '../components/FAQ.astro';
 import ResenasGoogle from '../components/ResenasGoogle.astro';
 import ResenasMini from '../components/ResenasMini.astro';
 import { faqPedidos } from '../lib/faq-pedidos';
+import { env } from 'cloudflare:workers';
 
-const env = Astro.locals.runtime?.env;
 const content = env ? await getContent(env) : defaultContent;
 
 const whatsappMessage = encodeURIComponent("¡Hola! Vi su página y me gustaría cotizar un pedido de donas 🍩");

@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
+import { env } from 'cloudflare:workers';
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params, locals }) => {
-  const env = locals.runtime?.env;
   if (!env) return new Response('Not found', { status: 404 });
 
   const path = params.path;

@@ -1,10 +1,10 @@
 import type { APIRoute } from 'astro';
 import { createSessionCookie, timingSafeEqual, isRateLimited, recordFailedLogin, clearFailedLogins } from '../../lib/auth';
+import { env } from 'cloudflare:workers';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals, redirect }) => {
-  const env = locals.runtime?.env;
   if (!env) return redirect('/admin/login?error=1');
 
   const ip = request.headers.get('cf-connecting-ip') || 'unknown';
