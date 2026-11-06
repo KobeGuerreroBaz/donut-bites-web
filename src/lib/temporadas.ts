@@ -24,6 +24,7 @@ export interface Temporada {
   disenosTexto: string;
   disenos: string[];
   fotos: FotoTemporada[];
+  galeria?: boolean;
   menu: FotoTemporada;
   ocasionesTitulo: string;
   ocasiones: Ocasion[];
@@ -148,19 +149,40 @@ export const temporadas: Temporada[] = [
     disenosTitulo: 'Diseños de donas decoradas para Navidad',
     disenosTexto:
       'Estos son algunos de los diseños de la temporada. Puedes pedirlos tal cual, combinarlos en una caja o decirnos tu idea para crear uno nuevo.',
-    disenos: ['Grinch', 'Reno', 'HO HO HO', 'Corona navideña'],
+    disenos: ['Grinch', 'Reno', 'HO HO HO', 'Corona navideña', 'Regalo', 'Copo de nieve', 'Árbol de Navidad'],
+    galeria: true,
     fotos: [
       {
-        src: `${NAVIDAD}/donas-decoradas-navidad-hohoho-corona-monterrey.webp`,
-        alt: 'Donas decoradas de Navidad HO HO HO y corona, empacadas individualmente con tarjeta de Santa',
+        src: `${NAVIDAD}/donas-decoradas-navidad-regalo-monterrey.webp`,
+        alt: 'Dona decorada de Navidad roja con moño blanco y perlitas doradas, como regalo',
       },
       {
-        src: `${NAVIDAD}/donas-decoradas-navidad-postal-santa-monterrey.webp`,
-        alt: 'Donas decoradas de Navidad HO HO HO y corona, empacadas una por una con postal de Santa',
+        src: `${NAVIDAD}/donas-decoradas-navidad-copo-de-nieve-monterrey.webp`,
+        alt: 'Dona decorada de Navidad con betún blanco, confeti azul y copo de nieve',
       },
       {
-        src: `${NAVIDAD}/donas-decoradas-navidad-caja-grinch-monterrey.webp`,
-        alt: 'Caja de donas decoradas de Navidad con Grinch, reno y coronas',
+        src: `${NAVIDAD}/donas-decoradas-navidad-hohoho-monterrey.webp`,
+        alt: 'Dona decorada de Navidad roja con letras HO HO HO',
+      },
+      {
+        src: `${NAVIDAD}/donas-decoradas-navidad-reno-monterrey.webp`,
+        alt: 'Dona decorada de reno de Navidad con chocolate, pretzels de cuernos y nariz roja',
+      },
+      {
+        src: `${NAVIDAD}/donas-decoradas-navidad-arbol-monterrey.webp`,
+        alt: 'Dona decorada de Navidad como árbol verde con serie de luces de M&M\'s',
+      },
+      {
+        src: `${NAVIDAD}/donas-decoradas-navidad-corona-verde-monterrey.webp`,
+        alt: 'Dona decorada de Navidad verde como corona, con hojitas y bolitas rojas',
+      },
+      {
+        src: `${NAVIDAD}/donas-decoradas-navidad-grinch-monterrey.webp`,
+        alt: 'Dona decorada del Grinch para Navidad con betún verde y ojos amarillos',
+      },
+      {
+        src: `${NAVIDAD}/donas-decoradas-navidad-renos-caja-monterrey.webp`,
+        alt: 'Caja de donas decoradas de renos de Navidad con chocolate y pretzels',
       },
     ],
     menu: {
