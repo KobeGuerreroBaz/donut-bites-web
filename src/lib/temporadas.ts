@@ -32,6 +32,7 @@ export interface Temporada {
 }
 
 const HALLOWEEN = '/images/library/halloween';
+const NAVIDAD = '/images/library/navidad';
 
 export const temporadas: Temporada[] = [
   {
@@ -126,6 +127,94 @@ export const temporadas: Temporada[] = [
       },
       {
         q: '¿Entregan donas de Halloween en mi zona?',
+        a: 'Sí, llevamos tu pedido a domicilio en toda el área metropolitana de Monterrey: Monterrey, Guadalupe, San Pedro, San Nicolás, Apodaca, Escobedo y Santa Catarina, incluida la zona de Cumbres. Mándanos tu dirección por WhatsApp y te confirmamos los detalles.',
+      },
+    ],
+  },
+  {
+    slug: 'navidad',
+    nombre: 'Navidad',
+    badge: '🎄 Navidad en Monterrey',
+    title: 'Donas Decoradas para Navidad en Monterrey | Donut Bites',
+    description:
+      'Donas decoradas navideñas en Monterrey y toda su área metropolitana: Grinch, renos y coronas hechas a mano. Cotiza por WhatsApp.',
+    h1: 'Donas decoradas para Navidad en Monterrey',
+    intro:
+      'Grinch, renos, coronas y mucho HO HO HO. Hacemos donas decoradas navideñas a mano, en caja o empacadas una por una, para tu cena, tus regalos o el postre de la posada. Entregamos en Monterrey, Guadalupe, San Pedro, San Nicolás, Apodaca, Escobedo y Santa Catarina.',
+    hero: {
+      src: `${NAVIDAD}/donas-decoradas-navidad-caja-grinch-monterrey.webp`,
+      alt: 'Caja de seis donas decoradas para Navidad con reno, Grinch, HO HO HO y coronas, junto a una dona del Grinch en su cajita',
+    },
+    disenosTitulo: 'Diseños de donas decoradas para Navidad',
+    disenosTexto:
+      'Estos son algunos de los diseños de la temporada. Puedes pedirlos tal cual, combinarlos en una caja o decirnos tu idea para crear uno nuevo.',
+    disenos: ['Grinch', 'Reno', 'HO HO HO', 'Corona navideña'],
+    fotos: [
+      {
+        src: `${NAVIDAD}/donas-decoradas-navidad-hohoho-corona-monterrey.webp`,
+        alt: 'Donas decoradas de Navidad HO HO HO y corona, empacadas individualmente con tarjeta de Santa',
+      },
+      {
+        src: `${NAVIDAD}/donas-decoradas-navidad-postal-santa-monterrey.webp`,
+        alt: 'Donas decoradas de Navidad HO HO HO y corona, empacadas una por una con postal de Santa',
+      },
+      {
+        src: `${NAVIDAD}/donas-decoradas-navidad-caja-grinch-monterrey.webp`,
+        alt: 'Caja de donas decoradas de Navidad con Grinch, reno y coronas',
+      },
+    ],
+    menu: {
+      src: `${NAVIDAD}/donas-decoradas-navidad-postal-santa-monterrey.webp`,
+      alt: 'Donas decoradas de Navidad HO HO HO y corona, empacadas una por una con postal de Santa, de Donut Bites Monterrey',
+    },
+    ocasionesTitulo: 'Para cada celebración navideña',
+    ocasiones: [
+      {
+        emoji: '🍽️',
+        titulo: 'Postre para tu cena de Navidad',
+        texto: 'Donas decoradas fáciles de repartir, para cerrar tu cena con un postre que todos quieren fotografiar.',
+      },
+      {
+        emoji: '🎁',
+        titulo: 'Regalos de Navidad',
+        texto: 'Donas empacadas una por una, listas para regalar a tus clientes, tu equipo o tus seres queridos.',
+      },
+      {
+        emoji: '🎒',
+        titulo: 'Convivio navideño en el colegio',
+        texto: 'Donas decoradas individuales para que todo el salón celebre la Navidad con un detalle divertido.',
+      },
+      {
+        emoji: '🎂',
+        titulo: 'Pastel de donas navideño',
+        texto: 'Un pastel de donas con tema navideño y cake topper personalizado, para ser el centro de tu mesa.',
+      },
+    ],
+    mensajeWhatsApp:
+      '¡Hola! Vi la página de donas decoradas para Navidad y me gustaría cotizar un pedido 🎄🍩',
+    faq: [
+      {
+        q: '¿Con cuánta anticipación debo pedir mis donas de Navidad?',
+        a: 'Te recomendamos escribirnos con al menos 3 días de anticipación. En diciembre las fechas cercanas al 24 y al 31 se llenan rápido, así que entre antes apartes la tuya, mejor. Escríbenos por WhatsApp con el día y la cantidad, y revisamos disponibilidad.',
+      },
+      {
+        q: '¿Pueden ir empacadas una por una para regalar?',
+        a: 'Sí. Tu pedido puede ir en caja o empacado individualmente, ideal para regalos, colegios y oficina. Cuéntanos tu idea por WhatsApp y te cotizamos.',
+      },
+      {
+        q: '¿Hacen pastel de donas para Navidad?',
+        a: 'Sí. Armamos pasteles de donas con tema navideño desde 15 donas, con cake topper personalizado. Cuéntanos cuántas personas serán y tu idea por WhatsApp, y te cotizamos.',
+      },
+      {
+        q: '¿Sirven como postre para mi cena o mi posada?',
+        a: 'Claro. Las donas decoradas son un postre fácil de repartir para tu cena de Navidad, tu posada o el convivio de tu oficina. También hacemos pedidos para empresas y eventos grandes, con factura. Escríbenos por WhatsApp con la fecha y la cantidad.',
+      },
+      {
+        q: '¿Puedo pedir un diseño navideño diferente a los de la foto?',
+        a: 'Claro. Además de los diseños de la temporada, podemos decorar tus donas con el personaje, los colores o el tema que imagines. Mándanos tu idea por WhatsApp.',
+      },
+      {
+        q: '¿Entregan donas de Navidad en mi zona?',
         a: 'Sí, llevamos tu pedido a domicilio en toda el área metropolitana de Monterrey: Monterrey, Guadalupe, San Pedro, San Nicolás, Apodaca, Escobedo y Santa Catarina, incluida la zona de Cumbres. Mándanos tu dirección por WhatsApp y te confirmamos los detalles.',
       },
     ],
