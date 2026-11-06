@@ -76,9 +76,13 @@ export const defaultContent: SiteContent = {
       subtitle: 'Cajas y diseños navideños hechos a mano, perfectos para regalar o compartir en estas fiestas.',
       ctaText: 'Hacer mi pedido navideño',
       images: [
-        { src: `${LIB}/navidad/donas-decoradas-navidad-hohoho-corona-monterrey.webp`, alt: 'Donas decoradas de Navidad, Ho Ho Ho y corona, Monterrey' },
-        { src: `${LIB}/navidad/donas-decoradas-navidad-postal-santa-monterrey.webp`, alt: 'Dona decorada de Navidad con postal de Santa, Monterrey' },
-        { src: `${LIB}/navidad/donas-decoradas-navidad-caja-grinch-monterrey.webp`, alt: 'Caja de donas decoradas de Navidad con diseño Grinch, Monterrey' },
+        { src: `${LIB}/navidad/donas-decoradas-navidad-hohoho-monterrey.webp`, alt: 'Dona decorada de Navidad roja con letras HO HO HO, Monterrey' },
+        { src: `${LIB}/navidad/donas-decoradas-navidad-reno-monterrey.webp`, alt: 'Dona decorada de reno de Navidad con chocolate y pretzels, Monterrey' },
+        { src: `${LIB}/navidad/donas-decoradas-navidad-arbol-monterrey.webp`, alt: 'Dona decorada de Navidad como árbol con serie de luces de M&M\'s, Monterrey' },
+        { src: `${LIB}/navidad/donas-decoradas-navidad-copo-de-nieve-monterrey.webp`, alt: 'Dona decorada de Navidad con betún blanco y copo de nieve, Monterrey' },
+        { src: `${LIB}/navidad/donas-decoradas-navidad-regalo-monterrey.webp`, alt: 'Dona decorada de Navidad roja con moño blanco, como regalo, Monterrey' },
+        { src: `${LIB}/navidad/donas-decoradas-navidad-corona-verde-monterrey.webp`, alt: 'Dona decorada de Navidad verde como corona, Monterrey' },
+        { src: `${LIB}/navidad/donas-decoradas-navidad-grinch-monterrey.webp`, alt: 'Dona decorada del Grinch para Navidad, Monterrey' },
       ],
     },
     'san-valentin': {
