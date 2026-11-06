@@ -133,15 +133,15 @@ export const temporadas: Temporada[] = [
     ],
   },
   {
-    slug: 'navidad',
-    nombre: 'Navidad',
-    badge: '🎄 Navidad en Monterrey',
-    title: 'Donas Decoradas para Navidad en Monterrey | Donut Bites',
+    slug: 'navidad-y-posadas',
+    nombre: 'Navidad y posadas',
+    badge: '🎄 Navidad y posadas en Monterrey',
+    title: 'Donas Decoradas para Navidad y Posadas en Monterrey | Donut Bites',
     description:
-      'Donas decoradas navideñas en Monterrey y toda su área metropolitana: Grinch, renos y coronas hechas a mano. Cotiza por WhatsApp.',
-    h1: 'Donas decoradas para Navidad en Monterrey',
+      'Donas decoradas navideñas y postres para posadas en Monterrey y toda su área metropolitana: Grinch, renos y coronas hechas a mano. Cotiza por WhatsApp.',
+    h1: 'Donas decoradas para Navidad y posadas en Monterrey',
     intro:
-      'Grinch, renos, coronas y mucho HO HO HO. Hacemos donas decoradas navideñas a mano, en caja o empacadas una por una, para tu cena, tus regalos o el postre de la posada. Entregamos en Monterrey, Guadalupe, San Pedro, San Nicolás, Apodaca, Escobedo y Santa Catarina.',
+      'Grinch, renos, coronas y mucho HO HO HO. Hacemos donas decoradas navideñas a mano, en caja o empacadas una por una, para tu cena, tus regalos y como postre de tu posada, la de tu oficina o la del colegio. Armamos desde una caja de 6 hasta pedidos de más de 600 piezas, con factura. Entregamos en Monterrey, Guadalupe, San Pedro, San Nicolás, Apodaca, Escobedo y Santa Catarina.',
     hero: {
       src: `${NAVIDAD}/donas-decoradas-navidad-caja-grinch-monterrey.webp`,
       alt: 'Caja de seis donas decoradas para Navidad con reno, Grinch, HO HO HO y coronas, junto a una dona del Grinch en su cajita',
@@ -189,7 +189,7 @@ export const temporadas: Temporada[] = [
       src: `${NAVIDAD}/donas-decoradas-navidad-postal-santa-monterrey.webp`,
       alt: 'Donas decoradas de Navidad HO HO HO y corona, empacadas una por una con postal de Santa, de Donut Bites Monterrey',
     },
-    ocasionesTitulo: 'Para cada celebración navideña',
+    ocasionesTitulo: 'Para cada cena, posada y regalo de Navidad',
     ocasiones: [
       {
         emoji: '🍽️',
@@ -197,14 +197,24 @@ export const temporadas: Temporada[] = [
         texto: 'Donas decoradas fáciles de repartir, para cerrar tu cena con un postre que todos quieren fotografiar.',
       },
       {
+        emoji: '🏢',
+        titulo: 'Posada de la oficina',
+        texto: 'Postre para todo tu equipo, en cajas o empacado individualmente para repartir sin batallar.',
+      },
+      {
+        emoji: '🎒',
+        titulo: 'Posada del colegio',
+        texto: 'Donas decoradas individuales para que todo el salón celebre, fáciles de repartir.',
+      },
+      {
         emoji: '🎁',
         titulo: 'Regalos de Navidad',
         texto: 'Donas empacadas una por una, listas para regalar a tus clientes, tu equipo o tus seres queridos.',
       },
       {
-        emoji: '🎒',
-        titulo: 'Convivio navideño en el colegio',
-        texto: 'Donas decoradas individuales para que todo el salón celebre la Navidad con un detalle divertido.',
+        emoji: '🎉',
+        titulo: 'Evento de empresa',
+        texto: 'Pedidos grandes, desde una caja de 6 hasta más de 600 piezas, con factura para tu empresa.',
       },
       {
         emoji: '🎂',
@@ -230,6 +240,10 @@ export const temporadas: Temporada[] = [
       {
         q: '¿Sirven como postre para mi cena o mi posada?',
         a: 'Claro. Las donas decoradas son un postre fácil de repartir para tu cena de Navidad, tu posada o el convivio de tu oficina. También hacemos pedidos para empresas y eventos grandes, con factura. Escríbenos por WhatsApp con la fecha y la cantidad.',
+      },
+      {
+        q: '¿Hacen pedidos grandes para posadas de empresa o de colegio?',
+        a: 'Sí. Armamos desde una caja de 6 hasta pedidos de más de 600 piezas, y facturamos pedidos de empresas. Dinos la fecha y cuántas personas serán por WhatsApp, y te ayudamos a calcular cuántas donas conviene pedir.',
       },
       {
         q: '¿Puedo pedir un diseño navideño diferente a los de la foto?',
