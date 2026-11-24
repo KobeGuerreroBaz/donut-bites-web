@@ -12,6 +12,7 @@ import { municipios, otrosMunicipios, rutaMunicipio } from '../lib/municipios';
 import { zonas, zonasDe } from '../lib/zonas';
 import { whatsappUrl } from '../lib/whatsapp';
 import { fotosParaMunicipio } from '../lib/fotos-locales';
+import { temporadas, rutaTemporada } from '../lib/temporadas';
 import { env } from 'cloudflare:workers';
 
 const { municipio: slug } = Astro.params;
@@ -29,6 +30,8 @@ const waNumber = content.whatsappNumber;
 const waURL = whatsappUrl(m.mensajeWhatsApp, waNumber);
 
 const faqItems = [...m.faq, ...faqPedidos.slice(0, 3)];
+
+const temporadaDestacada = temporadas.find((t) => t.destacada);
 
 const padre = zona ? municipios.find((x) => x.slug === zona.municipio) : undefined;
 const zonasHijas = zona ? [] : zonasDe(m.slug);
@@ -231,6 +234,19 @@ const serviceSchema = {
       </section>
 
       <FAQ items={faqItems} title={`Preguntas frecuentes sobre donas decoradas en ${m.nombre}`} />
+
+      <section class="local-section local-others">
+        <div class="container local-narrow">
+          <h2 class="local-others-title">También para tu celebración en {m.nombre}</h2>
+          <ul class="chips chips-center">
+            <li><a class="chip chip-link" href="/pastel-de-donas-monterrey">Pastel de donas</a></li>
+            <li><a class="chip chip-link" href="/donas-para-eventos-monterrey">Donas para eventos y empresas</a></li>
+            {temporadaDestacada && (
+              <li><a class="chip chip-link" href={rutaTemporada(temporadaDestacada.slug)}>Donas para {temporadaDestacada.nombre}</a></li>
+            )}
+          </ul>
+        </div>
+      </section>
 
       {zonasHijas.length > 0 && (
         <section class="local-section local-others">

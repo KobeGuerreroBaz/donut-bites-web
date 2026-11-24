@@ -1,0 +1,430 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import FAQ from '../components/FAQ.astro';
+import ResenasGoogle from '../components/ResenasGoogle.astro';
+import { getContent, defaultContent } from '../lib/content';
+import { env } from 'cloudflare:workers';
+import { municipios, rutaMunicipio } from '../lib/municipios';
+import { zonas } from '../lib/zonas';
+import { whatsappUrl } from '../lib/whatsapp';
+import type { FaqItem } from '../lib/faq-pedidos';
+
+const content = env ? await getContent(env) : defaultContent;
+const waNumber = content.whatsappNumber;
+
+const GEN = '/images/library/general';
+const PDD = '/images/library/pastel-de-donas';
+const siteUrl = 'https://donutbitesco.com';
+const ruta = '/donas-para-eventos-monterrey';
+
+const title = 'Donas para Eventos y Empresas en Monterrey | Donut Bites';
+const description =
+  'Donas decoradas para eventos, posadas y empresas en Monterrey: charolas, cajas y donas empacadas una por una. Desde una caja de 6 hasta más de 600 piezas, con factura.';
+const h1 = 'Donas para eventos y empresas en Monterrey';
+const mensajeWhatsApp = '¡Hola! Vi la página de donas para eventos y me gustaría cotizar un pedido para mi evento 🍩🎉';
+const waURL = whatsappUrl(mensajeWhatsApp, waNumber);
+
+const hero = {
+  src: `${GEN}/donas-gourmet-variedad-monterrey.webp`,
+  alt: "Charola plateada con seis donas decoradas de nuez, chocolate, Nutella, Oreo y M&M's, lista para repartir en un evento en Monterrey",
+  w: 1600,
+  h: 1600,
+};
+
+const galeria = [
+  {
+    src: `${GEN}/catalogo-donas-decoradas-monterrey.webp`,
+    alt: "Doce donas decoradas con distintos sabores vistas desde arriba: Oreo, M&M's, cajeta con nuez, Nutella y galleta",
+    tema: 'Variedad para repartir',
+    w: 1600,
+    h: 1200,
+  },
+  {
+    src: `${PDD}/pastel-de-donas-azul-oreo-cumpleanos-monterrey.webp`,
+    alt: 'Pastel de donas azul con toppings de Oreo, pretzels y cereal, con cake toppers personalizados de cumpleaños',
+    tema: 'Pastel de donas para tu evento',
+    w: 900,
+    h: 1205,
+  },
+  {
+    src: hero.src,
+    alt: hero.alt,
+    tema: 'Charolas listas para servir',
+    w: hero.w,
+    h: hero.h,
+  },
+];
+
+const incluye = [
+  { emoji: '🍩', titulo: 'Charolas listas para servir', texto: 'Llegan acomodadas y listas para poner en la mesa, sin que tengas que montar nada el día del evento.' },
+  { emoji: '📦', titulo: 'Cajas de 6 para repartir', texto: 'Prácticas para entregar por persona o por área, y fáciles de cargar en la oficina o el colegio.' },
+  { emoji: '🎁', titulo: 'Empacadas una por una', texto: 'Cada dona en su empaque individual: ideal para regalo de cliente, salón de clases o convivio.' },
+  { emoji: '🧾', titulo: 'Facturamos tu pedido', texto: 'Emitimos factura para pedidos de empresa. Pásanos tus datos fiscales al confirmar y la preparamos.' },
+];
+
+const ocasiones = [
+  'Posadas de oficina',
+  'Convivios de empresa',
+  'Juntas y capacitaciones',
+  'Eventos de colegio',
+  'Graduaciones',
+  'Aniversarios e inauguraciones',
+  'Bodas y XV años',
+  'Ferias y activaciones',
+];
+
+const pasos = [
+  { emoji: '💬', titulo: '1. Cuéntanos tu evento', texto: 'Dinos la fecha, cuántas personas serán y si lo quieres en charola, en cajas o empacado una por una. Pide con 3 días de anticipación.' },
+  { emoji: '🎨', titulo: '2. Lo armamos contigo', texto: 'Combinas los sabores que quieras y, si tu evento lleva tema o colores, decoramos las donas para que vayan a juego.' },
+  { emoji: '🛵', titulo: '3. Te lo entregamos', texto: 'Lo llevamos a domicilio en toda el área metropolitana de Monterrey, a la hora que acordemos.' },
+];
+
+const faq: FaqItem[] = [
+  {
+    q: '¿Cuál es el pedido mínimo para un evento?',
+    a: 'Empezamos desde una caja de 6 donas decoradas, y de ahí armamos el tamaño que pida tu evento. Hemos preparado pedidos de más de 600 piezas. Dinos cuántas personas serán y te ayudamos a calcular cuántas conviene pedir.',
+  },
+  {
+    q: '¿Cuántas donas pido por persona?',
+    a: 'Como postre para repartir, lo más común es una dona por invitado. Si va a convivir con otros postres o es un coffee break, con un poco menos alcanza. Escríbenos por WhatsApp con el número de personas y lo calculamos contigo.',
+  },
+  {
+    q: '¿Hacen factura para empresas?',
+    a: 'Sí, facturamos pedidos de empresa. Cuando confirmes tu pedido mándanos tus datos fiscales por WhatsApp y preparamos la factura.',
+  },
+  {
+    q: '¿Cómo llegan: en charola, en caja o empacadas?',
+    a: 'Como te sirva mejor. Las charolas llegan listas para la mesa, las cajas de 6 son prácticas para repartir por persona o por área, y también podemos empacar cada dona por separado para regalo o para el salón de clases. Dinos cuál te acomoda y lo preparamos así.',
+  },
+  {
+    q: '¿Pueden decorarlas con los colores o el tema de mi evento?',
+    a: 'Claro. Además de los sabores de la casa, decoramos las donas con los colores o el tema de tu evento, y para los pasteles de donas incluimos cake toppers personalizados. Mándanos tu idea por WhatsApp.',
+  },
+  {
+    q: '¿Con cuánta anticipación debo pedir para un evento grande?',
+    a: 'Te recomendamos escribirnos con al menos 3 días de anticipación. Para pedidos grandes, o si tu evento cae en temporada alta como diciembre o fin de cursos, entre antes lo apartes mejor, porque las fechas se llenan rápido.',
+  },
+  {
+    q: '¿Entregan en la oficina o en el salón del evento?',
+    a: 'Sí, llevamos tu pedido a domicilio en toda el área metropolitana de Monterrey: Monterrey, Guadalupe, San Pedro, San Nicolás, Apodaca, Escobedo y Santa Catarina, incluida la zona de Cumbres. Mándanos la dirección y la hora por WhatsApp y te confirmamos los detalles.',
+  },
+];
+
+const nombresCortos: Record<string, string> = {
+  'san-nicolas': 'San Nicolás',
+  'san-pedro': 'San Pedro',
+};
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: h1,
+  serviceType: 'Donas decoradas para eventos, posadas y pedidos de empresa',
+  url: `${siteUrl}${ruta}`,
+  provider: { '@id': `${siteUrl}/#negocio` },
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Área metropolitana de Monterrey',
+    containedInPlace: { '@type': 'AdministrativeArea', name: 'Nuevo León' },
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  ogTitle={title}
+  ogDescription={description}
+  image={hero.src}
+  imageAlt={hero.alt}
+  phone={waNumber}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+
+  <div class="site-wrapper">
+    <SiteHeader whatsappURL={waURL} />
+
+    <Breadcrumbs items={[{ name: h1 }]} />
+
+    <main>
+      <section class="pd-hero">
+        <div class="container pd-hero-inner">
+          <div class="pd-badge">🎉 Eventos y empresas en Monterrey</div>
+          <h1 class="pd-title">{h1}</h1>
+          <p class="pd-subtitle">Charolas, cajas y donas empacadas una por una</p>
+          <p class="pd-intro">
+            Preparamos donas decoradas a mano para posadas, convivios de oficina, eventos de colegio y celebraciones de empresa, en charola, en cajas de 6 o empacadas una por una.
+            Armamos desde una caja hasta pedidos de más de 600 piezas, facturamos a tu empresa y lo entregamos a domicilio en toda el área metropolitana de Monterrey.
+          </p>
+          <div class="pd-hero-photo">
+            <img src={hero.src} alt={hero.alt} width={hero.w} height={hero.h} loading="eager" fetchpriority="high" decoding="async" />
+          </div>
+          <div class="pd-ctas">
+            <WhatsAppButton number={waNumber} message={mensajeWhatsApp} label="Cotizar mi pedido" />
+            <a href="#galeria" class="btn-secondary">Ver más opciones</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="pd-section" id="galeria">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">Para tu evento</span>
+            <h2>Donas pensadas para repartir</h2>
+            <p>Charolas listas para la mesa, cajas para repartir por área y pasteles de donas para el centro del evento.</p>
+          </div>
+          <div class="pd-galeria">
+            {galeria.map((f) => (
+              <figure class="pd-foto">
+                <img src={f.src} alt={f.alt} width={f.w} height={f.h} loading="lazy" decoding="async" />
+                <figcaption>{f.tema}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <div class="pd-cta-row">
+            <WhatsAppButton number={waNumber} message={mensajeWhatsApp} label="Quiero cotizar mi evento" />
+          </div>
+        </div>
+      </section>
+
+      <section class="pd-section pd-soft">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">¿Cómo te lo entregamos?</span>
+            <h2>Charola, caja o empacadas una por una</h2>
+          </div>
+          <div class="pd-cards">
+            {incluye.map((c) => (
+              <div class="pd-card">
+                <div class="pd-card-icon">{c.emoji}</div>
+                <h3>{c.titulo}</h3>
+                <p>{c.texto}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <ResenasGoogle max={3} compacta prioridad="entrega" title="Nuestros clientes opinan" />
+
+      <section class="pd-section">
+        <div class="container pd-narrow">
+          <div class="section-header">
+            <span class="section-eyebrow">Ocasiones</span>
+            <h2>Donas para cada tipo de evento</h2>
+          </div>
+          <ul class="pd-chips">
+            {ocasiones.map((o) => <li class="pd-chip">{o}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section class="pd-section pd-soft">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">¿Cómo pedir?</span>
+            <h2>Tu pedido para evento, paso a paso</h2>
+          </div>
+          <div class="pd-steps">
+            {pasos.map((p) => (
+              <div class="pd-step">
+                <div class="pd-card-icon">{p.emoji}</div>
+                <h3>{p.titulo}</h3>
+                <p>{p.texto}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <FAQ items={faq} title="Preguntas frecuentes sobre pedidos para eventos" />
+
+      <section class="pd-section pd-others">
+        <div class="container pd-narrow">
+          <h2 class="pd-others-title">Donas para eventos con entrega en tu zona</h2>
+          <ul class="pd-chips">
+            {municipios.map((m) => (
+              <li><a class="pd-chip pd-chip-link" href={rutaMunicipio(m.slug)}>Donas decoradas en {nombresCortos[m.slug] ?? m.nombre}</a></li>
+            ))}
+            {zonas.map((z) => (
+              <li><a class="pd-chip pd-chip-link" href={rutaMunicipio(z.slug)}>Donas decoradas en {z.nombre}</a></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="pd-cta">
+        <div class="container pd-narrow">
+          <h2>¿Listo para cotizar tu evento?</h2>
+          <p>Escríbenos y te cotizamos a tu medida.</p>
+          <WhatsAppButton number={waNumber} message={mensajeWhatsApp} label="Iniciar mi pedido ahora" />
+        </div>
+      </section>
+    </main>
+
+    <SiteFooter whatsappURL={waURL} social={content.social} />
+  </div>
+</Layout>
+
+<style>
+  .pd-hero {
+    background: linear-gradient(135deg, #FFF0F3 0%, #FFF8F0 50%, #FFF3E8 100%);
+    padding: 48px 0 56px;
+    text-align: center;
+  }
+  .pd-hero-inner { max-width: 760px; }
+  .pd-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--white); border: 1.5px solid var(--pink-lt);
+    color: var(--pink); font-weight: 700; font-size: .85rem;
+    padding: 8px 16px; border-radius: var(--r-full);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .pd-title {
+    font-family: var(--ff-display);
+    font-size: clamp(2.1rem, 7vw, 3.4rem);
+    font-weight: 900;
+    line-height: 1.12;
+    color: var(--choco);
+    margin: 0 0 8px;
+  }
+  .pd-subtitle {
+    font-family: var(--ff-display);
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    color: var(--pink);
+    margin: 0 0 18px;
+  }
+  .pd-intro {
+    font-size: 1.1rem;
+    color: var(--gray);
+    line-height: 1.7;
+    margin: 0 auto 28px;
+    max-width: 620px;
+  }
+  .pd-hero-photo {
+    width: min(100%, 400px);
+    aspect-ratio: 3 / 4;
+    margin: 0 auto 28px;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    background: var(--pink-pale);
+  }
+  .pd-hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pd-ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+
+  .pd-section { padding: 72px 0; }
+  .pd-soft { background: #FFF8F0; }
+  .pd-narrow { max-width: 760px; }
+  .pd-section .section-header { margin-bottom: 36px; }
+  .pd-cta-row { text-align: center; margin-top: 32px; }
+
+  .pd-galeria {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .pd-foto {
+    margin: 0;
+    background: var(--white);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .pd-foto img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 30%; display: block; }
+  .pd-foto figcaption {
+    padding: 14px 16px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--choco);
+    font-size: .95rem;
+  }
+
+  .pd-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .pd-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .pd-card, .pd-step {
+    background: var(--white);
+    border-radius: var(--r-lg);
+    padding: 28px 22px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+  }
+  .pd-card-icon { font-size: 2.4rem; margin-bottom: 10px; }
+  .pd-card h3, .pd-step h3 {
+    font-family: var(--ff-display);
+    font-size: 1.15rem;
+    color: var(--choco);
+    margin: 0 0 8px;
+  }
+  .pd-card p, .pd-step p { font-size: .95rem; color: var(--gray); line-height: 1.6; margin: 0; }
+
+  .pd-chips {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+  }
+  .pd-chip {
+    display: inline-block;
+    background: var(--pink-pale);
+    color: var(--pink);
+    border: 1.5px solid var(--pink-lt);
+    border-radius: var(--r-full);
+    padding: 8px 18px;
+    font-weight: 700;
+    font-size: .92rem;
+  }
+  .pd-chip-link { text-decoration: none; transition: background .2s, color .2s; }
+  .pd-chip-link:hover { background: var(--pink); color: var(--white); }
+
+  .pd-others { padding: 24px 0 56px; text-align: center; }
+  .pd-others-title {
+    font-family: var(--ff-display);
+    font-size: 1.3rem;
+    color: var(--choco);
+    margin: 0 0 16px;
+  }
+
+  .pd-cta {
+    background: linear-gradient(135deg, var(--choco) 0%, #5C2A10 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 64px 0;
+  }
+  .pd-cta h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    margin: 0 0 10px;
+  }
+  .pd-cta p { color: rgba(255, 255, 255, .8); margin: 0 0 24px; }
+
+  @media (max-width: 900px) {
+    .pd-cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 700px) {
+    .pd-hero { padding: 28px 0 36px; }
+    .pd-intro { font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
+    .pd-hero-photo { width: min(100%, 340px); aspect-ratio: 1 / 1; margin-bottom: 22px; }
+    .pd-section { padding: 52px 0; }
+    .pd-cards, .pd-steps { grid-template-columns: 1fr; }
+    .pd-galeria { grid-template-columns: 1fr; justify-items: center; gap: 18px; }
+    .pd-foto { width: min(100%, 340px); }
+    .pd-foto img { aspect-ratio: 1 / 1; }
+  }
+</style>

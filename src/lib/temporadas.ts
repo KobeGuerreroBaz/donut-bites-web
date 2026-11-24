@@ -13,6 +13,8 @@ export interface Ocasion {
 
 export interface Temporada {
   slug: string;
+  /** Temporada que se promociona ahora en las paginas locales. Solo una a la vez. */
+  destacada?: boolean;
   nombre: string;
   badge: string;
   title: string;
@@ -134,6 +136,7 @@ export const temporadas: Temporada[] = [
   },
   {
     slug: 'navidad-y-posadas',
+    destacada: true,
     nombre: 'Navidad y posadas',
     badge: '🎄 Navidad y posadas en Monterrey',
     title: 'Donas Decoradas para Navidad y Posadas en Monterrey | Donut Bites',
