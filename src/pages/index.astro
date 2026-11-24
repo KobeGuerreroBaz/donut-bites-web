@@ -15,9 +15,9 @@ const content = env ? await getContent(env) : defaultContent;
 
 // SEO de la home: entrega el mismo día
 const seoTitle = 'Donas en Monterrey con Entrega el Mismo Día | Donut Bites';
-const seoDescription = `Donas en Monterrey: entrega hoy si pides antes de las ${listasHoy.horaCorte}, o ${listasHoy.entregaSiguienteDia}. También donas personalizadas por encargo con diseños especiales.`;
+const seoDescription = `Donas en Monterrey: entrega hoy si pides antes de las ${listasHoy.horaCorte}. También donas personalizadas por encargo con diseños especiales.`;
 const seoOgTitle = 'Donas en Monterrey con Entrega el Mismo Día | Donut Bites';
-const seoOgDescription = `Donas con entrega hoy o ${listasHoy.entregaSiguienteDia} en Monterrey y área metropolitana, y diseños especiales por encargo.`;
+const seoOgDescription = `Donas con entrega el mismo día en Monterrey y área metropolitana, y diseños especiales por encargo.`;
 
 const whatsappMessage = encodeURIComponent("¡Hola! Vi su página y me gustaría cotizar un pedido de donas 🍩");
 const whatsappURL = `https://wa.me/${content.whatsappNumber}?text=${whatsappMessage}`;
@@ -121,7 +121,7 @@ const occasions = [
           <em>para tus eventos</em>
         </h1>
         <p class="hero-subtitle">
-          Pide antes de las {listasHoy.horaCorte} y recibe tus donas el mismo día, o {listasHoy.entregaSiguienteDia}.
+          Pide antes de las {listasHoy.horaCorte} y recibe tus donas el mismo día.
           ¿Quieres algo más especial? Hacemos donas con diseños personalizados por encargo, con 3 días de anticipación.
         </p>
         <div class="hero-ctas">

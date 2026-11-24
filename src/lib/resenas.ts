@@ -14,7 +14,7 @@ export interface Resena {
 
 // Datos del perfil de Google (actualizar a mano cuando cambien)
 export const CALIFICACION_GOOGLE = 5.0;
-export const TOTAL_RESENAS_GOOGLE = 9;
+export const TOTAL_RESENAS_GOOGLE = 11;
 
 export const resenas: Resena[] = [
   {

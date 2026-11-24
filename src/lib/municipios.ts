@@ -155,7 +155,7 @@ export const municipios: Municipio[] = [
       'Te las llevamos a domicilio, y si prefieres pasar por tu pedido, lo coordinamos contigo por WhatsApp.',
     ideasTitulo: 'Ideas para tu festejo en San Nicolás',
     ideasTexto:
-      'Una caja con los colores de la generación para la fiesta de graduación, donas temáticas para el cumpleaños de los más pequeños o una charola para la reunión del partido. Cuéntanos la ocasión y la diseñamos.',
+      'Una caja con los colores de la generación para la fiesta de graduación, donas temáticas para el cumpleaños de los más pequeños o donas individuales para la reunión del partido. Cuéntanos la ocasión y la diseñamos.',
     mensajeWhatsApp:
       '¡Hola! Vi la página de donas decoradas en San Nicolás de los Garza y me gustaría cotizar un pedido 🍩',
     faq: [

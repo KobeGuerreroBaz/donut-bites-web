@@ -6,8 +6,6 @@ export const listasHoy = {
   /** Pedidos hechos antes de esta hora pueden salir el mismo día. */
   horaCorte: '2 pm',
   // Sin ventana de entrega a propósito: no comprometerse con un horario de llegada.
-  /** Si no alcanza para el mismo día. */
-  entregaSiguienteDia: 'al día siguiente por la mañana',
 
   sabores: [
     'Nutella',
